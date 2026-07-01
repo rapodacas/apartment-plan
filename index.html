@@ -8,101 +8,148 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f0f4f8;color:#2d2d2d;min-height:100vh}
 .hidden{display:none!important}
+a{color:#2a6a9a;text-decoration:none}
+a:hover{text-decoration:underline}
 
 /* Header */
 #app-header{background:linear-gradient(135deg,#2a4a6a,#3a6a9a);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-#app-header h1{font-size:16px;font-weight:600}
-.header-right{display:flex;align-items:center;gap:8px;font-size:12px}
+#app-header h1{font-size:17px;font-weight:600;cursor:pointer}
+.header-right{display:flex;align-items:center;gap:8px;font-size:13px}
 #header-user-label{opacity:.85}
-#app-header button{background:rgba(255,255,255,.2);color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:11px;cursor:pointer}
+#app-header button{background:rgba(255,255,255,.2);color:#fff;border:none;padding:6px 12px;border-radius:5px;font-size:12px;cursor:pointer}
 #app-header button:hover{background:rgba(255,255,255,.35)}
 
 /* Login dropdown */
-#login-dropdown{position:absolute;top:48px;right:12px;background:#fff;border-radius:8px;padding:16px;width:260px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:150}
-#login-dropdown select,#login-dropdown input{width:100%;padding:8px 10px;border:1px solid #d0dce8;border-radius:5px;font-size:13px;margin-bottom:8px}
-#login-dropdown button{width:100%;padding:8px;background:#2a4a6a;color:#fff;border:none;border-radius:5px;font-size:13px;cursor:pointer;font-weight:600}
-#login-dropdown button:hover{background:#3a6a9a}
-.login-err{color:#c44;font-size:12px;margin-bottom:6px}
+#login-dropdown{position:absolute;top:52px;right:12px;background:#fff;border-radius:8px;padding:16px;width:280px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:150}
+#login-dropdown select,#login-dropdown input{width:100%;padding:10px 12px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;margin-bottom:10px}
+#login-dropdown button{width:100%;padding:10px;background:#2a4a6a;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600}
+.login-err{color:#c44;font-size:13px;margin-bottom:8px}
 
-/* Scope */
-.scope-section{background:#fff;margin:12px;border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.scope-section h2{font-size:15px;color:#2a4a6a;margin-bottom:8px}
-.scope-section ul{padding-left:18px;font-size:13px;line-height:1.6}
-.scope-item{margin-bottom:2px}
-.scope-edit{width:100%;min-height:120px;font-size:13px;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-family:inherit;resize:vertical}
+/* Breadcrumb */
+.breadcrumb{padding:10px 16px;font-size:14px;color:#6a8aaa;background:#e8eef4}
+.breadcrumb span{cursor:pointer;color:#2a6a9a}
+.breadcrumb span:hover{text-decoration:underline}
 
-/* Phase sections */
-.phase-section{margin:12px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.phase-header{background:#2a4a6a;color:#fff;padding:10px 14px;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.phase-header .phase-dates{font-size:11px;opacity:.8;font-weight:400}
-.phase-body{padding:0}
-.milestone{background:#eef4fa;border-left:3px solid #3a6a9a;padding:8px 12px;font-size:12px;color:#2a4a6a;margin:0}
+/* ── PHASES LIST VIEW ── */
+.phase-card{background:#fff;margin:12px 16px;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;transition:box-shadow .15s}
+.phase-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.phase-card-header{background:#2a4a6a;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.phase-card-header h2{font-size:17px;font-weight:600;margin:0}
+.phase-card-dates{font-size:13px;opacity:.8}
+.phase-card-body{padding:14px 18px;font-size:14px;line-height:1.6}
+.phase-card-body .phase-stats{display:flex;gap:16px;margin-bottom:8px;font-size:13px;color:#6a8aaa}
+.phase-card-body .phase-stats strong{color:#2a4a6a}
+.phase-card-milestone{font-size:13px;color:#2a4a6a;font-style:italic}
+.phase-progress{height:4px;background:#e0e8f0;border-radius:2px;margin-top:8px;overflow:hidden}
+.phase-progress-fill{height:100%;background:#3a9a6a;border-radius:2px;transition:width .3s}
 
-/* Day rows */
-.day-row{display:flex;align-items:stretch;border-bottom:1px solid #e4eaf0;font-size:13px;min-height:44px}
-.day-row:nth-child(odd){background:#dce8f5}
-.day-row:nth-child(even){background:#fff}
-.day-date{min-width:70px;padding:8px;font-weight:600;font-size:12px;display:flex;flex-direction:column;justify-content:center}
-.day-date .day-type{font-size:10px;color:#6a8aaa;font-weight:400}
-.day-work{flex:1;padding:8px;display:flex;flex-direction:column;justify-content:center}
-.day-work-text{font-size:13px}
-.day-workers{padding:8px;min-width:100px;display:flex;flex-wrap:wrap;gap:3px;align-items:center}
-.worker-badge{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:600}
+/* ── DAY LIST (inside phase view) ── */
+.day-card{background:#fff;margin:8px 16px;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;transition:box-shadow .15s}
+.day-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.day-card:nth-child(odd) .day-card-inner{background:#dce8f5}
+.day-card:nth-child(even) .day-card-inner{background:#fff}
+.day-card-inner{display:flex;align-items:center;padding:12px 16px;gap:12px}
+.day-card-date{min-width:65px;font-weight:700;font-size:15px;line-height:1.2}
+.day-card-date .day-type{font-size:11px;color:#6a8aaa;font-weight:400;display:block}
+.day-card-work{flex:1;font-size:15px}
+.day-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:80px}
+.day-card-status{font-size:11px;padding:3px 8px;border-radius:10px;font-weight:600}
+.status-planned{background:#e0e8f0;color:#6a8aaa}
+.status-in-progress{background:#fff3cd;color:#856404}
+.status-done{background:#d4edda;color:#155724}
+.day-card-workers{display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end}
+
+/* ── DAY DETAIL VIEW ── */
+.day-detail{margin:12px 16px}
+.day-detail-header{background:#2a4a6a;color:#fff;padding:18px 20px;border-radius:10px 10px 0 0}
+.day-detail-header h2{font-size:20px;margin:0 0 4px}
+.day-detail-header .day-detail-sub{font-size:14px;opacity:.85}
+.day-detail-body{background:#fff;border-radius:0 0 10px 10px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+
+.detail-section{padding:16px 20px;border-bottom:1px solid #eef2f6}
+.detail-section:last-child{border-bottom:none}
+.detail-section h3{font-size:15px;color:#2a4a6a;margin-bottom:10px;font-weight:600}
+
+.detail-section textarea,.detail-section input[type="text"]{width:100%;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical}
+.detail-section textarea{min-height:80px}
+
+/* Status picker */
+.status-picker{display:flex;gap:8px}
+.status-picker button{padding:8px 16px;border:2px solid #d0dce8;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;background:#fff}
+.status-picker button.active-planned{border-color:#6a8aaa;background:#e0e8f0;color:#6a8aaa}
+.status-picker button.active-in-progress{border-color:#856404;background:#fff3cd;color:#856404}
+.status-picker button.active-done{border-color:#155724;background:#d4edda;color:#155724}
+
+/* Materials list */
+.materials-list{list-style:none;padding:0}
+.materials-list li{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:14px;border-bottom:1px solid #f0f4f8}
+.materials-list li:last-child{border:none}
+.mat-check{width:18px;height:18px;cursor:pointer}
+.mat-text{flex:1}
+.mat-text.checked{text-decoration:line-through;color:#aaa}
+
+/* Links/Media */
+.link-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f4f8;font-size:14px}
+.link-item:last-child{border:none}
+.link-icon{font-size:16px;min-width:24px;text-align:center}
+.link-remove{color:#c44;cursor:pointer;font-size:12px;padding:2px 6px}
+
+/* Worker badges */
+.worker-badge{font-size:11px;padding:3px 8px;border-radius:10px;font-weight:600;display:inline-block}
 .worker-badge.raoul{background:#2a4a6a;color:#fff}
 .worker-badge.charlie{background:#6a3a9a;color:#fff}
 .worker-badge.vinny{background:#3a9a6a;color:#fff}
 .worker-badge.joaquin{background:#9a6a3a;color:#fff}
-.worker-toggle{font-size:11px;padding:3px 8px;border-radius:10px;border:1px solid #d0dce8;background:#fff;cursor:pointer;white-space:nowrap}
+.worker-toggle{font-size:13px;padding:6px 14px;border-radius:8px;border:1px solid #d0dce8;background:#fff;cursor:pointer}
 .worker-toggle.signed-up{background:#3a9a6a;color:#fff;border-color:#3a9a6a}
 
-/* Edit mode */
-.day-edit-work{width:100%;padding:4px 6px;border:1px solid #aac;border-radius:4px;font-size:12px;font-family:inherit}
-.day-row .admin-btns{display:flex;gap:4px;padding:4px}
-.admin-btns button{font-size:10px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer}
-.btn-save{background:#3a9a6a;color:#fff}
-.btn-del{background:#c44;color:#fff}
-.btn-add{background:#2a4a6a;color:#fff;border:none;padding:6px 12px;border-radius:4px;font-size:12px;cursor:pointer;margin:8px 14px}
+/* Buttons */
+.btn{padding:8px 16px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600}
+.btn-primary{background:#2a4a6a;color:#fff}
+.btn-primary:hover{background:#3a6a9a}
+.btn-danger{background:#c44;color:#fff}
+.btn-secondary{background:#e0e8f0;color:#2a4a6a}
+.btn-success{background:#3a9a6a;color:#fff}
+.btn-sm{padding:5px 10px;font-size:12px}
 
-/* Risks */
-.risks-section{background:#fff;margin:12px;border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.risks-section h2{font-size:15px;color:#a06828;margin-bottom:8px}
-.risks-section ul{padding-left:18px;font-size:13px;line-height:1.6}
-.risk-edit{width:100%;min-height:80px;font-size:13px;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-family:inherit;resize:vertical}
+/* Scope card */
+.info-card{background:#fff;margin:12px 16px;border-radius:10px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.info-card h2{font-size:17px;color:#2a4a6a;margin-bottom:10px}
+.info-card ul{padding-left:20px;font-size:14px;line-height:1.7}
+.info-card p{font-size:14px;line-height:1.6}
 
 /* Summary bar */
-.summary-bar{background:#fff;margin:12px;border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;flex-wrap:wrap;gap:12px;font-size:13px}
-.summary-stat{text-align:center}
-.summary-stat .num{font-size:22px;font-weight:700;color:#2a4a6a}
-.summary-stat .label{font-size:11px;color:#888}
+.summary-bar{display:flex;flex-wrap:wrap;gap:12px;margin:12px 16px}
+.summary-stat{background:#fff;border-radius:8px;padding:12px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06);text-align:center;min-width:80px;flex:1}
+.summary-stat .num{font-size:24px;font-weight:700;color:#2a4a6a}
+.summary-stat .label{font-size:12px;color:#888}
 
 /* Footer */
-.app-footer{text-align:center;padding:16px;font-size:11px;color:#999}
+.app-footer{text-align:center;padding:20px;font-size:12px;color:#999}
 
 /* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
-.modal{background:#fff;border-radius:12px;padding:24px;max-width:420px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.2)}
-.modal h2{font-size:16px;color:#2a4a6a;margin-bottom:12px}
-.modal label{display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:#555}
-.modal input,.modal select,.modal textarea{width:100%;padding:8px;border:1px solid #d0dce8;border-radius:4px;font-size:13px;margin-bottom:10px;font-family:inherit}
+.modal{background:#fff;border-radius:12px;padding:24px;max-width:440px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.modal h2{font-size:17px;color:#2a4a6a;margin-bottom:14px}
+.modal label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:#555}
+.modal input,.modal select,.modal textarea{width:100%;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;margin-bottom:12px;font-family:inherit}
 .modal textarea{min-height:60px;resize:vertical}
-.modal-btns{display:flex;gap:8px;margin-top:8px}
-.modal-btns button{flex:1;padding:8px;border:none;border-radius:4px;font-size:13px;cursor:pointer;font-weight:600}
+.modal-btns{display:flex;gap:8px;margin-top:10px}
+.modal-btns button{flex:1;padding:10px;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600}
 .modal-btns .btn-primary{background:#2a4a6a;color:#fff}
 .modal-btns .btn-cancel{background:#eee;color:#555}
 </style>
 </head>
 <body>
 
-<!-- HEADER (always visible) -->
 <div id="app-header">
-  <h1>Apartment Build — 864 Farr Ave</h1>
+  <h1 onclick="navHome()">864 Farr Ave — Apartment Build</h1>
   <div class="header-right">
     <span id="header-user-label"></span>
     <button id="auth-btn" onclick="toggleAuth()"></button>
   </div>
 </div>
 
-<!-- LOGIN DROPDOWN -->
 <div id="login-dropdown" class="hidden">
   <div id="login-err" class="login-err hidden"></div>
   <select id="login-user">
@@ -116,25 +163,18 @@ body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f0f4f8;co
   <button onclick="doLogin()">Log In</button>
 </div>
 
-<!-- APP CONTENT (always visible) -->
-<div id="app">
-  <div id="summary-bar" class="summary-bar"></div>
-  <div id="scope-container"></div>
-  <div id="phases-container"></div>
-  <div id="risks-container"></div>
-  <div class="app-footer">864 Farr Ave, Escondido — Apartment Conversion Project</div>
-</div>
+<div id="breadcrumb" class="breadcrumb hidden"></div>
+<div id="content"></div>
 
-<!-- MODALS -->
 <div id="modal-overlay" class="modal-overlay hidden">
   <div id="modal" class="modal"></div>
 </div>
 
 <script>
 // ── Default Data ──
-const DEFAULT_PINS = { raoul: '8640', charlie: '1111', vinny: '2222', joaquin: '3333' };
+const DEFAULT_PINS={raoul:'8640',charlie:'1111',vinny:'2222',joaquin:'3333'};
 
-const DEFAULT_SCOPE = [
+const DEFAULT_SCOPE=[
   '10×12 conditioned office on raised foundation (existing core)',
   'East patio 12×8 → fully enclosed addition',
   'North patio 14×20 → partially enclosed 14×10 ground-level kitchen',
@@ -143,392 +183,524 @@ const DEFAULT_SCOPE = [
   'Fence + landscaping'
 ];
 
-const DEFAULT_RISKS = [
+const DEFAULT_RISKS=[
   'Permits: Determine strategy now — inspection delays could push schedule.',
   'Concrete cure: Slab/fence posts timed to cure between work days.',
   'Materials: Order windows, doors, mini-splits, plumbing by mid-July.',
   'Laborer ramp: Phases 1–2 ideal for training. By Phase 4 they\'re useful.'
 ];
 
-const DEFAULT_PHASES = [
+const DEFAULT_PHASES=[
   {
-    name: 'Phase 1: Demo & Site Prep', dates: '7/3–7/11', milestone: 'Site cleared, bathroom halved, all areas laid out.',
-    days: [
-      { date: '2026-07-03', label: 'F 7/3', type: 'off+hol', work: 'Demo half of outdoor bathroom, salvage fixtures' },
-      { date: '2026-07-04', label: 'Sa 7/4', type: '', work: 'Clear patios, debris removal, material staging' },
-      { date: '2026-07-06', label: 'M 7/6', type: 'WFH', work: 'Layout & string lines, dig/prep kitchen slab' },
-      { date: '2026-07-11', label: 'Sa 7/11', type: '', work: 'Grade north patio, prep for slab/pier footings' }
+    name:'Phase 1: Demo & Site Prep',dates:'7/3–7/11',
+    milestone:'Site cleared, bathroom halved, all areas laid out.',
+    materials:['Sledgehammer','Pry bar','Sawzall + demo blades','String line + stakes','Chalk line','Laser level or 4ft level','Tape measure (25ft)','Wheelbarrow','Shovels + rake','Dumpster or dump trailer rental','Gravel (for slab base)','Rebar + wire mesh','Form boards (2×4 or 2×6)'],
+    days:[
+      {date:'2026-07-03',label:'F 7/3',type:'off+hol',work:'Demo half of outdoor bathroom, salvage fixtures',status:'planned',notes:'',links:[],materials:['Sledgehammer','Pry bar','Sawzall','Safety glasses','Gloves','Dumpster']},
+      {date:'2026-07-04',label:'Sa 7/4',type:'',work:'Clear patios, debris removal, material staging',status:'planned',notes:'',links:[],materials:['Wheelbarrow','Shovels','Rake','Broom']},
+      {date:'2026-07-06',label:'M 7/6',type:'WFH',work:'Layout & string lines, dig/prep kitchen slab',status:'planned',notes:'',links:[],materials:['String line','Stakes','Chalk line','Laser level','Tape measure','Shovels','Gravel']},
+      {date:'2026-07-11',label:'Sa 7/11',type:'',work:'Grade north patio, prep for slab/pier footings',status:'planned',notes:'',links:[],materials:['Shovels','Rake','Tamper','Gravel','Level']}
     ]
   },
   {
-    name: 'Phase 2: Foundation & Framing', dates: '7/13–8/1', milestone: 'All walls framed and sheathed. Structure taking shape.',
-    days: [
-      { date: '2026-07-13', label: 'M 7/13', type: 'WFH', work: 'Pour kitchen slab or set piers (north 14×10)' },
-      { date: '2026-07-17', label: 'F 7/17', type: 'off', work: 'Build raised bathroom platform' },
-      { date: '2026-07-18', label: 'Sa 7/18', type: '', work: 'Continue bathroom platform' },
-      { date: '2026-07-20', label: 'M 7/20', type: 'WFH', work: 'Frame east walls (12×8) — full enclosure' },
-      { date: '2026-07-25', label: 'Sa 7/25', type: '', work: 'Frame north walls (14×10), headers' },
-      { date: '2026-07-27', label: 'M 7/27', type: 'WFH', work: 'Frame bathroom, tie into office' },
-      { date: '2026-07-31', label: 'F 7/31', type: 'off', work: 'Sheathe walls, housewrap' },
-      { date: '2026-08-01', label: 'Sa 8/1', type: '', work: 'Complete sheathing & housewrap' }
+    name:'Phase 2: Foundation & Framing',dates:'7/13–8/1',
+    milestone:'All walls framed and sheathed. Structure taking shape.',
+    materials:['Concrete (bags or truck pour)','Rebar + tie wire','Pier blocks (if not slab)','2×4 studs (or 2×6 for exterior)','2×4 plates (PT for bottom plate)','Headers: 2×8 / 2×10 / 2×12','Plywood sheathing (1/2" or 7/16" OSB)','Tyvek housewrap + tape','Framing nails (16d, 8d)','Joist hangers + hurricane ties','Construction screws (3", 3.5")','Circular saw','Framing nailer + compressor (or screw gun)','Speed square','4ft level','Chalk line'],
+    days:[
+      {date:'2026-07-13',label:'M 7/13',type:'WFH',work:'Pour kitchen slab or set piers (north 14×10)',status:'planned',notes:'If slab: need concrete truck or 60+ bags Quikrete. If piers: 12-16 pier blocks + 4×6 beams.',links:[],materials:['Concrete','Rebar','Form boards','Screed board','Float/trowel','Level']},
+      {date:'2026-07-17',label:'F 7/17',type:'off',work:'Build raised bathroom platform',status:'planned',notes:'Platform needs to match existing office floor height. PT lumber for contact with ground/concrete.',links:[],materials:['PT 2×6 joists','PT 4×4 posts','Plywood subfloor (3/4")','Joist hangers','Concrete','Level']},
+      {date:'2026-07-18',label:'Sa 7/18',type:'',work:'Continue bathroom platform',status:'planned',notes:'',links:[],materials:[]},
+      {date:'2026-07-20',label:'M 7/20',type:'WFH',work:'Frame east walls (12×8) — full enclosure',status:'planned',notes:'Build walls on ground, tilt up. Need helper to hold. Pre-cut all studs to same length.',links:[],materials:['2×4 studs','2×4 plates','Framing nails','Speed square','Circular saw','Tape measure']},
+      {date:'2026-07-25',label:'Sa 7/25',type:'',work:'Frame north walls (14×10), headers',status:'planned',notes:'Partial enclosure — determine which sides stay open. Headers sized for window/door openings.',links:[],materials:['2×4 studs','Header lumber','Jack/king studs','Cripples']},
+      {date:'2026-07-27',label:'M 7/27',type:'WFH',work:'Frame bathroom, tie into office',status:'planned',notes:'Tie new framing into existing office wall. May need to remove siding at connection point.',links:[],materials:['2×4 studs','Lag bolts (for tie-in)','Simpson ties']},
+      {date:'2026-07-31',label:'F 7/31',type:'off',work:'Sheathe walls, housewrap',status:'planned',notes:'',links:[],materials:['OSB/plywood sheathing','Tyvek housewrap','Housewrap tape','Cap nails','Stapler']},
+      {date:'2026-08-01',label:'Sa 8/1',type:'',work:'Complete sheathing & housewrap',status:'planned',notes:'',links:[],materials:[]}
     ]
   },
   {
-    name: 'Phase 3: Roof & Envelope', dates: '8/3–8/15', milestone: 'Dried in. Weather-tight on all enclosed areas.',
-    days: [
-      { date: '2026-08-03', label: 'M 8/3', type: 'WFH', work: 'Roof framing — east enclosure' },
-      { date: '2026-08-08', label: 'Sa 8/8', type: '', work: 'Roof framing — north kitchen' },
-      { date: '2026-08-10', label: 'M 8/10', type: 'WFH', work: 'Roofing material + windows/doors' },
-      { date: '2026-08-14', label: 'F 8/14', type: 'off', work: 'Siding, exterior finish, flash penetrations' },
-      { date: '2026-08-15', label: 'Sa 8/15', type: '', work: 'Complete exterior envelope' }
+    name:'Phase 3: Roof & Envelope',dates:'8/3–8/15',
+    milestone:'Dried in. Weather-tight on all enclosed areas.',
+    materials:['Rafters (2×6 or 2×8)','Ridge board','Roof sheathing (1/2" plywood or OSB)','Synthetic underlayment (or 30lb felt)','Roofing: corrugated metal panels or architectural shingles','Drip edge','Flashing (step, counter, valley)','Roofing nails / screws','Windows (measure and order by mid-July!)','Exterior door(s)','Siding material (T1-11, hardie, or match existing)','Exterior trim','Caulk (exterior grade)','Tin snips (if metal roof)','Roofing nailer or screw gun'],
+    days:[
+      {date:'2026-08-03',label:'M 8/3',type:'WFH',work:'Roof framing — east enclosure',status:'planned',notes:'Shed roof (single slope) tying into existing office roof is simplest. Match existing pitch if possible.',links:[],materials:['Rafters','Ridge board','Hurricane ties','Framing nails']},
+      {date:'2026-08-08',label:'Sa 8/8',type:'',work:'Roof framing — north kitchen',status:'planned',notes:'Lean-to off office wall. Lower pitch OK for kitchen — just needs drainage.',links:[],materials:['Rafters','Ledger board','Lag bolts','Joist hangers']},
+      {date:'2026-08-10',label:'M 8/10',type:'WFH',work:'Roofing material + windows/doors',status:'planned',notes:'Sheathe, felt/synthetic, then metal or shingles. Install windows same day if delivered.',links:[],materials:['Roof sheathing','Underlayment','Roofing material','Drip edge','Flashing','Windows','Door(s)']},
+      {date:'2026-08-14',label:'F 8/14',type:'off',work:'Siding, exterior finish, flash penetrations',status:'planned',notes:'Flash all window/door openings before siding. Z-flashing at horizontal joints.',links:[],materials:['Siding','Trim','Flashing','Caulk','Nails/screws']},
+      {date:'2026-08-15',label:'Sa 8/15',type:'',work:'Complete exterior envelope',status:'planned',notes:'',links:[],materials:[]}
     ]
   },
   {
-    name: 'Phase 4: Mechanicals', dates: '8/17–8/29', milestone: 'All mechanicals in. Ready for wall finish.',
-    days: [
-      { date: '2026-08-17', label: 'M 8/17', type: 'WFH', work: 'Rough plumbing — bathroom' },
-      { date: '2026-08-22', label: 'Sa 8/22', type: '', work: 'Rough plumbing — kitchen' },
-      { date: '2026-08-24', label: 'M 8/24', type: 'WFH', work: 'Electrical rough-in — all areas' },
-      { date: '2026-08-28', label: 'F 8/28', type: 'off', work: 'HVAC — mini-split(s) or extend system' },
-      { date: '2026-08-29', label: 'Sa 8/29', type: '', work: 'Insulate all walls & ceilings' }
+    name:'Phase 4: Mechanicals',dates:'8/17–8/29',
+    milestone:'All mechanicals in. Ready for wall finish.',
+    materials:['PEX pipe (1/2" and 3/4") + fittings + crimp rings','PEX crimper or SharkBite fittings','ABS/PVC drain pipe (2", 3", 4") + fittings','P-traps','Toilet flange','Shower drain + pan','Shut-off valves','Romex wire (12/2 for 20A, 14/2 for 15A)','Electrical boxes (old work)','Outlets, switches, cover plates','20A GFCI outlets (kitchen + bath)','Breakers (match panel)','Wire staples + wire nuts','Mini-split unit (order NOW — MrCool DIY or similar)','Line set + mounting bracket','Insulation batts (R-13 walls, R-30 ceiling)','Vapor barrier (if needed)'],
+    days:[
+      {date:'2026-08-17',label:'M 8/17',type:'WFH',work:'Rough plumbing — bathroom',status:'planned',notes:'Toilet supply + drain, sink supply + drain, shower supply + drain + vent. Tie into existing sewer line. May need licensed plumber if permitting.',links:[],materials:['PEX pipe + fittings','ABS drain pipe','P-trap','Toilet flange','Shower drain','Shut-offs']},
+      {date:'2026-08-22',label:'Sa 8/22',type:'',work:'Rough plumbing — kitchen',status:'planned',notes:'Kitchen sink supply (hot/cold) + drain. Dishwasher supply if planned. Gas line for range if not electric.',links:[],materials:['PEX pipe + fittings','ABS drain pipe','P-trap','Shut-offs']},
+      {date:'2026-08-24',label:'M 8/24',type:'WFH',work:'Electrical rough-in — all areas',status:'planned',notes:'Kitchen: 2× 20A circuits (GFCI), dedicated circuit for fridge + range. Bath: 20A GFCI + exhaust fan circuit. East room: 15A general + lighting. May need subpanel if main is full.',links:[],materials:['Romex (12/2, 14/2)','Electrical boxes','Wire staples','Breakers']},
+      {date:'2026-08-28',label:'F 8/28',type:'off',work:'HVAC — mini-split(s) or extend system',status:'planned',notes:'MrCool DIY units are pre-charged, no HVAC license needed. 12K BTU for east room, 18K for kitchen, or single 24K multi-zone.',links:[],materials:['Mini-split unit(s)','Line set','Mounting bracket','Conduit for line hide']},
+      {date:'2026-08-29',label:'Sa 8/29',type:'',work:'Insulate all walls & ceilings',status:'planned',notes:'R-13 in 2×4 walls, R-19 if 2×6. R-30 in ceiling. Friction fit batts. Vapor barrier on warm side if required by code.',links:[],materials:['Insulation batts','Vapor barrier','Stapler']}
     ]
   },
   {
-    name: 'Phase 5: Interior Finish', dates: '8/31–9/14', milestone: 'Interior complete. Livable spaces.',
-    days: [
-      { date: '2026-08-31', label: 'M 8/31', type: 'WFH', work: 'Hang drywall — east room + bathroom' },
-      { date: '2026-09-05', label: 'Sa 9/5', type: '', work: 'Hang drywall — kitchen' },
-      { date: '2026-09-07', label: 'M 9/7', type: 'Labor Day', work: 'Tape, mud, sand (first coat)' },
-      { date: '2026-09-08', label: 'Tu 9/8', type: 'WFH', work: 'Mud 2nd coat, sand, prime' },
-      { date: '2026-09-11', label: 'F 9/11', type: 'off', work: 'Paint all interior walls' },
-      { date: '2026-09-12', label: 'Sa 9/12', type: '', work: 'Flooring — all areas' },
-      { date: '2026-09-14', label: 'M 9/14', type: 'WFH', work: 'Kitchen cabinets, countertop, sink, appliances' }
+    name:'Phase 5: Interior Finish',dates:'8/31–9/14',
+    milestone:'Interior complete. Livable spaces.',
+    materials:['Drywall sheets (4×8, 1/2")','Joint compound (bucket)','Paper tape','Corner bead','Drywall screws','Sanding sponges','Primer','Interior paint','LVP flooring (waterproof, click-lock)','Underlayment (if needed for LVP)','Transition strips','Kitchen cabinets (IKEA or stock)','Countertop (butcher block or laminate)','Kitchen sink + faucet','Appliances (range, fridge, microwave)','Bathroom vanity + sink','Toilet','Shower surround or tile','Bathroom faucet','Exhaust fan','Light fixtures'],
+    days:[
+      {date:'2026-08-31',label:'M 8/31',type:'WFH',work:'Hang drywall — east room + bathroom',status:'planned',notes:'Start with ceiling, then walls. Score and snap. Use drywall lift or extra hands for ceiling sheets.',links:[],materials:['Drywall','Drywall screws','Drywall T-square','Utility knife','Drill']},
+      {date:'2026-09-05',label:'Sa 9/5',type:'',work:'Hang drywall — kitchen',status:'planned',notes:'',links:[],materials:['Drywall','Drywall screws']},
+      {date:'2026-09-07',label:'M 9/7',type:'Labor Day',work:'Tape, mud, sand (first coat)',status:'planned',notes:'Labor Day — off work, full project day. Embed tape in first coat of mud. Let dry overnight.',links:[],materials:['Joint compound','Paper tape','Corner bead','6" knife','10" knife']},
+      {date:'2026-09-08',label:'Tu 9/8',type:'WFH',work:'Mud 2nd coat, sand, prime',status:'planned',notes:'Wider coat with 10" knife. Sand smooth when dry. Prime everything.',links:[],materials:['Joint compound','Sanding sponge','Primer','Rollers + brushes']},
+      {date:'2026-09-11',label:'F 9/11',type:'off',work:'Paint all interior walls',status:'planned',notes:'2 coats. Cut in corners/ceiling first, then roll.',links:[],materials:['Interior paint','Rollers (9" + 4")','Brushes (2.5" angled)','Tape','Drop cloths']},
+      {date:'2026-09-12',label:'Sa 9/12',type:'',work:'Flooring — all areas',status:'planned',notes:'LVP click-lock is fast with 2 people. Start from longest wall. Undercut door frames.',links:[],materials:['LVP flooring','Underlayment','Transition strips','Tapping block','Pull bar','Spacers']},
+      {date:'2026-09-14',label:'M 9/14',type:'WFH',work:'Kitchen cabinets, countertop, sink, appliances',status:'planned',notes:'Level is critical for cabinets. Install uppers first. Template countertop for sink cutout.',links:[],materials:['Cabinets','Countertop','Sink + faucet','Supply lines','P-trap','Appliances']}
     ]
   },
   {
-    name: 'Phase 6: Fixtures, Fence & Finish', dates: '9/19–9/30', milestone: 'Project complete — Sep 30 deadline met.',
-    days: [
-      { date: '2026-09-19', label: 'Sa 9/19', type: '', work: 'Bathroom fixtures (toilet, sink, shower, vanity)' },
-      { date: '2026-09-21', label: 'M 9/21', type: 'WFH', work: 'Set fence posts, let cure' },
-      { date: '2026-09-25', label: 'F 9/25', type: 'off', work: 'Hang fence panels, gate' },
-      { date: '2026-09-26', label: 'Sa 9/26', type: '', work: 'Landscaping — plants, gravel, drainage' },
-      { date: '2026-09-28', label: 'M 9/28', type: 'WFH', work: 'Punch list — trim, caulk, touch-up, finals' }
+    name:'Phase 6: Fixtures, Fence & Finish',dates:'9/19–9/30',
+    milestone:'Project complete — Sep 30 deadline met.',
+    materials:['Toilet','Vanity + sink + faucet','Shower surround + faucet/valve','Mirror + medicine cabinet','Towel bars + TP holder','Exhaust fan','Light fixtures (all rooms)','Outlet covers + switch plates','Fence posts (4×4 PT, 8ft)','Fence rails (2×4 PT)','Fence pickets or pre-built panels','Post concrete (Quikrete)','Gate + hardware (hinges, latch)','Landscape plants','Gravel or mulch','Landscape fabric','Drip irrigation (optional)','Baseboard trim','Door trim/casing','Caulk (interior)','Touch-up paint'],
+    days:[
+      {date:'2026-09-19',label:'Sa 9/19',type:'',work:'Bathroom fixtures (toilet, sink, shower, vanity)',status:'planned',notes:'Set toilet on wax ring. Connect vanity supply/drain. Install shower valve trim + head.',links:[],materials:['Toilet + wax ring + bolts','Vanity','Faucet','Shower trim kit','Plumber\'s putty','Teflon tape']},
+      {date:'2026-09-21',label:'M 9/21',type:'WFH',work:'Set fence posts, let cure',status:'planned',notes:'Dig holes 24" deep, set posts plumb, pour concrete. Let cure 24-48 hrs before hanging rails/pickets.',links:[],materials:['4×4 PT posts','Quikrete','Post hole digger or auger','Level','String line','Water']},
+      {date:'2026-09-25',label:'F 9/25',type:'off',work:'Hang fence panels, gate',status:'planned',notes:'',links:[],materials:['Rails','Pickets or panels','Gate + hardware','Screws','Level']},
+      {date:'2026-09-26',label:'Sa 9/26',type:'',work:'Landscaping — plants, gravel, drainage',status:'planned',notes:'Grade away from structures. Landscape fabric under gravel. Drought-tolerant plants for Escondido.',links:[],materials:['Plants','Gravel/mulch','Landscape fabric','Drip irrigation','Shovel','Rake']},
+      {date:'2026-09-28',label:'M 9/28',type:'WFH',work:'Punch list — trim, caulk, touch-up, finals',status:'planned',notes:'Install baseboard, door trim, outlet/switch covers. Caulk all gaps. Touch-up paint. Final clean.',links:[],materials:['Baseboard','Door trim','Caulk','Nail gun','Touch-up paint','Covers/plates']}
     ]
   }
 ];
 
 // ── Storage ──
-const LS = {
-  get(k, def) { try { const v = localStorage.getItem('apt-' + k); return v ? JSON.parse(v) : def; } catch { return def; } },
-  set(k, v) { localStorage.setItem('apt-' + k, JSON.stringify(v)); }
+const LS={
+  get(k,def){try{const v=localStorage.getItem('apt-'+k);return v?JSON.parse(v):def}catch{return def}},
+  set(k,v){localStorage.setItem('apt-'+k,JSON.stringify(v))}
 };
-
-function loadData() {
-  return {
-    pins: LS.get('pins', DEFAULT_PINS),
-    scope: LS.get('scope', DEFAULT_SCOPE),
-    risks: LS.get('risks', DEFAULT_RISKS),
-    phases: LS.get('phases', DEFAULT_PHASES),
-    workers: LS.get('workers', {})
+function loadData(){
+  return{
+    pins:LS.get('pins',DEFAULT_PINS),
+    scope:LS.get('scope',DEFAULT_SCOPE),
+    risks:LS.get('risks',DEFAULT_RISKS),
+    phases:LS.get('phases',DEFAULT_PHASES),
+    workers:LS.get('workers',{}),
+    dayData:LS.get('dayData',{}) // {date: {notes,links,materials,status}}
   };
 }
-
-function saveData(data) {
-  LS.set('pins', data.pins);
-  LS.set('scope', data.scope);
-  LS.set('risks', data.risks);
-  LS.set('phases', data.phases);
-  LS.set('workers', data.workers);
+function saveData(d){
+  LS.set('pins',d.pins);LS.set('scope',d.scope);LS.set('risks',d.risks);
+  LS.set('phases',d.phases);LS.set('workers',d.workers);LS.set('dayData',d.dayData);
 }
 
-let DATA, USER = null;
+let DATA,USER=null,VIEW='home',VIEW_PI=null,VIEW_DI=null;
 
 // ── Auth ──
-function toggleAuth() {
-  if (USER) {
-    doLogout();
-  } else {
-    document.getElementById('login-dropdown').classList.toggle('hidden');
-  }
+function toggleAuth(){
+  if(USER)doLogout();
+  else document.getElementById('login-dropdown').classList.toggle('hidden');
 }
-
-function doLogin() {
-  const uid = document.getElementById('login-user').value;
-  const pin = document.getElementById('login-pin').value;
-  const errEl = document.getElementById('login-err');
-  errEl.classList.add('hidden');
-  if (!uid) { errEl.textContent = 'Select a name'; errEl.classList.remove('hidden'); return; }
-  DATA = loadData();
-  if (DATA.pins[uid] !== pin) { errEl.textContent = 'Wrong PIN'; errEl.classList.remove('hidden'); return; }
-  USER = uid;
-  LS.set('auth', uid);
+function doLogin(){
+  const uid=document.getElementById('login-user').value;
+  const pin=document.getElementById('login-pin').value;
+  const err=document.getElementById('login-err');
+  err.classList.add('hidden');
+  if(!uid){err.textContent='Select a name';err.classList.remove('hidden');return}
+  DATA=loadData();
+  if(DATA.pins[uid]!==pin){err.textContent='Wrong PIN';err.classList.remove('hidden');return}
+  USER=uid;LS.set('auth',uid);
   document.getElementById('login-dropdown').classList.add('hidden');
-  document.getElementById('login-pin').value = '';
+  document.getElementById('login-pin').value='';
   render();
 }
-
-function doLogout() {
-  LS.set('auth', null);
-  USER = null;
-  document.getElementById('login-user').value = '';
-  document.getElementById('login-pin').value = '';
-  document.getElementById('login-err').classList.add('hidden');
+function doLogout(){
+  LS.set('auth',null);USER=null;
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pin').value='';
   render();
 }
+function isAdmin(){return USER==='raoul'}
+function isLoggedIn(){return USER!==null}
 
-function isAdmin() { return USER === 'raoul'; }
-function isLoggedIn() { return USER !== null; }
+// ── Navigation ──
+function navHome(){VIEW='home';VIEW_PI=null;VIEW_DI=null;render()}
+function navPhase(pi){VIEW='phase';VIEW_PI=pi;VIEW_DI=null;render()}
+function navDay(pi,di){VIEW='day';VIEW_PI=pi;VIEW_DI=di;render()}
+
+// ── Day data helpers ──
+function getDayExtra(date){
+  return DATA.dayData[date]||{notes:'',links:[],materials:[],status:'planned'};
+}
+function setDayExtra(date,extra){
+  DATA.dayData[date]=extra;saveData(DATA);
+}
 
 // ── Render ──
-function render() {
-  DATA = loadData();
+function render(){
+  DATA=loadData();
   updateHeaderAuth();
-  renderSummary();
-  renderScope();
-  renderPhases();
-  renderRisks();
-}
+  const bc=document.getElementById('breadcrumb');
+  const c=document.getElementById('content');
 
-function updateHeaderAuth() {
-  const label = document.getElementById('header-user-label');
-  const btn = document.getElementById('auth-btn');
-  if (isLoggedIn()) {
-    label.textContent = USER.charAt(0).toUpperCase() + USER.slice(1) + (isAdmin() ? ' (Admin)' : '');
-    btn.textContent = 'Log Out';
-  } else {
-    label.textContent = '';
-    btn.textContent = 'Log In';
+  if(VIEW==='home'){
+    bc.classList.add('hidden');
+    c.innerHTML=renderHome();
+  }else if(VIEW==='phase'){
+    bc.classList.remove('hidden');
+    bc.innerHTML=`<span onclick="navHome()">Home</span> / ${esc(DATA.phases[VIEW_PI].name)}`;
+    c.innerHTML=renderPhaseView(VIEW_PI);
+  }else if(VIEW==='day'){
+    bc.classList.remove('hidden');
+    const p=DATA.phases[VIEW_PI];
+    const d=p.days[VIEW_DI];
+    bc.innerHTML=`<span onclick="navHome()">Home</span> / <span onclick="navPhase(${VIEW_PI})">${esc(p.name)}</span> / ${esc(d.label)}`;
+    c.innerHTML=renderDayView(VIEW_PI,VIEW_DI);
   }
 }
 
-function renderSummary() {
-  const totalDays = DATA.phases.reduce((s, p) => s + p.days.length, 0);
-  const allDates = DATA.phases.flatMap(p => p.days.map(d => d.date));
-  const totalWorkerSlots = allDates.reduce((s, dt) => s + (DATA.workers[dt] || []).length, 0);
-
-  let html = `<div class="summary-stat"><div class="num">${totalDays}</div><div class="label">Work Days</div></div>`;
-  html += `<div class="summary-stat"><div class="num">${DATA.phases.length}</div><div class="label">Phases</div></div>`;
-  html += `<div class="summary-stat"><div class="num">${totalWorkerSlots}</div><div class="label">Worker Signups</div></div>`;
-  if (isLoggedIn() && !isAdmin()) {
-    let myDays = 0;
-    allDates.forEach(dt => { if ((DATA.workers[dt] || []).includes(USER)) myDays++; });
-    html += `<div class="summary-stat"><div class="num">${myDays}</div><div class="label">My Days</div></div>`;
-  }
-  document.getElementById('summary-bar').innerHTML = html;
-}
-
-function renderScope() {
-  const c = document.getElementById('scope-container');
-  if (isAdmin()) {
-    c.innerHTML = `<div class="scope-section">
-      <h2>Scope</h2>
-      <textarea class="scope-edit" id="scope-edit">${DATA.scope.join('\n')}</textarea>
-      <button class="btn-add" style="margin:8px 0 0" onclick="saveScope()">Save Scope</button>
-    </div>`;
-  } else {
-    c.innerHTML = `<div class="scope-section">
-      <h2>Scope</h2>
-      <ul>${DATA.scope.map(s => `<li class="scope-item">${esc(s)}</li>`).join('')}</ul>
-      <div style="margin-top:8px;font-size:12px;color:#888;"><strong>Crew:</strong> Raoul + laborer (Mon + off Fri). ~34 work days.</div>
-    </div>`;
+function updateHeaderAuth(){
+  const lbl=document.getElementById('header-user-label');
+  const btn=document.getElementById('auth-btn');
+  if(isLoggedIn()){
+    lbl.textContent=USER.charAt(0).toUpperCase()+USER.slice(1)+(isAdmin()?' (Admin)':'');
+    btn.textContent='Log Out';
+  }else{
+    lbl.textContent='';btn.textContent='Log In';
   }
 }
 
-function saveScope() {
-  DATA.scope = document.getElementById('scope-edit').value.split('\n').filter(l => l.trim());
-  saveData(DATA);
-  render();
-}
+// ── HOME VIEW ──
+function renderHome(){
+  let h='';
+  // Summary
+  const totalDays=DATA.phases.reduce((s,p)=>s+p.days.length,0);
+  const allDates=DATA.phases.flatMap(p=>p.days.map(d=>d.date));
+  const slotsUsed=allDates.reduce((s,dt)=>s+(DATA.workers[dt]||[]).length,0);
+  let doneDays=0;allDates.forEach(dt=>{const x=getDayExtra(dt);if(x.status==='done')doneDays++});
 
-function renderPhases() {
-  const c = document.getElementById('phases-container');
-  let html = '';
-  DATA.phases.forEach((phase, pi) => {
-    html += `<div class="phase-section">`;
-    html += `<div class="phase-header" onclick="togglePhase(${pi})">
-      <span>${esc(phase.name)}</span>
-      <span class="phase-dates">${esc(phase.dates)} · ${phase.days.length} days</span>
-    </div>`;
-    html += `<div class="phase-body" id="phase-body-${pi}">`;
+  h+=`<div class="summary-bar">
+    <div class="summary-stat"><div class="num">${totalDays}</div><div class="label">Work Days</div></div>
+    <div class="summary-stat"><div class="num">${DATA.phases.length}</div><div class="label">Phases</div></div>
+    <div class="summary-stat"><div class="num">${doneDays}/${totalDays}</div><div class="label">Completed</div></div>
+    <div class="summary-stat"><div class="num">${slotsUsed}</div><div class="label">Signups</div></div>`;
+  if(isLoggedIn()&&!isAdmin()){
+    let my=0;allDates.forEach(dt=>{if((DATA.workers[dt]||[]).includes(USER))my++});
+    h+=`<div class="summary-stat"><div class="num">${my}</div><div class="label">My Days</div></div>`;
+  }
+  h+=`</div>`;
 
-    phase.days.forEach((day, di) => {
-      const assigned = DATA.workers[day.date] || [];
+  // Scope
+  if(isAdmin()){
+    h+=`<div class="info-card"><h2>Scope</h2>
+      <textarea id="scope-edit" style="width:100%;min-height:100px;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical">${DATA.scope.join('\n')}</textarea>
+      <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="saveScope()">Save</button></div>`;
+  }else{
+    h+=`<div class="info-card"><h2>Scope</h2><ul>${DATA.scope.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
+    <p style="margin-top:8px;color:#888;font-size:13px"><strong>Crew:</strong> Raoul + laborer (Mon + off Fri). Target: Sep 30.</p></div>`;
+  }
 
-      html += `<div class="day-row">`;
-      html += `<div class="day-date">${esc(day.label)}${day.type ? `<span class="day-type">${esc(day.type)}</span>` : ''}</div>`;
+  // Phase cards
+  DATA.phases.forEach((p,pi)=>{
+    const total=p.days.length;
+    let done=0;p.days.forEach(d=>{const x=getDayExtra(d.date);if(x.status==='done')done++});
+    const pct=total?Math.round(done/total*100):0;
+    const workers=new Set();p.days.forEach(d=>(DATA.workers[d.date]||[]).forEach(w=>workers.add(w)));
 
-      if (isAdmin()) {
-        html += `<div class="day-work" style="flex:1">
-          <input class="day-edit-work" value="${escAttr(day.work)}" id="work-${pi}-${di}" onchange="updateWork(${pi},${di},this.value)">
-        </div>`;
-      } else {
-        html += `<div class="day-work"><span class="day-work-text">${esc(day.work)}</span></div>`;
-      }
-
-      html += `<div class="day-workers">`;
-      assigned.forEach(w => {
-        html += `<span class="worker-badge ${w}">${w.charAt(0).toUpperCase() + w.slice(1)}</span>`;
-      });
-      // Workers can sign up; public viewers just see badges
-      if (isLoggedIn() && !isAdmin()) {
-        const isMeSignedUp = assigned.includes(USER);
-        html += `<button class="worker-toggle ${isMeSignedUp ? 'signed-up' : ''}" onclick="toggleWorker('${day.date}')">${isMeSignedUp ? '✓ Signed Up' : '+ Sign Up'}</button>`;
-      }
-      if (isAdmin()) {
-        html += `<button class="btn-add" style="margin:0;padding:2px 6px;font-size:10px" onclick="removeDayPrompt(${pi},${di})">✕</button>`;
-      }
-      html += `</div>`;
-      html += `</div>`;
-    });
-
-    html += `<div class="milestone">${esc(phase.milestone)}</div>`;
-    if (isAdmin()) {
-      html += `<button class="btn-add" onclick="addDayModal(${pi})">+ Add Day</button>`;
-    }
-    html += `</div></div>`;
+    h+=`<div class="phase-card" onclick="navPhase(${pi})">
+      <div class="phase-card-header"><h2>${esc(p.name)}</h2><span class="phase-card-dates">${esc(p.dates)}</span></div>
+      <div class="phase-card-body">
+        <div class="phase-stats"><span><strong>${total}</strong> days</span><span><strong>${done}</strong> done</span><span><strong>${workers.size}</strong> workers</span></div>
+        <div class="phase-card-milestone">${esc(p.milestone)}</div>
+        <div class="phase-progress"><div class="phase-progress-fill" style="width:${pct}%"></div></div>
+      </div></div>`;
   });
 
-  if (isAdmin()) {
-    html += `<button class="btn-add" style="margin:12px" onclick="addPhaseModal()">+ Add Phase</button>`;
+  if(isAdmin()){
+    h+=`<div style="padding:8px 16px"><button class="btn btn-primary" onclick="addPhaseModal()">+ Add Phase</button></div>`;
   }
-  c.innerHTML = html;
+
+  // Risks
+  if(isAdmin()){
+    h+=`<div class="info-card"><h2 style="color:#a06828">Risks & Notes</h2>
+      <textarea id="risks-edit" style="width:100%;min-height:80px;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical">${DATA.risks.join('\n')}</textarea>
+      <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="saveRisks()">Save</button></div>`;
+  }else{
+    h+=`<div class="info-card"><h2 style="color:#a06828">Risks & Notes</h2><ul>${DATA.risks.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div>`;
+  }
+
+  h+=`<div class="app-footer">864 Farr Ave, Escondido — Apartment Conversion Project</div>`;
+  return h;
 }
 
-function renderRisks() {
-  const c = document.getElementById('risks-container');
-  if (isAdmin()) {
-    c.innerHTML = `<div class="risks-section">
-      <h2>Risks & Notes</h2>
-      <textarea class="risk-edit" id="risks-edit">${DATA.risks.join('\n')}</textarea>
-      <button class="btn-add" style="margin:8px 0 0" onclick="saveRisks()">Save Risks</button>
-    </div>`;
-  } else {
-    c.innerHTML = `<div class="risks-section">
-      <h2>Risks & Notes</h2>
-      <ul>${DATA.risks.map(r => `<li>${esc(r)}</li>`).join('')}</ul>
-    </div>`;
+// ── PHASE VIEW ──
+function renderPhaseView(pi){
+  const p=DATA.phases[pi];
+  let h='';
+
+  // Phase materials
+  if(p.materials&&p.materials.length){
+    h+=`<div class="info-card"><h2>Materials — ${esc(p.name)}</h2><ul class="materials-list">`;
+    p.materials.forEach((m,mi)=>{
+      h+=`<li><span style="font-size:14px">${esc(m)}</span></li>`;
+    });
+    h+=`</ul></div>`;
   }
+
+  // Day cards
+  p.days.forEach((d,di)=>{
+    const extra=getDayExtra(d.date);
+    const assigned=DATA.workers[d.date]||[];
+    const statusClass='status-'+(extra.status||'planned');
+
+    h+=`<div class="day-card" onclick="navDay(${pi},${di})"><div class="day-card-inner">
+      <div class="day-card-date">${esc(d.label)}${d.type?`<span class="day-type">${esc(d.type)}</span>`:''}</div>
+      <div class="day-card-work">${esc(d.work)}</div>
+      <div class="day-card-right">
+        <span class="day-card-status ${statusClass}">${extra.status||'planned'}</span>
+        <div class="day-card-workers">${assigned.map(w=>`<span class="worker-badge ${w}">${w.charAt(0).toUpperCase()}</span>`).join('')}</div>
+      </div>
+    </div></div>`;
+  });
+
+  if(isAdmin()){
+    h+=`<div style="padding:8px 16px"><button class="btn btn-primary" onclick="addDayModal(${pi})">+ Add Day</button></div>`;
+  }
+
+  h+=`<div class="info-card"><div class="phase-card-milestone" style="font-size:15px">${esc(p.milestone)}</div></div>`;
+  return h;
 }
 
-function saveRisks() {
-  DATA.risks = document.getElementById('risks-edit').value.split('\n').filter(l => l.trim());
-  saveData(DATA);
-  render();
+// ── DAY DETAIL VIEW ──
+function renderDayView(pi,di){
+  const p=DATA.phases[pi];
+  const d=p.days[di];
+  const extra=getDayExtra(d.date);
+  const assigned=DATA.workers[d.date]||[];
+  let h='';
+
+  h+=`<div class="day-detail">
+    <div class="day-detail-header">
+      <h2>${esc(d.label)} — ${esc(d.work)}</h2>
+      <div class="day-detail-sub">${esc(p.name)} · ${d.type?esc(d.type)+' · ':''}${d.date}</div>
+    </div>
+    <div class="day-detail-body">`;
+
+  // Status
+  h+=`<div class="detail-section"><h3>Status</h3><div class="status-picker">`;
+  ['planned','in-progress','done'].forEach(s=>{
+    const active=(extra.status||'planned')===s?` active-${s}`:'';
+    const label=s.charAt(0).toUpperCase()+s.slice(1);
+    if(isAdmin()){
+      h+=`<button class="${active}" onclick="setStatus('${d.date}','${s}')">${label}</button>`;
+    }else{
+      h+=`<button class="${active}" disabled>${label}</button>`;
+    }
+  });
+  h+=`</div></div>`;
+
+  // Work description (admin editable)
+  h+=`<div class="detail-section"><h3>Work</h3>`;
+  if(isAdmin()){
+    h+=`<input type="text" id="day-work-edit" value="${escAttr(d.work)}" onchange="updateWork(${pi},${di},this.value)">`;
+  }else{
+    h+=`<p style="font-size:15px">${esc(d.work)}</p>`;
+  }
+  h+=`</div>`;
+
+  // Workers
+  h+=`<div class="detail-section"><h3>Workers</h3><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">`;
+  assigned.forEach(w=>{
+    h+=`<span class="worker-badge ${w}">${w.charAt(0).toUpperCase()+w.slice(1)}</span>`;
+  });
+  if(assigned.length===0) h+=`<span style="color:#aaa;font-size:14px">No one signed up yet</span>`;
+  if(isLoggedIn()&&!isAdmin()){
+    const mine=assigned.includes(USER);
+    h+=`<button class="worker-toggle ${mine?'signed-up':''}" onclick="toggleWorker('${d.date}')">${mine?'✓ Signed Up':'+ Sign Up'}</button>`;
+  }
+  h+=`</div></div>`;
+
+  // Materials for this day
+  const dayMats=d.materials||[];
+  if(dayMats.length||isAdmin()){
+    h+=`<div class="detail-section"><h3>Materials Needed</h3>`;
+    if(dayMats.length){
+      h+=`<ul class="materials-list">`;
+      dayMats.forEach((m,mi)=>{
+        h+=`<li><span class="mat-text" style="font-size:14px">${esc(m)}</span>`;
+        if(isAdmin()) h+=`<span class="link-remove" onclick="removeDayMaterial(${pi},${di},${mi})">✕</span>`;
+        h+=`</li>`;
+      });
+      h+=`</ul>`;
+    }else{
+      h+=`<p style="color:#aaa;font-size:14px">None listed</p>`;
+    }
+    if(isAdmin()){
+      h+=`<div style="display:flex;gap:6px;margin-top:8px">
+        <input type="text" id="new-mat" placeholder="Add material..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px">
+        <button class="btn btn-primary btn-sm" onclick="addDayMaterial(${pi},${di})">Add</button></div>`;
+    }
+    h+=`</div>`;
+  }
+
+  // Notes
+  h+=`<div class="detail-section"><h3>Notes</h3>`;
+  if(isAdmin()){
+    h+=`<textarea id="day-notes" onchange="saveNotes('${d.date}',this.value)">${esc(extra.notes||'')}</textarea>`;
+    // Also show default notes from data
+    if(d.notes) h+=`<p style="margin-top:6px;font-size:13px;color:#6a8aaa"><em>${esc(d.notes)}</em></p>`;
+  }else{
+    const allNotes=(extra.notes||'')+(d.notes?'\n'+d.notes:'');
+    h+=allNotes.trim()?`<p style="font-size:14px;white-space:pre-wrap">${esc(allNotes.trim())}</p>`:`<p style="color:#aaa;font-size:14px">No notes</p>`;
+  }
+  h+=`</div>`;
+
+  // Links / Photos / Videos
+  const links=extra.links||[];
+  h+=`<div class="detail-section"><h3>Photos / Videos / Links</h3>`;
+  if(links.length){
+    links.forEach((lnk,li)=>{
+      const icon=lnk.type==='photo'?'📷':lnk.type==='video'?'🎥':'🔗';
+      h+=`<div class="link-item">
+        <span class="link-icon">${icon}</span>
+        <a href="${escAttr(lnk.url)}" target="_blank" rel="noopener" style="flex:1;font-size:14px">${esc(lnk.title||lnk.url)}</a>`;
+      if(isAdmin()) h+=`<span class="link-remove" onclick="removeLink('${d.date}',${li})">✕</span>`;
+      h+=`</div>`;
+    });
+  }else{
+    h+=`<p style="color:#aaa;font-size:14px">None added</p>`;
+  }
+  if(isAdmin()){
+    h+=`<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;gap:6px">
+        <select id="link-type" style="padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:13px;width:100px">
+          <option value="link">Link</option><option value="photo">Photo</option><option value="video">Video</option>
+        </select>
+        <input type="text" id="link-url" placeholder="URL..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px">
+      </div>
+      <div style="display:flex;gap:6px">
+        <input type="text" id="link-title" placeholder="Title (optional)..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px">
+        <button class="btn btn-primary btn-sm" onclick="addLink('${d.date}')">Add</button>
+      </div></div>`;
+  }
+  h+=`</div>`;
+
+  // Admin: delete day
+  if(isAdmin()){
+    h+=`<div class="detail-section" style="border:none"><button class="btn btn-danger" onclick="removeDayPrompt(${pi},${di})">Delete This Day</button></div>`;
+  }
+
+  h+=`</div></div>`;
+  return h;
 }
 
 // ── Actions ──
-function togglePhase(pi) {
-  const el = document.getElementById('phase-body-' + pi);
-  el.style.display = el.style.display === 'none' ? '' : 'none';
+function saveScope(){
+  DATA.scope=document.getElementById('scope-edit').value.split('\n').filter(l=>l.trim());
+  saveData(DATA);render();
 }
-
-function toggleWorker(date) {
-  if (!DATA.workers[date]) DATA.workers[date] = [];
-  const arr = DATA.workers[date];
-  const idx = arr.indexOf(USER);
-  if (idx >= 0) arr.splice(idx, 1);
-  else arr.push(USER);
-  saveData(DATA);
-  render();
+function saveRisks(){
+  DATA.risks=document.getElementById('risks-edit').value.split('\n').filter(l=>l.trim());
+  saveData(DATA);render();
 }
-
-function updateWork(pi, di, val) {
-  DATA.phases[pi].days[di].work = val;
-  saveData(DATA);
+function updateWork(pi,di,val){
+  DATA.phases[pi].days[di].work=val;saveData(DATA);
 }
-
-function removeDayPrompt(pi, di) {
-  if (confirm('Remove ' + DATA.phases[pi].days[di].label + '?')) {
-    const date = DATA.phases[pi].days[di].date;
-    DATA.phases[pi].days.splice(di, 1);
-    delete DATA.workers[date];
-    saveData(DATA);
-    render();
+function setStatus(date,status){
+  const extra=getDayExtra(date);extra.status=status;setDayExtra(date,extra);render();
+}
+function saveNotes(date,val){
+  const extra=getDayExtra(date);extra.notes=val;setDayExtra(date,extra);
+}
+function addLink(date){
+  const type=document.getElementById('link-type').value;
+  const url=document.getElementById('link-url').value;
+  const title=document.getElementById('link-title').value;
+  if(!url)return;
+  const extra=getDayExtra(date);
+  if(!extra.links)extra.links=[];
+  extra.links.push({type,url,title});
+  setDayExtra(date,extra);render();
+}
+function removeLink(date,li){
+  const extra=getDayExtra(date);extra.links.splice(li,1);setDayExtra(date,extra);render();
+}
+function addDayMaterial(pi,di){
+  const val=document.getElementById('new-mat').value.trim();
+  if(!val)return;
+  if(!DATA.phases[pi].days[di].materials)DATA.phases[pi].days[di].materials=[];
+  DATA.phases[pi].days[di].materials.push(val);
+  saveData(DATA);render();
+}
+function removeDayMaterial(pi,di,mi){
+  DATA.phases[pi].days[di].materials.splice(mi,1);saveData(DATA);render();
+}
+function toggleWorker(date){
+  if(!DATA.workers[date])DATA.workers[date]=[];
+  const arr=DATA.workers[date];
+  const idx=arr.indexOf(USER);
+  if(idx>=0)arr.splice(idx,1);else arr.push(USER);
+  saveData(DATA);render();
+}
+function removeDayPrompt(pi,di){
+  if(confirm('Remove '+DATA.phases[pi].days[di].label+'?')){
+    const date=DATA.phases[pi].days[di].date;
+    DATA.phases[pi].days.splice(di,1);
+    delete DATA.workers[date];delete DATA.dayData[date];
+    saveData(DATA);navPhase(pi);
   }
 }
 
 // ── Modals ──
-function showModal(html) {
-  document.getElementById('modal').innerHTML = html;
-  document.getElementById('modal-overlay').classList.remove('hidden');
-}
-function hideModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+function showModal(html){document.getElementById('modal').innerHTML=html;document.getElementById('modal-overlay').classList.remove('hidden')}
+function hideModal(){document.getElementById('modal-overlay').classList.add('hidden')}
 
-function addDayModal(pi) {
-  showModal(`
-    <h2>Add Day to ${esc(DATA.phases[pi].name)}</h2>
-    <label>Date (YYYY-MM-DD)</label><input id="md-date" type="date">
+function addDayModal(pi){
+  showModal(`<h2>Add Day to ${esc(DATA.phases[pi].name)}</h2>
+    <label>Date</label><input id="md-date" type="date">
     <label>Label (e.g. M 7/6)</label><input id="md-label" placeholder="M 7/6">
     <label>Type (WFH, off, etc)</label><input id="md-type" placeholder="WFH">
     <label>Work Description</label><textarea id="md-work" placeholder="What we're doing..."></textarea>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="hideModal()">Cancel</button>
-      <button class="btn-primary" onclick="addDay(${pi})">Add</button>
-    </div>
-  `);
+    <div class="modal-btns"><button class="btn-cancel" onclick="hideModal()">Cancel</button><button class="btn-primary" onclick="addDay(${pi})">Add</button></div>`);
 }
-
-function addDay(pi) {
-  const date = document.getElementById('md-date').value;
-  const label = document.getElementById('md-label').value;
-  const type = document.getElementById('md-type').value;
-  const work = document.getElementById('md-work').value;
-  if (!date || !label || !work) return;
-  DATA.phases[pi].days.push({ date, label, type, work });
-  DATA.phases[pi].days.sort((a, b) => a.date.localeCompare(b.date));
-  saveData(DATA);
-  hideModal();
-  render();
+function addDay(pi){
+  const date=document.getElementById('md-date').value;
+  const label=document.getElementById('md-label').value;
+  const type=document.getElementById('md-type').value;
+  const work=document.getElementById('md-work').value;
+  if(!date||!label||!work)return;
+  DATA.phases[pi].days.push({date,label,type,work,status:'planned',notes:'',links:[],materials:[]});
+  DATA.phases[pi].days.sort((a,b)=>a.date.localeCompare(b.date));
+  saveData(DATA);hideModal();render();
 }
-
-function addPhaseModal() {
-  showModal(`
-    <h2>Add Phase</h2>
+function addPhaseModal(){
+  showModal(`<h2>Add Phase</h2>
     <label>Phase Name</label><input id="md-pname" placeholder="Phase 7: ...">
     <label>Date Range</label><input id="md-pdates" placeholder="10/1–10/15">
     <label>Milestone</label><textarea id="md-pmilestone" placeholder="What this phase achieves..."></textarea>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="hideModal()">Cancel</button>
-      <button class="btn-primary" onclick="addPhase()">Add</button>
-    </div>
-  `);
+    <div class="modal-btns"><button class="btn-cancel" onclick="hideModal()">Cancel</button><button class="btn-primary" onclick="addPhase()">Add</button></div>`);
 }
-
-function addPhase() {
-  const name = document.getElementById('md-pname').value;
-  const dates = document.getElementById('md-pdates').value;
-  const milestone = document.getElementById('md-pmilestone').value;
-  if (!name) return;
-  DATA.phases.push({ name, dates: dates || '', milestone: milestone || '', days: [] });
-  saveData(DATA);
-  hideModal();
-  render();
+function addPhase(){
+  const name=document.getElementById('md-pname').value;
+  const dates=document.getElementById('md-pdates').value;
+  const milestone=document.getElementById('md-pmilestone').value;
+  if(!name)return;
+  DATA.phases.push({name,dates:dates||'',milestone:milestone||'',days:[],materials:[]});
+  saveData(DATA);hideModal();render();
 }
 
 // ── Utilities ──
-function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
-function escAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function escAttr(s){return(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
 
-// ── Close dropdown on outside click ──
-document.addEventListener('click', function(e) {
-  const dd = document.getElementById('login-dropdown');
-  const btn = document.getElementById('auth-btn');
-  if (!dd.classList.contains('hidden') && !dd.contains(e.target) && e.target !== btn) {
-    dd.classList.add('hidden');
-  }
+// ── Event listeners ──
+document.addEventListener('click',function(e){
+  const dd=document.getElementById('login-dropdown');
+  const btn=document.getElementById('auth-btn');
+  if(!dd.classList.contains('hidden')&&!dd.contains(e.target)&&e.target!==btn)dd.classList.add('hidden');
 });
-
-document.getElementById('modal-overlay').addEventListener('click', function(e) {
-  if (e.target === this) hideModal();
-});
+document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)hideModal()});
 
 // ── Init ──
-(function() {
-  DATA = loadData();
-  const saved = LS.get('auth', null);
-  if (saved && DATA.pins[saved]) {
-    USER = saved;
-  }
+(function(){
+  DATA=loadData();
+  const saved=LS.get('auth',null);
+  if(saved&&DATA.pins[saved])USER=saved;
   render();
 })();
 </script>
