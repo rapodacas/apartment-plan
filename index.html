@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apartment Build — 864 Farr Ave</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f0f4f8;color:#2d2d2d;min-height:100vh}
+.hidden{display:none!important}
+
+/* Login */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
+.login-box{background:#fff;border-radius:12px;padding:32px;max-width:360px;width:100%;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.login-box h1{font-size:20px;color:#2a4a6a;margin-bottom:4px}
+.login-box p{font-size:13px;color:#888;margin-bottom:20px}
+.login-box select,.login-box input{width:100%;padding:10px 12px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;margin-bottom:12px}
+.login-box button{width:100%;padding:10px;background:#2a4a6a;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600}
+.login-box button:hover{background:#3a6a9a}
+.login-err{color:#c44;font-size:12px;margin-bottom:8px}
+
+/* Header */
+#app-header{background:linear-gradient(135deg,#2a4a6a,#3a6a9a);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+#app-header h1{font-size:16px;font-weight:600}
+#app-header .user-info{font-size:12px;display:flex;align-items:center;gap:10px}
+#app-header button{background:rgba(255,255,255,.2);color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:11px;cursor:pointer}
+
+/* Scope */
+.scope-section{background:#fff;margin:12px;border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.scope-section h2{font-size:15px;color:#2a4a6a;margin-bottom:8px}
+.scope-section ul{padding-left:18px;font-size:13px;line-height:1.6}
+.scope-item{margin-bottom:2px}
+.scope-edit{width:100%;min-height:120px;font-size:13px;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-family:inherit;resize:vertical}
+
+/* Phase sections */
+.phase-section{margin:12px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.phase-header{background:#2a4a6a;color:#fff;padding:10px 14px;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.phase-header .phase-dates{font-size:11px;opacity:.8;font-weight:400}
+.phase-body{padding:0}
+.milestone{background:#eef4fa;border-left:3px solid #3a6a9a;padding:8px 12px;font-size:12px;color:#2a4a6a;margin:0}
+
+/* Day rows */
+.day-row{display:flex;align-items:stretch;border-bottom:1px solid #e4eaf0;font-size:13px;min-height:44px}
+.day-row:nth-child(odd){background:#dce8f5}
+.day-row:nth-child(even){background:#fff}
+.day-date{min-width:70px;padding:8px;font-weight:600;font-size:12px;display:flex;flex-direction:column;justify-content:center}
+.day-date .day-type{font-size:10px;color:#6a8aaa;font-weight:400}
+.day-work{flex:1;padding:8px;display:flex;flex-direction:column;justify-content:center}
+.day-work-text{font-size:13px}
+.day-workers{padding:8px;min-width:100px;display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+.worker-badge{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:600}
+.worker-badge.raoul{background:#2a4a6a;color:#fff}
+.worker-badge.charlie{background:#6a3a9a;color:#fff}
+.worker-badge.vinny{background:#3a9a6a;color:#fff}
+.worker-badge.joaquin{background:#9a6a3a;color:#fff}
+.worker-toggle{font-size:11px;padding:3px 8px;border-radius:10px;border:1px solid #d0dce8;background:#fff;cursor:pointer;white-space:nowrap}
+.worker-toggle.signed-up{background:#3a9a6a;color:#fff;border-color:#3a9a6a}
+
+/* Edit mode */
+.day-edit-work{width:100%;padding:4px 6px;border:1px solid #aac;border-radius:4px;font-size:12px;font-family:inherit}
+.day-row .admin-btns{display:flex;gap:4px;padding:4px}
+.admin-btns button{font-size:10px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer}
+.btn-save{background:#3a9a6a;color:#fff}
+.btn-del{background:#c44;color:#fff}
+.btn-add{background:#2a4a6a;color:#fff;border:none;padding:6px 12px;border-radius:4px;font-size:12px;cursor:pointer;margin:8px 14px}
+
+/* Risks */
+.risks-section{background:#fff;margin:12px;border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.risks-section h2{font-size:15px;color:#a06828;margin-bottom:8px}
+.risks-section ul{padding-left:18px;font-size:13px;line-height:1.6}
+.risk-edit{width:100%;min-height:80px;font-size:13px;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-family:inherit;resize:vertical}
+
+/* Summary bar */
+.summary-bar{background:#fff;margin:12px;border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;flex-wrap:wrap;gap:12px;font-size:13px}
+.summary-stat{text-align:center}
+.summary-stat .num{font-size:22px;font-weight:700;color:#2a4a6a}
+.summary-stat .label{font-size:11px;color:#888}
+
+/* Footer */
+.app-footer{text-align:center;padding:16px;font-size:11px;color:#999}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
+.modal{background:#fff;border-radius:12px;padding:24px;max-width:420px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.modal h2{font-size:16px;color:#2a4a6a;margin-bottom:12px}
+.modal label{display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:#555}
+.modal input,.modal select,.modal textarea{width:100%;padding:8px;border:1px solid #d0dce8;border-radius:4px;font-size:13px;margin-bottom:10px;font-family:inherit}
+.modal textarea{min-height:60px;resize:vertical}
+.modal-btns{display:flex;gap:8px;margin-top:8px}
+.modal-btns button{flex:1;padding:8px;border:none;border-radius:4px;font-size:13px;cursor:pointer;font-weight:600}
+.modal-btns .btn-primary{background:#2a4a6a;color:#fff}
+.modal-btns .btn-cancel{background:#eee;color:#555}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>864 Farr Ave</h1>
+    <p>Apartment Build — Jul–Sep 2026</p>
+    <div id="login-err" class="login-err hidden"></div>
+    <select id="login-user">
+      <option value="">Select your name...</option>
+      <option value="raoul">Raoul (Owner)</option>
+      <option value="charlie">Charlie</option>
+      <option value="vinny">Vinny</option>
+      <option value="joaquin">Joaquin</option>
+    </select>
+    <input type="password" id="login-pin" placeholder="PIN">
+    <button onclick="doLogin()">Log In</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <div id="app-header">
+    <h1>Apartment Build</h1>
+    <div class="user-info">
+      <span id="user-label"></span>
+      <button onclick="doLogout()">Log Out</button>
+    </div>
+  </div>
+
+  <div id="summary-bar" class="summary-bar"></div>
+  <div id="scope-container"></div>
+  <div id="phases-container"></div>
+  <div id="risks-container"></div>
+
+  <div class="app-footer">864 Farr Ave, Escondido • Apartment Conversion Project</div>
+</div>
+
+<!-- MODALS -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div id="modal" class="modal"></div>
+</div>
+
+<script>
+// ── Default Data ──
+const DEFAULT_PINS = { raoul: '8640', charlie: '1111', vinny: '2222', joaquin: '3333' };
+
+const DEFAULT_SCOPE = [
+  '10×12 conditioned office on raised foundation (existing core)',
+  'East patio 12×8 → fully enclosed addition',
+  'North patio 14×20 → partially enclosed 14×10 ground-level kitchen',
+  'New small raised bathroom addition',
+  'Existing 8×8 outdoor bathroom → cut to ~4×8',
+  'Fence + landscaping'
+];
+
+const DEFAULT_RISKS = [
+  'Permits: Determine strategy now — inspection delays could push schedule.',
+  'Concrete cure: Slab/fence posts timed to cure between work days.',
+  'Materials: Order windows, doors, mini-splits, plumbing by mid-July.',
+  'Laborer ramp: Phases 1–2 ideal for training. By Phase 4 they\'re useful.'
+];
+
+const DEFAULT_PHASES = [
+  {
+    name: 'Phase 1: Demo & Site Prep', dates: '7/3–7/11', milestone: 'Site cleared, bathroom halved, all areas laid out.',
+    days: [
+      { date: '2026-07-03', label: 'F 7/3', type: 'off+hol', work: 'Demo half of outdoor bathroom, salvage fixtures' },
+      { date: '2026-07-04', label: 'Sa 7/4', type: '', work: 'Clear patios, debris removal, material staging' },
+      { date: '2026-07-06', label: 'M 7/6', type: 'WFH', work: 'Layout & string lines, dig/prep kitchen slab' },
+      { date: '2026-07-11', label: 'Sa 7/11', type: '', work: 'Grade north patio, prep for slab/pier footings' }
+    ]
+  },
+  {
+    name: 'Phase 2: Foundation & Framing', dates: '7/13–8/1', milestone: 'All walls framed and sheathed. Structure taking shape.',
+    days: [
+      { date: '2026-07-13', label: 'M 7/13', type: 'WFH', work: 'Pour kitchen slab or set piers (north 14×10)' },
+      { date: '2026-07-17', label: 'F 7/17', type: 'off', work: 'Build raised bathroom platform' },
+      { date: '2026-07-18', label: 'Sa 7/18', type: '', work: 'Continue bathroom platform' },
+      { date: '2026-07-20', label: 'M 7/20', type: 'WFH', work: 'Frame east walls (12×8) — full enclosure' },
+      { date: '2026-07-25', label: 'Sa 7/25', type: '', work: 'Frame north walls (14×10), headers' },
+      { date: '2026-07-27', label: 'M 7/27', type: 'WFH', work: 'Frame bathroom, tie into office' },
+      { date: '2026-07-31', label: 'F 7/31', type: 'off', work: 'Sheathe walls, housewrap' },
+      { date: '2026-08-01', label: 'Sa 8/1', type: '', work: 'Complete sheathing & housewrap' }
+    ]
+  },
+  {
+    name: 'Phase 3: Roof & Envelope', dates: '8/3–8/15', milestone: 'Dried in. Weather-tight on all enclosed areas.',
+    days: [
+      { date: '2026-08-03', label: 'M 8/3', type: 'WFH', work: 'Roof framing — east enclosure' },
+      { date: '2026-08-08', label: 'Sa 8/8', type: '', work: 'Roof framing — north kitchen' },
+      { date: '2026-08-10', label: 'M 8/10', type: 'WFH', work: 'Roofing material + windows/doors' },
+      { date: '2026-08-14', label: 'F 8/14', type: 'off', work: 'Siding, exterior finish, flash penetrations' },
+      { date: '2026-08-15', label: 'Sa 8/15', type: '', work: 'Complete exterior envelope' }
+    ]
+  },
+  {
+    name: 'Phase 4: Mechanicals', dates: '8/17–8/29', milestone: 'All mechanicals in. Ready for wall finish.',
+    days: [
+      { date: '2026-08-17', label: 'M 8/17', type: 'WFH', work: 'Rough plumbing — bathroom' },
+      { date: '2026-08-22', label: 'Sa 8/22', type: '', work: 'Rough plumbing — kitchen' },
+      { date: '2026-08-24', label: 'M 8/24', type: 'WFH', work: 'Electrical rough-in — all areas' },
+      { date: '2026-08-28', label: 'F 8/28', type: 'off', work: 'HVAC — mini-split(s) or extend system' },
+      { date: '2026-08-29', label: 'Sa 8/29', type: '', work: 'Insulate all walls & ceilings' }
+    ]
+  },
+  {
+    name: 'Phase 5: Interior Finish', dates: '8/31–9/14', milestone: 'Interior complete. Livable spaces.',
+    days: [
+      { date: '2026-08-31', label: 'M 8/31', type: 'WFH', work: 'Hang drywall — east room + bathroom' },
+      { date: '2026-09-05', label: 'Sa 9/5', type: '', work: 'Hang drywall — kitchen' },
+      { date: '2026-09-07', label: 'M 9/7', type: 'Labor Day', work: 'Tape, mud, sand (first coat)' },
+      { date: '2026-09-08', label: 'Tu 9/8', type: 'WFH', work: 'Mud 2nd coat, sand, prime' },
+      { date: '2026-09-11', label: 'F 9/11', type: 'off', work: 'Paint all interior walls' },
+      { date: '2026-09-12', label: 'Sa 9/12', type: '', work: 'Flooring — all areas' },
+      { date: '2026-09-14', label: 'M 9/14', type: 'WFH', work: 'Kitchen cabinets, countertop, sink, appliances' }
+    ]
+  },
+  {
+    name: 'Phase 6: Fixtures, Fence & Finish', dates: '9/19–9/30', milestone: 'Project complete — Sep 30 deadline met.',
+    days: [
+      { date: '2026-09-19', label: 'Sa 9/19', type: '', work: 'Bathroom fixtures (toilet, sink, shower, vanity)' },
+      { date: '2026-09-21', label: 'M 9/21', type: 'WFH', work: 'Set fence posts, let cure' },
+      { date: '2026-09-25', label: 'F 9/25', type: 'off', work: 'Hang fence panels, gate' },
+      { date: '2026-09-26', label: 'Sa 9/26', type: '', work: 'Landscaping — plants, gravel, drainage' },
+      { date: '2026-09-28', label: 'M 9/28', type: 'WFH', work: 'Punch list — trim, caulk, touch-up, finals' }
+    ]
+  }
+];
+
+// ── Storage ──
+const LS = {
+  get(k, def) { try { const v = localStorage.getItem('apt-' + k); return v ? JSON.parse(v) : def; } catch { return def; } },
+  set(k, v) { localStorage.setItem('apt-' + k, JSON.stringify(v)); }
+};
+
+function loadData() {
+  return {
+    pins: LS.get('pins', DEFAULT_PINS),
+    scope: LS.get('scope', DEFAULT_SCOPE),
+    risks: LS.get('risks', DEFAULT_RISKS),
+    phases: LS.get('phases', DEFAULT_PHASES),
+    workers: LS.get('workers', {}) // { "2026-07-03": ["charlie","vinny"], ... }
+  };
+}
+
+function saveData(data) {
+  LS.set('pins', data.pins);
+  LS.set('scope', data.scope);
+  LS.set('risks', data.risks);
+  LS.set('phases', data.phases);
+  LS.set('workers', data.workers);
+}
+
+let DATA, USER;
+
+// ── Auth ──
+function doLogin() {
+  const uid = document.getElementById('login-user').value;
+  const pin = document.getElementById('login-pin').value;
+  const errEl = document.getElementById('login-err');
+  if (!uid) { errEl.textContent = 'Select a name'; errEl.classList.remove('hidden'); return; }
+  DATA = loadData();
+  if (DATA.pins[uid] !== pin) { errEl.textContent = 'Wrong PIN'; errEl.classList.remove('hidden'); return; }
+  USER = uid;
+  LS.set('auth', uid);
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  render();
+}
+
+function doLogout() {
+  LS.set('auth', null);
+  USER = null;
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('login-pin').value = '';
+  document.getElementById('login-err').classList.add('hidden');
+}
+
+function isAdmin() { return USER === 'raoul'; }
+
+// ── Render ──
+function render() {
+  DATA = loadData();
+  document.getElementById('user-label').textContent = USER.charAt(0).toUpperCase() + USER.slice(1) + (isAdmin() ? ' (Admin)' : '');
+  renderSummary();
+  renderScope();
+  renderPhases();
+  renderRisks();
+}
+
+function renderSummary() {
+  const totalDays = DATA.phases.reduce((s, p) => s + p.days.length, 0);
+  const allDates = DATA.phases.flatMap(p => p.days.map(d => d.date));
+  let myDays = 0;
+  if (!isAdmin()) {
+    allDates.forEach(dt => { if ((DATA.workers[dt] || []).includes(USER)) myDays++; });
+  }
+  const totalWorkerSlots = allDates.reduce((s, dt) => s + (DATA.workers[dt] || []).length, 0);
+
+  let html = `<div class="summary-stat"><div class="num">${totalDays}</div><div class="label">Work Days</div></div>`;
+  html += `<div class="summary-stat"><div class="num">${DATA.phases.length}</div><div class="label">Phases</div></div>`;
+  html += `<div class="summary-stat"><div class="num">${totalWorkerSlots}</div><div class="label">Worker Signups</div></div>`;
+  if (!isAdmin()) {
+    html += `<div class="summary-stat"><div class="num">${myDays}</div><div class="label">My Days</div></div>`;
+  }
+  document.getElementById('summary-bar').innerHTML = html;
+}
+
+function renderScope() {
+  const c = document.getElementById('scope-container');
+  if (isAdmin()) {
+    c.innerHTML = `<div class="scope-section">
+      <h2>Scope</h2>
+      <textarea class="scope-edit" id="scope-edit">${DATA.scope.join('\n')}</textarea>
+      <button class="btn-add" style="margin:8px 0 0" onclick="saveScope()">Save Scope</button>
+    </div>`;
+  } else {
+    c.innerHTML = `<div class="scope-section">
+      <h2>Scope</h2>
+      <ul>${DATA.scope.map(s => `<li class="scope-item">${esc(s)}</li>`).join('')}</ul>
+      <div style="margin-top:8px;font-size:12px;color:#888;"><strong>Crew:</strong> Raoul + laborer (Mon + off Fri). ~34 work days.</div>
+    </div>`;
+  }
+}
+
+function saveScope() {
+  DATA.scope = document.getElementById('scope-edit').value.split('\n').filter(l => l.trim());
+  saveData(DATA);
+  render();
+}
+
+function renderPhases() {
+  const c = document.getElementById('phases-container');
+  let html = '';
+  DATA.phases.forEach((phase, pi) => {
+    html += `<div class="phase-section">`;
+    html += `<div class="phase-header" onclick="togglePhase(${pi})">
+      <span>${esc(phase.name)}</span>
+      <span class="phase-dates">${esc(phase.dates)} · ${phase.days.length} days</span>
+    </div>`;
+    html += `<div class="phase-body" id="phase-body-${pi}">`;
+
+    phase.days.forEach((day, di) => {
+      const assigned = DATA.workers[day.date] || [];
+      const isMeSignedUp = assigned.includes(USER);
+
+      html += `<div class="day-row">`;
+      html += `<div class="day-date">${esc(day.label)}${day.type ? `<span class="day-type">${esc(day.type)}</span>` : ''}</div>`;
+
+      if (isAdmin()) {
+        html += `<div class="day-work" style="flex:1">
+          <input class="day-edit-work" value="${escAttr(day.work)}" id="work-${pi}-${di}" onchange="updateWork(${pi},${di},this.value)">
+        </div>`;
+      } else {
+        html += `<div class="day-work"><span class="day-work-text">${esc(day.work)}</span></div>`;
+      }
+
+      html += `<div class="day-workers">`;
+      assigned.forEach(w => {
+        html += `<span class="worker-badge ${w}">${w.charAt(0).toUpperCase() + w.slice(1)}</span>`;
+      });
+      if (!isAdmin()) {
+        html += `<button class="worker-toggle ${isMeSignedUp ? 'signed-up' : ''}" onclick="toggleWorker('${day.date}')">${isMeSignedUp ? '✓ Signed Up' : '+ Sign Up'}</button>`;
+      }
+      if (isAdmin()) {
+        html += `<button class="btn-add" style="margin:0;padding:2px 6px;font-size:10px" onclick="removeDayPrompt(${pi},${di})">✕</button>`;
+      }
+      html += `</div>`;
+      html += `</div>`;
+    });
+
+    html += `<div class="milestone">${esc(phase.milestone)}</div>`;
+    if (isAdmin()) {
+      html += `<button class="btn-add" onclick="addDayModal(${pi})">+ Add Day</button>`;
+    }
+    html += `</div></div>`;
+  });
+
+  if (isAdmin()) {
+    html += `<button class="btn-add" style="margin:12px" onclick="addPhaseModal()">+ Add Phase</button>`;
+  }
+  c.innerHTML = html;
+}
+
+function renderRisks() {
+  const c = document.getElementById('risks-container');
+  if (isAdmin()) {
+    c.innerHTML = `<div class="risks-section">
+      <h2>Risks & Notes</h2>
+      <textarea class="risk-edit" id="risks-edit">${DATA.risks.join('\n')}</textarea>
+      <button class="btn-add" style="margin:8px 0 0" onclick="saveRisks()">Save Risks</button>
+    </div>`;
+  } else {
+    c.innerHTML = `<div class="risks-section">
+      <h2>Risks & Notes</h2>
+      <ul>${DATA.risks.map(r => `<li>${esc(r)}</li>`).join('')}</ul>
+    </div>`;
+  }
+}
+
+function saveRisks() {
+  DATA.risks = document.getElementById('risks-edit').value.split('\n').filter(l => l.trim());
+  saveData(DATA);
+  render();
+}
+
+// ── Actions ──
+function togglePhase(pi) {
+  const el = document.getElementById('phase-body-' + pi);
+  el.style.display = el.style.display === 'none' ? '' : 'none';
+}
+
+function toggleWorker(date) {
+  if (!DATA.workers[date]) DATA.workers[date] = [];
+  const arr = DATA.workers[date];
+  const idx = arr.indexOf(USER);
+  if (idx >= 0) arr.splice(idx, 1);
+  else arr.push(USER);
+  saveData(DATA);
+  render();
+}
+
+function updateWork(pi, di, val) {
+  DATA.phases[pi].days[di].work = val;
+  saveData(DATA);
+}
+
+function removeDayPrompt(pi, di) {
+  if (confirm('Remove ' + DATA.phases[pi].days[di].label + '?')) {
+    const date = DATA.phases[pi].days[di].date;
+    DATA.phases[pi].days.splice(di, 1);
+    delete DATA.workers[date];
+    saveData(DATA);
+    render();
+  }
+}
+
+// ── Modals ──
+function showModal(html) {
+  document.getElementById('modal').innerHTML = html;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function hideModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+
+function addDayModal(pi) {
+  showModal(`
+    <h2>Add Day to ${esc(DATA.phases[pi].name)}</h2>
+    <label>Date (YYYY-MM-DD)</label><input id="md-date" type="date">
+    <label>Label (e.g. M 7/6)</label><input id="md-label" placeholder="M 7/6">
+    <label>Type (WFH, off, etc)</label><input id="md-type" placeholder="WFH">
+    <label>Work Description</label><textarea id="md-work" placeholder="What we're doing..."></textarea>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="hideModal()">Cancel</button>
+      <button class="btn-primary" onclick="addDay(${pi})">Add</button>
+    </div>
+  `);
+}
+
+function addDay(pi) {
+  const date = document.getElementById('md-date').value;
+  const label = document.getElementById('md-label').value;
+  const type = document.getElementById('md-type').value;
+  const work = document.getElementById('md-work').value;
+  if (!date || !label || !work) return;
+  DATA.phases[pi].days.push({ date, label, type, work });
+  DATA.phases[pi].days.sort((a, b) => a.date.localeCompare(b.date));
+  saveData(DATA);
+  hideModal();
+  render();
+}
+
+function addPhaseModal() {
+  showModal(`
+    <h2>Add Phase</h2>
+    <label>Phase Name</label><input id="md-pname" placeholder="Phase 7: ...">
+    <label>Date Range</label><input id="md-pdates" placeholder="10/1–10/15">
+    <label>Milestone</label><textarea id="md-pmilestone" placeholder="What this phase achieves..."></textarea>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="hideModal()">Cancel</button>
+      <button class="btn-primary" onclick="addPhase()">Add</button>
+    </div>
+  `);
+}
+
+function addPhase() {
+  const name = document.getElementById('md-pname').value;
+  const dates = document.getElementById('md-pdates').value;
+  const milestone = document.getElementById('md-pmilestone').value;
+  if (!name) return;
+  DATA.phases.push({ name, dates: dates || '', milestone: milestone || '', days: [] });
+  saveData(DATA);
+  hideModal();
+  render();
+}
+
+// ── Utilities ──
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+function escAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+
+// ── Init ──
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) hideModal();
+});
+
+// Auto-login if session exists
+(function() {
+  const saved = LS.get('auth', null);
+  if (saved) {
+    USER = saved;
+    DATA = loadData();
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    render();
+  }
+})();
+</script>
+</body>
+</html>
