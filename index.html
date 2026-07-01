@@ -9,21 +9,20 @@
 body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f0f4f8;color:#2d2d2d;min-height:100vh}
 .hidden{display:none!important}
 
-/* Login */
-#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
-.login-box{background:#fff;border-radius:12px;padding:32px;max-width:360px;width:100%;box-shadow:0 4px 20px rgba(0,0,0,.1)}
-.login-box h1{font-size:20px;color:#2a4a6a;margin-bottom:4px}
-.login-box p{font-size:13px;color:#888;margin-bottom:20px}
-.login-box select,.login-box input{width:100%;padding:10px 12px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;margin-bottom:12px}
-.login-box button{width:100%;padding:10px;background:#2a4a6a;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600}
-.login-box button:hover{background:#3a6a9a}
-.login-err{color:#c44;font-size:12px;margin-bottom:8px}
-
 /* Header */
 #app-header{background:linear-gradient(135deg,#2a4a6a,#3a6a9a);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 #app-header h1{font-size:16px;font-weight:600}
-#app-header .user-info{font-size:12px;display:flex;align-items:center;gap:10px}
+.header-right{display:flex;align-items:center;gap:8px;font-size:12px}
+#header-user-label{opacity:.85}
 #app-header button{background:rgba(255,255,255,.2);color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:11px;cursor:pointer}
+#app-header button:hover{background:rgba(255,255,255,.35)}
+
+/* Login dropdown */
+#login-dropdown{position:absolute;top:48px;right:12px;background:#fff;border-radius:8px;padding:16px;width:260px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:150}
+#login-dropdown select,#login-dropdown input{width:100%;padding:8px 10px;border:1px solid #d0dce8;border-radius:5px;font-size:13px;margin-bottom:8px}
+#login-dropdown button{width:100%;padding:8px;background:#2a4a6a;color:#fff;border:none;border-radius:5px;font-size:13px;cursor:pointer;font-weight:600}
+#login-dropdown button:hover{background:#3a6a9a}
+.login-err{color:#c44;font-size:12px;margin-bottom:6px}
 
 /* Scope */
 .scope-section{background:#fff;margin:12px;border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
@@ -94,40 +93,36 @@ body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f0f4f8;co
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-box">
-    <h1>864 Farr Ave</h1>
-    <p>Apartment Build — Jul–Sep 2026</p>
-    <div id="login-err" class="login-err hidden"></div>
-    <select id="login-user">
-      <option value="">Select your name...</option>
-      <option value="raoul">Raoul (Owner)</option>
-      <option value="charlie">Charlie</option>
-      <option value="vinny">Vinny</option>
-      <option value="joaquin">Joaquin</option>
-    </select>
-    <input type="password" id="login-pin" placeholder="PIN">
-    <button onclick="doLogin()">Log In</button>
+<!-- HEADER (always visible) -->
+<div id="app-header">
+  <h1>Apartment Build — 864 Farr Ave</h1>
+  <div class="header-right">
+    <span id="header-user-label"></span>
+    <button id="auth-btn" onclick="toggleAuth()"></button>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app" class="hidden">
-  <div id="app-header">
-    <h1>Apartment Build</h1>
-    <div class="user-info">
-      <span id="user-label"></span>
-      <button onclick="doLogout()">Log Out</button>
-    </div>
-  </div>
+<!-- LOGIN DROPDOWN -->
+<div id="login-dropdown" class="hidden">
+  <div id="login-err" class="login-err hidden"></div>
+  <select id="login-user">
+    <option value="">Select your name...</option>
+    <option value="raoul">Raoul (Owner)</option>
+    <option value="charlie">Charlie</option>
+    <option value="vinny">Vinny</option>
+    <option value="joaquin">Joaquin</option>
+  </select>
+  <input type="password" id="login-pin" placeholder="PIN" onkeydown="if(event.key==='Enter')doLogin()">
+  <button onclick="doLogin()">Log In</button>
+</div>
 
+<!-- APP CONTENT (always visible) -->
+<div id="app">
   <div id="summary-bar" class="summary-bar"></div>
   <div id="scope-container"></div>
   <div id="phases-container"></div>
   <div id="risks-container"></div>
-
-  <div class="app-footer">864 Farr Ave, Escondido • Apartment Conversion Project</div>
+  <div class="app-footer">864 Farr Ave, Escondido — Apartment Conversion Project</div>
 </div>
 
 <!-- MODALS -->
@@ -234,7 +229,7 @@ function loadData() {
     scope: LS.get('scope', DEFAULT_SCOPE),
     risks: LS.get('risks', DEFAULT_RISKS),
     phases: LS.get('phases', DEFAULT_PHASES),
-    workers: LS.get('workers', {}) // { "2026-07-03": ["charlie","vinny"], ... }
+    workers: LS.get('workers', {})
   };
 }
 
@@ -246,57 +241,77 @@ function saveData(data) {
   LS.set('workers', data.workers);
 }
 
-let DATA, USER;
+let DATA, USER = null;
 
 // ── Auth ──
+function toggleAuth() {
+  if (USER) {
+    doLogout();
+  } else {
+    document.getElementById('login-dropdown').classList.toggle('hidden');
+  }
+}
+
 function doLogin() {
   const uid = document.getElementById('login-user').value;
   const pin = document.getElementById('login-pin').value;
   const errEl = document.getElementById('login-err');
+  errEl.classList.add('hidden');
   if (!uid) { errEl.textContent = 'Select a name'; errEl.classList.remove('hidden'); return; }
   DATA = loadData();
   if (DATA.pins[uid] !== pin) { errEl.textContent = 'Wrong PIN'; errEl.classList.remove('hidden'); return; }
   USER = uid;
   LS.set('auth', uid);
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('login-dropdown').classList.add('hidden');
+  document.getElementById('login-pin').value = '';
   render();
 }
 
 function doLogout() {
   LS.set('auth', null);
   USER = null;
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('login-user').value = '';
   document.getElementById('login-pin').value = '';
   document.getElementById('login-err').classList.add('hidden');
+  render();
 }
 
 function isAdmin() { return USER === 'raoul'; }
+function isLoggedIn() { return USER !== null; }
 
 // ── Render ──
 function render() {
   DATA = loadData();
-  document.getElementById('user-label').textContent = USER.charAt(0).toUpperCase() + USER.slice(1) + (isAdmin() ? ' (Admin)' : '');
+  updateHeaderAuth();
   renderSummary();
   renderScope();
   renderPhases();
   renderRisks();
 }
 
+function updateHeaderAuth() {
+  const label = document.getElementById('header-user-label');
+  const btn = document.getElementById('auth-btn');
+  if (isLoggedIn()) {
+    label.textContent = USER.charAt(0).toUpperCase() + USER.slice(1) + (isAdmin() ? ' (Admin)' : '');
+    btn.textContent = 'Log Out';
+  } else {
+    label.textContent = '';
+    btn.textContent = 'Log In';
+  }
+}
+
 function renderSummary() {
   const totalDays = DATA.phases.reduce((s, p) => s + p.days.length, 0);
   const allDates = DATA.phases.flatMap(p => p.days.map(d => d.date));
-  let myDays = 0;
-  if (!isAdmin()) {
-    allDates.forEach(dt => { if ((DATA.workers[dt] || []).includes(USER)) myDays++; });
-  }
   const totalWorkerSlots = allDates.reduce((s, dt) => s + (DATA.workers[dt] || []).length, 0);
 
   let html = `<div class="summary-stat"><div class="num">${totalDays}</div><div class="label">Work Days</div></div>`;
   html += `<div class="summary-stat"><div class="num">${DATA.phases.length}</div><div class="label">Phases</div></div>`;
   html += `<div class="summary-stat"><div class="num">${totalWorkerSlots}</div><div class="label">Worker Signups</div></div>`;
-  if (!isAdmin()) {
+  if (isLoggedIn() && !isAdmin()) {
+    let myDays = 0;
+    allDates.forEach(dt => { if ((DATA.workers[dt] || []).includes(USER)) myDays++; });
     html += `<div class="summary-stat"><div class="num">${myDays}</div><div class="label">My Days</div></div>`;
   }
   document.getElementById('summary-bar').innerHTML = html;
@@ -338,7 +353,6 @@ function renderPhases() {
 
     phase.days.forEach((day, di) => {
       const assigned = DATA.workers[day.date] || [];
-      const isMeSignedUp = assigned.includes(USER);
 
       html += `<div class="day-row">`;
       html += `<div class="day-date">${esc(day.label)}${day.type ? `<span class="day-type">${esc(day.type)}</span>` : ''}</div>`;
@@ -355,7 +369,9 @@ function renderPhases() {
       assigned.forEach(w => {
         html += `<span class="worker-badge ${w}">${w.charAt(0).toUpperCase() + w.slice(1)}</span>`;
       });
-      if (!isAdmin()) {
+      // Workers can sign up; public viewers just see badges
+      if (isLoggedIn() && !isAdmin()) {
+        const isMeSignedUp = assigned.includes(USER);
         html += `<button class="worker-toggle ${isMeSignedUp ? 'signed-up' : ''}" onclick="toggleWorker('${day.date}')">${isMeSignedUp ? '✓ Signed Up' : '+ Sign Up'}</button>`;
       }
       if (isAdmin()) {
@@ -493,21 +509,27 @@ function addPhase() {
 function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
 function escAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
 
-// ── Init ──
+// ── Close dropdown on outside click ──
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('login-dropdown');
+  const btn = document.getElementById('auth-btn');
+  if (!dd.classList.contains('hidden') && !dd.contains(e.target) && e.target !== btn) {
+    dd.classList.add('hidden');
+  }
+});
+
 document.getElementById('modal-overlay').addEventListener('click', function(e) {
   if (e.target === this) hideModal();
 });
 
-// Auto-login if session exists
+// ── Init ──
 (function() {
+  DATA = loadData();
   const saved = LS.get('auth', null);
-  if (saved) {
+  if (saved && DATA.pins[saved]) {
     USER = saved;
-    DATA = loadData();
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('app').classList.remove('hidden');
-    render();
   }
+  render();
 })();
 </script>
 </body>
