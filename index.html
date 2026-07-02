@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Apartment Build — 864 Farr Ave</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f0f4f8;color:#2d2d2d;min-height:100vh}
@@ -20,10 +21,14 @@ a:hover{text-decoration:underline}
 #app-header button:hover{background:rgba(255,255,255,.35)}
 
 /* Login dropdown */
-#login-dropdown{position:absolute;top:52px;right:12px;background:#fff;border-radius:8px;padding:16px;width:280px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:150}
+#login-dropdown{position:absolute;top:52px;right:12px;background:#fff;border-radius:8px;padding:16px;width:300px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:150}
 #login-dropdown select,#login-dropdown input{width:100%;padding:10px 12px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;margin-bottom:10px}
-#login-dropdown button{width:100%;padding:10px;background:#2a4a6a;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600}
+#login-dropdown button.pin-btn{width:100%;padding:10px;background:#2a4a6a;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600}
 .login-err{color:#c44;font-size:13px;margin-bottom:8px}
+.login-divider{display:flex;align-items:center;gap:10px;margin:14px 0;font-size:12px;color:#aaa}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:#ddd}
+#g-signin-btn{display:flex;justify-content:center;margin-bottom:6px}
+.login-section-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
 
 /* Breadcrumb */
 .breadcrumb{padding:10px 16px;font-size:14px;color:#6a8aaa;background:#e8eef4}
@@ -152,6 +157,9 @@ a:hover{text-decoration:underline}
 
 <div id="login-dropdown" class="hidden">
   <div id="login-err" class="login-err hidden"></div>
+  <div id="g-signin-btn"></div>
+  <div class="login-divider">or use PIN</div>
+  <div class="login-section-label">PIN Login</div>
   <select id="login-user">
     <option value="">Select your name...</option>
     <option value="raoul">Raoul (Owner)</option>
@@ -160,7 +168,7 @@ a:hover{text-decoration:underline}
     <option value="joaquin">Joaquin</option>
   </select>
   <input type="password" id="login-pin" placeholder="PIN" onkeydown="if(event.key==='Enter')doLogin()">
-  <button onclick="doLogin()">Log In</button>
+  <button class="pin-btn" onclick="doLogin()">Log In with PIN</button>
 </div>
 
 <div id="breadcrumb" class="breadcrumb hidden"></div>
@@ -171,6 +179,67 @@ a:hover{text-decoration:underline}
 </div>
 
 <script>
+// ── Google Auth Config ──
+const GOOGLE_CLIENT_ID='502600709324-u90b4c7cuhe7qc439u5vcbjtval1tb9d.apps.googleusercontent.com';
+
+// Map Google emails to user roles
+const EMAIL_ROLES={
+  'raoul.fresno@gmail.com':{uid:'raoul',role:'admin',name:'Raoul'},
+  // Add worker emails here as needed:
+  // 'charlie@example.com':{uid:'charlie',role:'worker',name:'Charlie'},
+  // 'vinny@example.com':{uid:'vinny',role:'worker',name:'Vinny'},
+  // 'joaquin@example.com':{uid:'joaquin',role:'worker',name:'Joaquin'},
+};
+
+function handleGoogleSignIn(response){
+  // Decode JWT payload (base64url)
+  const payload=JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+  const email=payload.email;
+  const name=payload.name||email;
+
+  const mapping=EMAIL_ROLES[email.toLowerCase()];
+  if(mapping){
+    USER=mapping.uid;
+    LS.set('auth',USER);
+    LS.set('authMethod','google');
+    LS.set('googleName',name);
+    LS.set('googleEmail',email);
+  }else{
+    // Unknown email — grant read-only guest access with their name
+    USER=null;
+    LS.set('auth',null);
+    LS.set('authMethod',null);
+    const err=document.getElementById('login-err');
+    err.textContent='Email not authorized: '+email;
+    err.classList.remove('hidden');
+    return;
+  }
+  document.getElementById('login-dropdown').classList.add('hidden');
+  document.getElementById('login-err').classList.add('hidden');
+  render();
+}
+
+function initGoogleSignIn(){
+  if(typeof google==='undefined'||!google.accounts)return;
+  google.accounts.id.initialize({
+    client_id:GOOGLE_CLIENT_ID,
+    callback:handleGoogleSignIn,
+    auto_select:false,
+    cancel_on_tap_outside:true
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('g-signin-btn'),
+    {theme:'outline',size:'large',width:268,text:'signin_with',shape:'rectangular'}
+  );
+}
+
+// Retry init until Google script loads
+let _gsiRetries=0;
+function waitForGSI(){
+  if(typeof google!=='undefined'&&google.accounts){initGoogleSignIn();return}
+  if(_gsiRetries++<20)setTimeout(waitForGSI,250);
+}
+
 // ── Default Data ──
 const DEFAULT_PINS={raoul:'8640',charlie:'1111',vinny:'2222',joaquin:'3333'};
 
@@ -310,9 +379,14 @@ function doLogin(){
   render();
 }
 function doLogout(){
-  LS.set('auth',null);USER=null;
+  const wasGoogle=LS.get('authMethod',null)==='google';
+  LS.set('auth',null);LS.set('authMethod',null);LS.set('googleName',null);LS.set('googleEmail',null);
+  USER=null;
   document.getElementById('login-user').value='';
   document.getElementById('login-pin').value='';
+  if(wasGoogle&&typeof google!=='undefined'&&google.accounts){
+    google.accounts.id.disableAutoSelect();
+  }
   render();
 }
 function isAdmin(){return USER==='raoul'}
@@ -358,7 +432,13 @@ function updateHeaderAuth(){
   const lbl=document.getElementById('header-user-label');
   const btn=document.getElementById('auth-btn');
   if(isLoggedIn()){
-    lbl.textContent=USER.charAt(0).toUpperCase()+USER.slice(1)+(isAdmin()?' (Admin)':'');
+    const gName=LS.get('googleName',null);
+    const method=LS.get('authMethod',null);
+    if(method==='google'&&gName){
+      lbl.textContent=gName+(isAdmin()?' (Admin)':'');
+    }else{
+      lbl.textContent=USER.charAt(0).toUpperCase()+USER.slice(1)+(isAdmin()?' (Admin)':'');
+    }
     btn.textContent='Log Out';
   }else{
     lbl.textContent='';btn.textContent='Log In';
@@ -700,8 +780,15 @@ document.getElementById('modal-overlay').addEventListener('click',function(e){if
 (function(){
   DATA=loadData();
   const saved=LS.get('auth',null);
-  if(saved&&DATA.pins[saved])USER=saved;
+  // Restore session — Google users don't need PIN check
+  if(saved){
+    const method=LS.get('authMethod',null);
+    if(method==='google'||DATA.pins[saved]){
+      USER=saved;
+    }
+  }
   render();
+  waitForGSI();
 })();
 </script>
 </body>
