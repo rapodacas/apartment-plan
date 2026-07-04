@@ -318,13 +318,14 @@ let _gsiR=0;function waitForGSI(){if(typeof google!=='undefined'&&google.account
 function ensureDriveToken(){
   return new Promise((resolve,reject)=>{
     if(ACCESS_TOKEN){resolve(ACCESS_TOKEN);return}
-    if(!tokenClient){reject('No Google auth');return}
-    const origCb=tokenClient.callback;
+    if(!tokenClient){reject(new Error('Not signed in with Google. Log out and sign in with Google first.'));return}
     tokenClient.callback=(resp)=>{
+      if(resp.error){reject(new Error('Drive access denied: '+resp.error));return}
       if(resp.access_token){ACCESS_TOKEN=resp.access_token;resolve(ACCESS_TOKEN)}
-      else reject('Token request failed');
+      else reject(new Error('No access token received. Check popup blocker.'));
     };
-    tokenClient.requestAccessToken({prompt:'consent'});
+    try{tokenClient.requestAccessToken({prompt:'consent'})}
+    catch(e){reject(new Error('Could not open Google consent. Check popup blocker.'))}
   });
 }
 
@@ -700,16 +701,25 @@ function capturePhoto(taskId){
   input.type='file';input.accept='image/*';input.capture='environment';
   input.onchange=async()=>{
     if(!input.files[0])return;
-    showModal(`<h2>Uploading Photo...</h2><p style="text-align:center;font-size:14px;color:#666" id="photo-status">Compressing...</p>`);
+    showModal(`<h2>Uploading Photo...</h2><p style="text-align:center;font-size:14px;color:#666" id="photo-status">Compressing...</p><div class="modal-btns" style="margin-top:16px"><button class="btn-cancel" onclick="hideModal()">Cancel</button></div>`);
     try{
+      // Check Drive token first
+      if(!ACCESS_TOKEN){
+        document.getElementById('photo-status').textContent='Requesting Drive access...';
+        await ensureDriveToken();
+      }
       const compressed=await compressPhoto(input.files[0]);
-      document.getElementById('photo-status').textContent=`Compressed to ${Math.round(compressed.size/1024)}KB. Uploading...`;
+      const sizeKB=Math.round(compressed.size/1024);
+      document.getElementById('photo-status').textContent=`Compressed to ${sizeKB}KB. Uploading to Drive...`;
       const ts=Date.now();
       const result=await uploadToDrive(compressed,`photo_${taskId}_${ts}.jpg`,'image/jpeg');
       const t=getTask(taskId);
       t.links.push({type:'photo',url:result.directUrl,title:`Photo ${new Date().toLocaleDateString()}`,driveId:result.id,viewUrl:result.url});
       saveData(DATA);hideModal();render();
-    }catch(e){document.getElementById('photo-status').textContent='Error: '+e.message}
+    }catch(e){
+      const el=document.getElementById('photo-status');
+      if(el)el.innerHTML=`<span style="color:#c44">Error: ${esc(e.message||String(e))}</span><br><br>Make sure you allowed Google Drive access when signing in. Try logging out and back in with Google.`;
+    }
   };
   input.click();
 }
