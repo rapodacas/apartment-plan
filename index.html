@@ -12,7 +12,6 @@ body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f0f4f8;co
 a{color:#2a6a9a;text-decoration:none}
 a:hover{text-decoration:underline}
 
-/* Header */
 #app-header{background:linear-gradient(135deg,#2a4a6a,#3a6a9a);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 #app-header h1{font-size:17px;font-weight:600;cursor:pointer}
 .header-right{display:flex;align-items:center;gap:8px;font-size:13px}
@@ -20,7 +19,6 @@ a:hover{text-decoration:underline}
 #app-header button{background:rgba(255,255,255,.2);color:#fff;border:none;padding:6px 12px;border-radius:5px;font-size:12px;cursor:pointer}
 #app-header button:hover{background:rgba(255,255,255,.35)}
 
-/* Login dropdown */
 #login-dropdown{position:absolute;top:52px;right:12px;background:#fff;border-radius:8px;padding:16px;width:300px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:150}
 #login-dropdown select,#login-dropdown input{width:100%;padding:10px 12px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;margin-bottom:10px}
 #login-dropdown button.pin-btn{width:100%;padding:10px;background:#2a4a6a;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600}
@@ -28,95 +26,77 @@ a:hover{text-decoration:underline}
 .login-divider{display:flex;align-items:center;gap:10px;margin:14px 0;font-size:12px;color:#aaa}
 .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:#ddd}
 #g-signin-btn{display:flex;justify-content:center;margin-bottom:6px}
-.login-section-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
 
-/* Breadcrumb */
 .breadcrumb{padding:10px 16px;font-size:14px;color:#6a8aaa;background:#e8eef4}
 .breadcrumb span{cursor:pointer;color:#2a6a9a}
 .breadcrumb span:hover{text-decoration:underline}
 
-/* ── PHASES LIST VIEW ── */
+.info-card{background:#fff;margin:12px 16px;border-radius:10px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.info-card h2{font-size:17px;color:#2a4a6a;margin-bottom:10px}
+.info-card ul{padding-left:20px;font-size:14px;line-height:1.7}
+.info-card p{font-size:14px;line-height:1.6}
+
+.summary-bar{display:flex;flex-wrap:wrap;gap:12px;margin:12px 16px}
+.summary-stat{background:#fff;border-radius:8px;padding:12px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06);text-align:center;min-width:80px;flex:1}
+.summary-stat .num{font-size:24px;font-weight:700;color:#2a4a6a}
+.summary-stat .label{font-size:12px;color:#888}
+
+/* Phase cards */
 .phase-card{background:#fff;margin:12px 16px;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;transition:box-shadow .15s}
 .phase-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12)}
 .phase-card-header{background:#2a4a6a;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
 .phase-card-header h2{font-size:17px;font-weight:600;margin:0}
 .phase-card-dates{font-size:13px;opacity:.8}
 .phase-card-body{padding:14px 18px;font-size:14px;line-height:1.6}
-.phase-card-body .phase-stats{display:flex;gap:16px;margin-bottom:8px;font-size:13px;color:#6a8aaa}
-.phase-card-body .phase-stats strong{color:#2a4a6a}
-.phase-card-milestone{font-size:13px;color:#2a4a6a;font-style:italic}
+.phase-stats{display:flex;gap:16px;font-size:13px;color:#6a8aaa}
+.phase-stats strong{color:#2a4a6a}
 .phase-progress{height:4px;background:#e0e8f0;border-radius:2px;margin-top:8px;overflow:hidden}
-.phase-progress-fill{height:100%;background:#3a9a6a;border-radius:2px;transition:width .3s}
+.phase-progress-fill{height:100%;background:#3a9a6a;border-radius:2px}
 
-/* ── DAY LIST (inside phase view) ── */
-.day-card{background:#fff;margin:8px 16px;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;transition:box-shadow .15s}
-.day-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1)}
-.day-card:nth-child(odd) .day-card-inner{background:#dce8f5}
-.day-card:nth-child(even) .day-card-inner{background:#fff}
-.day-card-inner{display:flex;align-items:center;padding:12px 16px;gap:12px}
-.day-card-date{min-width:65px;font-weight:700;font-size:15px;line-height:1.2}
-.day-card-date .day-type{font-size:11px;color:#6a8aaa;font-weight:400;display:block}
-.day-card-work{flex:1;font-size:15px}
-.day-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:80px}
-.day-card-status{font-size:11px;padding:3px 8px;border-radius:10px;font-weight:600;cursor:pointer;user-select:none}
+/* Task cards */
+.task-card{background:#fff;margin:8px 16px;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;transition:box-shadow .15s}
+.task-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.task-card:nth-child(odd) .task-card-inner{background:#dce8f5}
+.task-card:nth-child(even) .task-card-inner{background:#fff}
+.task-card-inner{display:flex;align-items:center;padding:12px 16px;gap:12px}
+.task-card-date{min-width:65px;font-weight:700;font-size:15px;line-height:1.2}
+.task-card-date .day-type{font-size:11px;color:#6a8aaa;font-weight:400;display:block}
+.task-card-work{flex:1;font-size:15px}
+.task-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:90px}
+.task-status{font-size:11px;padding:3px 8px;border-radius:10px;font-weight:600;cursor:pointer;user-select:none}
+.task-status:hover{opacity:.8}
 .status-planned{background:#e0e8f0;color:#6a8aaa}
 .status-in-progress{background:#fff3cd;color:#856404}
 .status-done{background:#d4edda;color:#155724}
 .status-overdue{background:#f8d7da;color:#721c24}
-.day-card-status:hover{opacity:.8}
+.task-card-workers{display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end}
+.task-deps{font-size:10px;color:#aaa;margin-top:2px}
 
-/* Move controls */
-.move-controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.move-controls button{padding:6px 12px;border:1px solid #d0dce8;border-radius:6px;font-size:13px;cursor:pointer;background:#fff;font-weight:600;color:#2a4a6a}
-.move-controls button:hover{background:#eef4fa}
-.move-controls select{padding:6px 10px;border:1px solid #d0dce8;border-radius:6px;font-size:13px}
-
-/* Overdue banner */
-.overdue-banner{background:#f8d7da;border-left:4px solid #c44;margin:12px 16px;border-radius:0 8px 8px 0;padding:12px 16px;font-size:14px;color:#721c24}
-.overdue-banner h3{margin:0 0 8px;font-size:15px}
-.overdue-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(114,28,36,.1);gap:8px}
-.overdue-item:last-child{border:none}
-.overdue-item-text{flex:1;font-size:13px}
-.rollover-btn{padding:4px 10px;background:#c44;color:#fff;border:none;border-radius:4px;font-size:11px;cursor:pointer;font-weight:600;white-space:nowrap}
-.rollover-btn:hover{background:#a33}
-.day-card-workers{display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end}
-
-/* ── DAY DETAIL VIEW ── */
-.day-detail{margin:12px 16px}
-.day-detail-header{background:#2a4a6a;color:#fff;padding:18px 20px;border-radius:10px 10px 0 0}
-.day-detail-header h2{font-size:20px;margin:0 0 4px}
-.day-detail-header .day-detail-sub{font-size:14px;opacity:.85}
-.day-detail-body{background:#fff;border-radius:0 0 10px 10px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-
+/* Task detail */
+.task-detail{margin:12px 16px}
+.task-detail-header{background:#2a4a6a;color:#fff;padding:18px 20px;border-radius:10px 10px 0 0}
+.task-detail-header h2{font-size:20px;margin:0 0 4px}
+.task-detail-header .task-detail-sub{font-size:14px;opacity:.85}
+.task-detail-body{background:#fff;border-radius:0 0 10px 10px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .detail-section{padding:16px 20px;border-bottom:1px solid #eef2f6}
 .detail-section:last-child{border-bottom:none}
 .detail-section h3{font-size:15px;color:#2a4a6a;margin-bottom:10px;font-weight:600}
-
-.detail-section textarea,.detail-section input[type="text"]{width:100%;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical}
+.detail-section textarea,.detail-section input[type="text"],.detail-section input[type="date"]{width:100%;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical}
 .detail-section textarea{min-height:80px}
 
-/* Status picker */
-.status-picker{display:flex;gap:8px}
+.status-picker{display:flex;gap:8px;flex-wrap:wrap}
 .status-picker button{padding:8px 16px;border:2px solid #d0dce8;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;background:#fff}
 .status-picker button.active-planned{border-color:#6a8aaa;background:#e0e8f0;color:#6a8aaa}
 .status-picker button.active-in-progress{border-color:#856404;background:#fff3cd;color:#856404}
 .status-picker button.active-done{border-color:#155724;background:#d4edda;color:#155724}
 
-/* Materials list */
 .materials-list{list-style:none;padding:0}
 .materials-list li{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:14px;border-bottom:1px solid #f0f4f8}
 .materials-list li:last-child{border:none}
-.mat-check{width:18px;height:18px;cursor:pointer}
-.mat-text{flex:1}
-.mat-text.checked{text-decoration:line-through;color:#aaa}
-
-/* Links/Media */
 .link-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f4f8;font-size:14px}
 .link-item:last-child{border:none}
-.link-icon{font-size:16px;min-width:24px;text-align:center}
 .link-remove{color:#c44;cursor:pointer;font-size:12px;padding:2px 6px}
 
-/* Worker badges */
 .worker-badge{font-size:11px;padding:3px 8px;border-radius:10px;font-weight:600;display:inline-block}
 .worker-badge.raoul{background:#2a4a6a;color:#fff}
 .worker-badge.charlie{background:#6a3a9a;color:#fff}
@@ -125,33 +105,30 @@ a:hover{text-decoration:underline}
 .worker-toggle{font-size:13px;padding:6px 14px;border-radius:8px;border:1px solid #d0dce8;background:#fff;cursor:pointer}
 .worker-toggle.signed-up{background:#3a9a6a;color:#fff;border-color:#3a9a6a}
 
-/* Buttons */
 .btn{padding:8px 16px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600}
 .btn-primary{background:#2a4a6a;color:#fff}
 .btn-primary:hover{background:#3a6a9a}
 .btn-danger{background:#c44;color:#fff}
-.btn-secondary{background:#e0e8f0;color:#2a4a6a}
-.btn-success{background:#3a9a6a;color:#fff}
 .btn-sm{padding:5px 10px;font-size:12px}
+.btn-warn{background:#e67e22;color:#fff}
 
-/* Scope card */
-.info-card{background:#fff;margin:12px 16px;border-radius:10px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.info-card h2{font-size:17px;color:#2a4a6a;margin-bottom:10px}
-.info-card ul{padding-left:20px;font-size:14px;line-height:1.7}
-.info-card p{font-size:14px;line-height:1.6}
+.dep-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:#eef4fa;color:#2a4a6a;margin:2px;cursor:default}
+.dep-tag.unmet{background:#f8d7da;color:#721c24}
 
-/* Summary bar */
-.summary-bar{display:flex;flex-wrap:wrap;gap:12px;margin:12px 16px}
-.summary-stat{background:#fff;border-radius:8px;padding:12px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06);text-align:center;min-width:80px;flex:1}
-.summary-stat .num{font-size:24px;font-weight:700;color:#2a4a6a}
-.summary-stat .label{font-size:12px;color:#888}
+/* Push schedule controls */
+.push-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.push-controls select,.push-controls input{padding:6px 10px;border:1px solid #d0dce8;border-radius:6px;font-size:13px}
 
-/* Footer */
+/* Overdue banner */
+.overdue-banner{background:#f8d7da;border-left:4px solid #c44;margin:12px 16px;border-radius:0 8px 8px 0;padding:12px 16px;font-size:14px;color:#721c24}
+.overdue-banner h3{margin:0 0 8px;font-size:15px}
+.overdue-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(114,28,36,.1);gap:8px}
+.overdue-item:last-child{border:none}
+
 .app-footer{text-align:center;padding:20px;font-size:12px;color:#999}
 
-/* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
-.modal{background:#fff;border-radius:12px;padding:24px;max-width:440px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.modal{background:#fff;border-radius:12px;padding:24px;max-width:480px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto}
 .modal h2{font-size:17px;color:#2a4a6a;margin-bottom:14px}
 .modal label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:#555}
 .modal input,.modal select,.modal textarea{width:100%;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;margin-bottom:12px;font-family:inherit}
@@ -176,7 +153,6 @@ a:hover{text-decoration:underline}
   <div id="login-err" class="login-err hidden"></div>
   <div id="g-signin-btn"></div>
   <div class="login-divider">or use PIN</div>
-  <div class="login-section-label">PIN Login</div>
   <select id="login-user">
     <option value="">Select your name...</option>
     <option value="raoul">Raoul (Owner)</option>
@@ -196,69 +172,83 @@ a:hover{text-decoration:underline}
 </div>
 
 <script>
-// ── Google Auth Config ──
+// ── Config ──
 const GOOGLE_CLIENT_ID='502600709324-u90b4c7cuhe7qc439u5vcbjtval1tb9d.apps.googleusercontent.com';
-
-// Map Google emails to user roles
-const EMAIL_ROLES={
-  'raoul.fresno@gmail.com':{uid:'raoul',role:'admin',name:'Raoul'},
-  // Add worker emails here as needed:
-  // 'charlie@example.com':{uid:'charlie',role:'worker',name:'Charlie'},
-  // 'vinny@example.com':{uid:'vinny',role:'worker',name:'Vinny'},
-  // 'joaquin@example.com':{uid:'joaquin',role:'worker',name:'Joaquin'},
-};
-
-function handleGoogleSignIn(response){
-  // Decode JWT payload (base64url)
-  const payload=JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-  const email=payload.email;
-  const name=payload.name||email;
-
-  const mapping=EMAIL_ROLES[email.toLowerCase()];
-  if(mapping){
-    USER=mapping.uid;
-    LS.set('auth',USER);
-    LS.set('authMethod','google');
-    LS.set('googleName',name);
-    LS.set('googleEmail',email);
-  }else{
-    // Unknown email — grant read-only guest access with their name
-    USER=null;
-    LS.set('auth',null);
-    LS.set('authMethod',null);
-    const err=document.getElementById('login-err');
-    err.textContent='Email not authorized: '+email;
-    err.classList.remove('hidden');
-    return;
-  }
-  document.getElementById('login-dropdown').classList.add('hidden');
-  document.getElementById('login-err').classList.add('hidden');
-  render();
-}
-
-function initGoogleSignIn(){
-  if(typeof google==='undefined'||!google.accounts)return;
-  google.accounts.id.initialize({
-    client_id:GOOGLE_CLIENT_ID,
-    callback:handleGoogleSignIn,
-    auto_select:false,
-    cancel_on_tap_outside:true
-  });
-  google.accounts.id.renderButton(
-    document.getElementById('g-signin-btn'),
-    {theme:'outline',size:'large',width:268,text:'signin_with',shape:'rectangular'}
-  );
-}
-
-// Retry init until Google script loads
-let _gsiRetries=0;
-function waitForGSI(){
-  if(typeof google!=='undefined'&&google.accounts){initGoogleSignIn();return}
-  if(_gsiRetries++<20)setTimeout(waitForGSI,250);
-}
-
-// ── Default Data ──
+const EMAIL_ROLES={'raoul.fresno@gmail.com':{uid:'raoul',role:'admin',name:'Raoul'}};
 const DEFAULT_PINS={raoul:'8640',charlie:'1111',vinny:'2222',joaquin:'3333'};
+
+// ── Available work days (the schedule grid) ──
+const AVAILABLE_DAYS=[
+  '2026-07-03','2026-07-04','2026-07-06','2026-07-11','2026-07-13','2026-07-17','2026-07-18',
+  '2026-07-20','2026-07-25','2026-07-27','2026-07-31','2026-08-01','2026-08-03','2026-08-08',
+  '2026-08-10','2026-08-14','2026-08-15','2026-08-17','2026-08-22','2026-08-24','2026-08-28',
+  '2026-08-29','2026-08-31','2026-09-05','2026-09-07','2026-09-08','2026-09-11','2026-09-12',
+  '2026-09-14','2026-09-19','2026-09-21','2026-09-25','2026-09-26','2026-09-28'
+];
+
+function dayLabel(date){
+  const d=new Date(date+'T12:00:00');
+  const days=['Su','M','Tu','W','Th','F','Sa'];
+  return days[d.getDay()]+' '+(d.getMonth()+1)+'/'+d.getDate();
+}
+function dayType(date){
+  const d=new Date(date+'T12:00:00');
+  const dow=d.getDay();
+  if(date==='2026-07-03')return 'off+hol';
+  if(date==='2026-09-07')return 'Labor Day';
+  if(date==='2026-09-08')return 'WFH (shifted)';
+  if(dow===1)return 'WFH';
+  if(dow===5)return 'off';
+  return '';
+}
+
+// ── Default Tasks ──
+let _id=0;
+function tid(){return 't'+(++_id)}
+
+const DEFAULT_TASKS=[
+  // Phase 1
+  {id:'t1',phase:'Phase 1: Demo & Site Prep',work:'Demo half of outdoor bathroom, salvage fixtures',scheduledDate:'2026-07-03',completedDate:null,status:'planned',order:1,dependsOn:[],materials:['Sledgehammer','Pry bar','Sawzall','Safety glasses','Gloves','Dumpster'],notes:'',links:[]},
+  {id:'t2',phase:'Phase 1: Demo & Site Prep',work:'Clear patios, debris removal, material staging',scheduledDate:'2026-07-04',completedDate:null,status:'planned',order:2,dependsOn:['t1'],materials:['Wheelbarrow','Shovels','Rake','Broom'],notes:'',links:[]},
+  {id:'t3',phase:'Phase 1: Demo & Site Prep',work:'Layout & string lines, dig/prep kitchen slab',scheduledDate:'2026-07-06',completedDate:null,status:'planned',order:3,dependsOn:['t2'],materials:['String line','Stakes','Chalk line','Laser level','Tape measure','Shovels','Gravel'],notes:'',links:[]},
+  {id:'t4',phase:'Phase 1: Demo & Site Prep',work:'Grade north patio, prep for slab/pier footings',scheduledDate:'2026-07-11',completedDate:null,status:'planned',order:4,dependsOn:['t3'],materials:['Shovels','Rake','Tamper','Gravel','Level'],notes:'',links:[]},
+  // Phase 2
+  {id:'t5',phase:'Phase 2: Foundation & Framing',work:'Pour kitchen slab or set piers (north 14×10)',scheduledDate:'2026-07-13',completedDate:null,status:'planned',order:5,dependsOn:['t4'],materials:['Concrete','Rebar','Form boards','Screed board','Float/trowel','Level'],notes:'If slab: need concrete truck or 60+ bags Quikrete. If piers: 12-16 pier blocks + 4×6 beams.',links:[]},
+  {id:'t6',phase:'Phase 2: Foundation & Framing',work:'Build raised bathroom platform',scheduledDate:'2026-07-17',completedDate:null,status:'planned',order:6,dependsOn:['t4'],materials:['PT 2×6 joists','PT 4×4 posts','Plywood subfloor (3/4")','Joist hangers','Concrete','Level'],notes:'Platform needs to match existing office floor height. PT lumber for ground contact.',links:[]},
+  {id:'t7',phase:'Phase 2: Foundation & Framing',work:'Continue bathroom platform',scheduledDate:'2026-07-18',completedDate:null,status:'planned',order:7,dependsOn:['t6'],materials:[],notes:'',links:[]},
+  {id:'t8',phase:'Phase 2: Foundation & Framing',work:'Frame east walls (12×8) — full enclosure',scheduledDate:'2026-07-20',completedDate:null,status:'planned',order:8,dependsOn:['t5','t7'],materials:['2×4 studs','2×4 plates','Framing nails','Speed square','Circular saw','Tape measure'],notes:'Build walls on ground, tilt up. Need helper to hold.',links:[]},
+  {id:'t9',phase:'Phase 2: Foundation & Framing',work:'Frame north walls (14×10), headers',scheduledDate:'2026-07-25',completedDate:null,status:'planned',order:9,dependsOn:['t5'],materials:['2×4 studs','Header lumber','Jack/king studs','Cripples'],notes:'Partial enclosure — determine which sides stay open.',links:[]},
+  {id:'t10',phase:'Phase 2: Foundation & Framing',work:'Frame bathroom, tie into office',scheduledDate:'2026-07-27',completedDate:null,status:'planned',order:10,dependsOn:['t7'],materials:['2×4 studs','Lag bolts (for tie-in)','Simpson ties'],notes:'Tie new framing into existing office wall.',links:[]},
+  {id:'t11',phase:'Phase 2: Foundation & Framing',work:'Sheathe walls, housewrap',scheduledDate:'2026-07-31',completedDate:null,status:'planned',order:11,dependsOn:['t8','t9','t10'],materials:['OSB/plywood sheathing','Tyvek housewrap','Housewrap tape','Cap nails','Stapler'],notes:'',links:[]},
+  {id:'t12',phase:'Phase 2: Foundation & Framing',work:'Complete sheathing & housewrap',scheduledDate:'2026-08-01',completedDate:null,status:'planned',order:12,dependsOn:['t11'],materials:[],notes:'',links:[]},
+  // Phase 3
+  {id:'t13',phase:'Phase 3: Roof & Envelope',work:'Roof framing — east enclosure',scheduledDate:'2026-08-03',completedDate:null,status:'planned',order:13,dependsOn:['t12'],materials:['Rafters','Ridge board','Hurricane ties','Framing nails'],notes:'Shed roof tying into existing office roof is simplest.',links:[]},
+  {id:'t14',phase:'Phase 3: Roof & Envelope',work:'Roof framing — north kitchen',scheduledDate:'2026-08-08',completedDate:null,status:'planned',order:14,dependsOn:['t12'],materials:['Rafters','Ledger board','Lag bolts','Joist hangers'],notes:'Lean-to off office wall. Lower pitch OK.',links:[]},
+  {id:'t15',phase:'Phase 3: Roof & Envelope',work:'Roofing material + windows/doors',scheduledDate:'2026-08-10',completedDate:null,status:'planned',order:15,dependsOn:['t13','t14'],materials:['Roof sheathing','Underlayment','Roofing material','Drip edge','Flashing','Windows','Door(s)'],notes:'Install windows same day if delivered.',links:[]},
+  {id:'t16',phase:'Phase 3: Roof & Envelope',work:'Siding, exterior finish, flash penetrations',scheduledDate:'2026-08-14',completedDate:null,status:'planned',order:16,dependsOn:['t15'],materials:['Siding','Trim','Flashing','Caulk','Nails/screws'],notes:'Flash all window/door openings before siding.',links:[]},
+  {id:'t17',phase:'Phase 3: Roof & Envelope',work:'Complete exterior envelope',scheduledDate:'2026-08-15',completedDate:null,status:'planned',order:17,dependsOn:['t16'],materials:[],notes:'',links:[]},
+  // Phase 4
+  {id:'t18',phase:'Phase 4: Mechanicals',work:'Rough plumbing — bathroom',scheduledDate:'2026-08-17',completedDate:null,status:'planned',order:18,dependsOn:['t17'],materials:['PEX pipe + fittings','ABS drain pipe','P-trap','Toilet flange','Shower drain','Shut-offs'],notes:'May need licensed plumber if permitting.',links:[]},
+  {id:'t19',phase:'Phase 4: Mechanicals',work:'Rough plumbing — kitchen',scheduledDate:'2026-08-22',completedDate:null,status:'planned',order:19,dependsOn:['t17'],materials:['PEX pipe + fittings','ABS drain pipe','P-trap','Shut-offs'],notes:'Kitchen sink supply + drain. Gas line for range if not electric.',links:[]},
+  {id:'t20',phase:'Phase 4: Mechanicals',work:'Electrical rough-in — all areas',scheduledDate:'2026-08-24',completedDate:null,status:'planned',order:20,dependsOn:['t17'],materials:['Romex (12/2, 14/2)','Electrical boxes','Wire staples','Breakers'],notes:'Kitchen: 2× 20A GFCI. Bath: 20A GFCI + fan. May need subpanel.',links:[]},
+  {id:'t21',phase:'Phase 4: Mechanicals',work:'HVAC — mini-split(s)',scheduledDate:'2026-08-28',completedDate:null,status:'planned',order:21,dependsOn:['t17'],materials:['Mini-split unit(s)','Line set','Mounting bracket','Conduit for line hide'],notes:'MrCool DIY pre-charged, no HVAC license needed.',links:[]},
+  {id:'t22',phase:'Phase 4: Mechanicals',work:'Insulate all walls & ceilings',scheduledDate:'2026-08-29',completedDate:null,status:'planned',order:22,dependsOn:['t18','t19','t20','t21'],materials:['Insulation batts','Vapor barrier','Stapler'],notes:'R-13 walls, R-30 ceiling.',links:[]},
+  // Phase 5
+  {id:'t23',phase:'Phase 5: Interior Finish',work:'Hang drywall — east room + bathroom',scheduledDate:'2026-08-31',completedDate:null,status:'planned',order:23,dependsOn:['t22'],materials:['Drywall','Drywall screws','Drywall T-square','Utility knife','Drill'],notes:'Start with ceiling, then walls.',links:[]},
+  {id:'t24',phase:'Phase 5: Interior Finish',work:'Hang drywall — kitchen',scheduledDate:'2026-09-05',completedDate:null,status:'planned',order:24,dependsOn:['t22'],materials:['Drywall','Drywall screws'],notes:'',links:[]},
+  {id:'t25',phase:'Phase 5: Interior Finish',work:'Tape, mud, sand (first coat)',scheduledDate:'2026-09-07',completedDate:null,status:'planned',order:25,dependsOn:['t23','t24'],materials:['Joint compound','Paper tape','Corner bead','6" knife','10" knife'],notes:'Labor Day — full project day.',links:[]},
+  {id:'t26',phase:'Phase 5: Interior Finish',work:'Mud 2nd coat, sand, prime',scheduledDate:'2026-09-08',completedDate:null,status:'planned',order:26,dependsOn:['t25'],materials:['Joint compound','Sanding sponge','Primer','Rollers + brushes'],notes:'',links:[]},
+  {id:'t27',phase:'Phase 5: Interior Finish',work:'Paint all interior walls',scheduledDate:'2026-09-11',completedDate:null,status:'planned',order:27,dependsOn:['t26'],materials:['Interior paint','Rollers','Brushes','Tape','Drop cloths'],notes:'2 coats. Cut in corners first, then roll.',links:[]},
+  {id:'t28',phase:'Phase 5: Interior Finish',work:'Flooring — all areas',scheduledDate:'2026-09-12',completedDate:null,status:'planned',order:28,dependsOn:['t27'],materials:['LVP flooring','Underlayment','Transition strips','Tapping block','Pull bar','Spacers'],notes:'LVP click-lock, start from longest wall.',links:[]},
+  {id:'t29',phase:'Phase 5: Interior Finish',work:'Kitchen cabinets, countertop, sink, appliances',scheduledDate:'2026-09-14',completedDate:null,status:'planned',order:29,dependsOn:['t28'],materials:['Cabinets','Countertop','Sink + faucet','Supply lines','P-trap','Appliances'],notes:'Level is critical for cabinets. Install uppers first.',links:[]},
+  // Phase 6
+  {id:'t30',phase:'Phase 6: Fixtures, Fence & Finish',work:'Bathroom fixtures (toilet, sink, shower, vanity)',scheduledDate:'2026-09-19',completedDate:null,status:'planned',order:30,dependsOn:['t28'],materials:['Toilet + wax ring','Vanity','Faucet','Shower trim kit'],notes:'',links:[]},
+  {id:'t31',phase:'Phase 6: Fixtures, Fence & Finish',work:'Set fence posts, let cure',scheduledDate:'2026-09-21',completedDate:null,status:'planned',order:31,dependsOn:['t17'],materials:['4×4 PT posts','Quikrete','Post hole digger','Level','String line'],notes:'Dig 24" deep, plumb, pour concrete. Cure 24-48 hrs.',links:[]},
+  {id:'t32',phase:'Phase 6: Fixtures, Fence & Finish',work:'Hang fence panels, gate',scheduledDate:'2026-09-25',completedDate:null,status:'planned',order:32,dependsOn:['t31'],materials:['Rails','Pickets/panels','Gate + hardware','Screws','Level'],notes:'',links:[]},
+  {id:'t33',phase:'Phase 6: Fixtures, Fence & Finish',work:'Landscaping — plants, gravel, drainage',scheduledDate:'2026-09-26',completedDate:null,status:'planned',order:33,dependsOn:['t32'],materials:['Plants','Gravel/mulch','Landscape fabric','Drip irrigation'],notes:'Grade away from structures. Drought-tolerant.',links:[]},
+  {id:'t34',phase:'Phase 6: Fixtures, Fence & Finish',work:'Punch list — trim, caulk, touch-up, finals',scheduledDate:'2026-09-28',completedDate:null,status:'planned',order:34,dependsOn:['t29','t30','t32'],materials:['Baseboard','Door trim','Caulk','Nail gun','Touch-up paint','Covers/plates'],notes:'',links:[]}
+];
+_id=34;
 
 const DEFAULT_SCOPE=[
   '10×12 conditioned office on raised foundation (existing core)',
@@ -268,7 +258,6 @@ const DEFAULT_SCOPE=[
   'Existing 8×8 outdoor bathroom → cut to ~4×8',
   'Fence + landscaping'
 ];
-
 const DEFAULT_RISKS=[
   'Permits: Determine strategy now — inspection delays could push schedule.',
   'Concrete cure: Slab/fence posts timed to cure between work days.',
@@ -276,704 +265,342 @@ const DEFAULT_RISKS=[
   'Laborer ramp: Phases 1–2 ideal for training. By Phase 4 they\'re useful.'
 ];
 
-const DEFAULT_PHASES=[
-  {
-    name:'Phase 1: Demo & Site Prep',dates:'7/3–7/11',
-    milestone:'Site cleared, bathroom halved, all areas laid out.',
-    materials:['Sledgehammer','Pry bar','Sawzall + demo blades','String line + stakes','Chalk line','Laser level or 4ft level','Tape measure (25ft)','Wheelbarrow','Shovels + rake','Dumpster or dump trailer rental','Gravel (for slab base)','Rebar + wire mesh','Form boards (2×4 or 2×6)'],
-    days:[
-      {date:'2026-07-03',label:'F 7/3',type:'off+hol',work:'Demo half of outdoor bathroom, salvage fixtures',status:'planned',notes:'',links:[],materials:['Sledgehammer','Pry bar','Sawzall','Safety glasses','Gloves','Dumpster']},
-      {date:'2026-07-04',label:'Sa 7/4',type:'',work:'Clear patios, debris removal, material staging',status:'planned',notes:'',links:[],materials:['Wheelbarrow','Shovels','Rake','Broom']},
-      {date:'2026-07-06',label:'M 7/6',type:'WFH',work:'Layout & string lines, dig/prep kitchen slab',status:'planned',notes:'',links:[],materials:['String line','Stakes','Chalk line','Laser level','Tape measure','Shovels','Gravel']},
-      {date:'2026-07-11',label:'Sa 7/11',type:'',work:'Grade north patio, prep for slab/pier footings',status:'planned',notes:'',links:[],materials:['Shovels','Rake','Tamper','Gravel','Level']}
-    ]
-  },
-  {
-    name:'Phase 2: Foundation & Framing',dates:'7/13–8/1',
-    milestone:'All walls framed and sheathed. Structure taking shape.',
-    materials:['Concrete (bags or truck pour)','Rebar + tie wire','Pier blocks (if not slab)','2×4 studs (or 2×6 for exterior)','2×4 plates (PT for bottom plate)','Headers: 2×8 / 2×10 / 2×12','Plywood sheathing (1/2" or 7/16" OSB)','Tyvek housewrap + tape','Framing nails (16d, 8d)','Joist hangers + hurricane ties','Construction screws (3", 3.5")','Circular saw','Framing nailer + compressor (or screw gun)','Speed square','4ft level','Chalk line'],
-    days:[
-      {date:'2026-07-13',label:'M 7/13',type:'WFH',work:'Pour kitchen slab or set piers (north 14×10)',status:'planned',notes:'If slab: need concrete truck or 60+ bags Quikrete. If piers: 12-16 pier blocks + 4×6 beams.',links:[],materials:['Concrete','Rebar','Form boards','Screed board','Float/trowel','Level']},
-      {date:'2026-07-17',label:'F 7/17',type:'off',work:'Build raised bathroom platform',status:'planned',notes:'Platform needs to match existing office floor height. PT lumber for contact with ground/concrete.',links:[],materials:['PT 2×6 joists','PT 4×4 posts','Plywood subfloor (3/4")','Joist hangers','Concrete','Level']},
-      {date:'2026-07-18',label:'Sa 7/18',type:'',work:'Continue bathroom platform',status:'planned',notes:'',links:[],materials:[]},
-      {date:'2026-07-20',label:'M 7/20',type:'WFH',work:'Frame east walls (12×8) — full enclosure',status:'planned',notes:'Build walls on ground, tilt up. Need helper to hold. Pre-cut all studs to same length.',links:[],materials:['2×4 studs','2×4 plates','Framing nails','Speed square','Circular saw','Tape measure']},
-      {date:'2026-07-25',label:'Sa 7/25',type:'',work:'Frame north walls (14×10), headers',status:'planned',notes:'Partial enclosure — determine which sides stay open. Headers sized for window/door openings.',links:[],materials:['2×4 studs','Header lumber','Jack/king studs','Cripples']},
-      {date:'2026-07-27',label:'M 7/27',type:'WFH',work:'Frame bathroom, tie into office',status:'planned',notes:'Tie new framing into existing office wall. May need to remove siding at connection point.',links:[],materials:['2×4 studs','Lag bolts (for tie-in)','Simpson ties']},
-      {date:'2026-07-31',label:'F 7/31',type:'off',work:'Sheathe walls, housewrap',status:'planned',notes:'',links:[],materials:['OSB/plywood sheathing','Tyvek housewrap','Housewrap tape','Cap nails','Stapler']},
-      {date:'2026-08-01',label:'Sa 8/1',type:'',work:'Complete sheathing & housewrap',status:'planned',notes:'',links:[],materials:[]}
-    ]
-  },
-  {
-    name:'Phase 3: Roof & Envelope',dates:'8/3–8/15',
-    milestone:'Dried in. Weather-tight on all enclosed areas.',
-    materials:['Rafters (2×6 or 2×8)','Ridge board','Roof sheathing (1/2" plywood or OSB)','Synthetic underlayment (or 30lb felt)','Roofing: corrugated metal panels or architectural shingles','Drip edge','Flashing (step, counter, valley)','Roofing nails / screws','Windows (measure and order by mid-July!)','Exterior door(s)','Siding material (T1-11, hardie, or match existing)','Exterior trim','Caulk (exterior grade)','Tin snips (if metal roof)','Roofing nailer or screw gun'],
-    days:[
-      {date:'2026-08-03',label:'M 8/3',type:'WFH',work:'Roof framing — east enclosure',status:'planned',notes:'Shed roof (single slope) tying into existing office roof is simplest. Match existing pitch if possible.',links:[],materials:['Rafters','Ridge board','Hurricane ties','Framing nails']},
-      {date:'2026-08-08',label:'Sa 8/8',type:'',work:'Roof framing — north kitchen',status:'planned',notes:'Lean-to off office wall. Lower pitch OK for kitchen — just needs drainage.',links:[],materials:['Rafters','Ledger board','Lag bolts','Joist hangers']},
-      {date:'2026-08-10',label:'M 8/10',type:'WFH',work:'Roofing material + windows/doors',status:'planned',notes:'Sheathe, felt/synthetic, then metal or shingles. Install windows same day if delivered.',links:[],materials:['Roof sheathing','Underlayment','Roofing material','Drip edge','Flashing','Windows','Door(s)']},
-      {date:'2026-08-14',label:'F 8/14',type:'off',work:'Siding, exterior finish, flash penetrations',status:'planned',notes:'Flash all window/door openings before siding. Z-flashing at horizontal joints.',links:[],materials:['Siding','Trim','Flashing','Caulk','Nails/screws']},
-      {date:'2026-08-15',label:'Sa 8/15',type:'',work:'Complete exterior envelope',status:'planned',notes:'',links:[],materials:[]}
-    ]
-  },
-  {
-    name:'Phase 4: Mechanicals',dates:'8/17–8/29',
-    milestone:'All mechanicals in. Ready for wall finish.',
-    materials:['PEX pipe (1/2" and 3/4") + fittings + crimp rings','PEX crimper or SharkBite fittings','ABS/PVC drain pipe (2", 3", 4") + fittings','P-traps','Toilet flange','Shower drain + pan','Shut-off valves','Romex wire (12/2 for 20A, 14/2 for 15A)','Electrical boxes (old work)','Outlets, switches, cover plates','20A GFCI outlets (kitchen + bath)','Breakers (match panel)','Wire staples + wire nuts','Mini-split unit (order NOW — MrCool DIY or similar)','Line set + mounting bracket','Insulation batts (R-13 walls, R-30 ceiling)','Vapor barrier (if needed)'],
-    days:[
-      {date:'2026-08-17',label:'M 8/17',type:'WFH',work:'Rough plumbing — bathroom',status:'planned',notes:'Toilet supply + drain, sink supply + drain, shower supply + drain + vent. Tie into existing sewer line. May need licensed plumber if permitting.',links:[],materials:['PEX pipe + fittings','ABS drain pipe','P-trap','Toilet flange','Shower drain','Shut-offs']},
-      {date:'2026-08-22',label:'Sa 8/22',type:'',work:'Rough plumbing — kitchen',status:'planned',notes:'Kitchen sink supply (hot/cold) + drain. Dishwasher supply if planned. Gas line for range if not electric.',links:[],materials:['PEX pipe + fittings','ABS drain pipe','P-trap','Shut-offs']},
-      {date:'2026-08-24',label:'M 8/24',type:'WFH',work:'Electrical rough-in — all areas',status:'planned',notes:'Kitchen: 2× 20A circuits (GFCI), dedicated circuit for fridge + range. Bath: 20A GFCI + exhaust fan circuit. East room: 15A general + lighting. May need subpanel if main is full.',links:[],materials:['Romex (12/2, 14/2)','Electrical boxes','Wire staples','Breakers']},
-      {date:'2026-08-28',label:'F 8/28',type:'off',work:'HVAC — mini-split(s) or extend system',status:'planned',notes:'MrCool DIY units are pre-charged, no HVAC license needed. 12K BTU for east room, 18K for kitchen, or single 24K multi-zone.',links:[],materials:['Mini-split unit(s)','Line set','Mounting bracket','Conduit for line hide']},
-      {date:'2026-08-29',label:'Sa 8/29',type:'',work:'Insulate all walls & ceilings',status:'planned',notes:'R-13 in 2×4 walls, R-19 if 2×6. R-30 in ceiling. Friction fit batts. Vapor barrier on warm side if required by code.',links:[],materials:['Insulation batts','Vapor barrier','Stapler']}
-    ]
-  },
-  {
-    name:'Phase 5: Interior Finish',dates:'8/31–9/14',
-    milestone:'Interior complete. Livable spaces.',
-    materials:['Drywall sheets (4×8, 1/2")','Joint compound (bucket)','Paper tape','Corner bead','Drywall screws','Sanding sponges','Primer','Interior paint','LVP flooring (waterproof, click-lock)','Underlayment (if needed for LVP)','Transition strips','Kitchen cabinets (IKEA or stock)','Countertop (butcher block or laminate)','Kitchen sink + faucet','Appliances (range, fridge, microwave)','Bathroom vanity + sink','Toilet','Shower surround or tile','Bathroom faucet','Exhaust fan','Light fixtures'],
-    days:[
-      {date:'2026-08-31',label:'M 8/31',type:'WFH',work:'Hang drywall — east room + bathroom',status:'planned',notes:'Start with ceiling, then walls. Score and snap. Use drywall lift or extra hands for ceiling sheets.',links:[],materials:['Drywall','Drywall screws','Drywall T-square','Utility knife','Drill']},
-      {date:'2026-09-05',label:'Sa 9/5',type:'',work:'Hang drywall — kitchen',status:'planned',notes:'',links:[],materials:['Drywall','Drywall screws']},
-      {date:'2026-09-07',label:'M 9/7',type:'Labor Day',work:'Tape, mud, sand (first coat)',status:'planned',notes:'Labor Day — off work, full project day. Embed tape in first coat of mud. Let dry overnight.',links:[],materials:['Joint compound','Paper tape','Corner bead','6" knife','10" knife']},
-      {date:'2026-09-08',label:'Tu 9/8',type:'WFH',work:'Mud 2nd coat, sand, prime',status:'planned',notes:'Wider coat with 10" knife. Sand smooth when dry. Prime everything.',links:[],materials:['Joint compound','Sanding sponge','Primer','Rollers + brushes']},
-      {date:'2026-09-11',label:'F 9/11',type:'off',work:'Paint all interior walls',status:'planned',notes:'2 coats. Cut in corners/ceiling first, then roll.',links:[],materials:['Interior paint','Rollers (9" + 4")','Brushes (2.5" angled)','Tape','Drop cloths']},
-      {date:'2026-09-12',label:'Sa 9/12',type:'',work:'Flooring — all areas',status:'planned',notes:'LVP click-lock is fast with 2 people. Start from longest wall. Undercut door frames.',links:[],materials:['LVP flooring','Underlayment','Transition strips','Tapping block','Pull bar','Spacers']},
-      {date:'2026-09-14',label:'M 9/14',type:'WFH',work:'Kitchen cabinets, countertop, sink, appliances',status:'planned',notes:'Level is critical for cabinets. Install uppers first. Template countertop for sink cutout.',links:[],materials:['Cabinets','Countertop','Sink + faucet','Supply lines','P-trap','Appliances']}
-    ]
-  },
-  {
-    name:'Phase 6: Fixtures, Fence & Finish',dates:'9/19–9/30',
-    milestone:'Project complete — Sep 30 deadline met.',
-    materials:['Toilet','Vanity + sink + faucet','Shower surround + faucet/valve','Mirror + medicine cabinet','Towel bars + TP holder','Exhaust fan','Light fixtures (all rooms)','Outlet covers + switch plates','Fence posts (4×4 PT, 8ft)','Fence rails (2×4 PT)','Fence pickets or pre-built panels','Post concrete (Quikrete)','Gate + hardware (hinges, latch)','Landscape plants','Gravel or mulch','Landscape fabric','Drip irrigation (optional)','Baseboard trim','Door trim/casing','Caulk (interior)','Touch-up paint'],
-    days:[
-      {date:'2026-09-19',label:'Sa 9/19',type:'',work:'Bathroom fixtures (toilet, sink, shower, vanity)',status:'planned',notes:'Set toilet on wax ring. Connect vanity supply/drain. Install shower valve trim + head.',links:[],materials:['Toilet + wax ring + bolts','Vanity','Faucet','Shower trim kit','Plumber\'s putty','Teflon tape']},
-      {date:'2026-09-21',label:'M 9/21',type:'WFH',work:'Set fence posts, let cure',status:'planned',notes:'Dig holes 24" deep, set posts plumb, pour concrete. Let cure 24-48 hrs before hanging rails/pickets.',links:[],materials:['4×4 PT posts','Quikrete','Post hole digger or auger','Level','String line','Water']},
-      {date:'2026-09-25',label:'F 9/25',type:'off',work:'Hang fence panels, gate',status:'planned',notes:'',links:[],materials:['Rails','Pickets or panels','Gate + hardware','Screws','Level']},
-      {date:'2026-09-26',label:'Sa 9/26',type:'',work:'Landscaping — plants, gravel, drainage',status:'planned',notes:'Grade away from structures. Landscape fabric under gravel. Drought-tolerant plants for Escondido.',links:[],materials:['Plants','Gravel/mulch','Landscape fabric','Drip irrigation','Shovel','Rake']},
-      {date:'2026-09-28',label:'M 9/28',type:'WFH',work:'Punch list — trim, caulk, touch-up, finals',status:'planned',notes:'Install baseboard, door trim, outlet/switch covers. Caulk all gaps. Touch-up paint. Final clean.',links:[],materials:['Baseboard','Door trim','Caulk','Nail gun','Touch-up paint','Covers/plates']}
-    ]
-  }
-];
-
 // ── Storage ──
 const LS={
-  get(k,def){try{const v=localStorage.getItem('apt-'+k);return v?JSON.parse(v):def}catch{return def}},
-  set(k,v){localStorage.setItem('apt-'+k,JSON.stringify(v))}
+  get(k,def){try{const v=localStorage.getItem('apt2-'+k);return v?JSON.parse(v):def}catch{return def}},
+  set(k,v){localStorage.setItem('apt2-'+k,JSON.stringify(v))}
 };
 function loadData(){
   return{
     pins:LS.get('pins',DEFAULT_PINS),
     scope:LS.get('scope',DEFAULT_SCOPE),
     risks:LS.get('risks',DEFAULT_RISKS),
-    phases:LS.get('phases',DEFAULT_PHASES),
-    workers:LS.get('workers',{}),
-    dayData:LS.get('dayData',{}) // {date: {notes,links,materials,status}}
+    tasks:LS.get('tasks',DEFAULT_TASKS),
+    workers:LS.get('workers',{}) // {taskId: ['charlie','vinny']}
   };
 }
-function saveData(d){
-  LS.set('pins',d.pins);LS.set('scope',d.scope);LS.set('risks',d.risks);
-  LS.set('phases',d.phases);LS.set('workers',d.workers);LS.set('dayData',d.dayData);
-}
+function saveData(d){LS.set('pins',d.pins);LS.set('scope',d.scope);LS.set('risks',d.risks);LS.set('tasks',d.tasks);LS.set('workers',d.workers)}
 
-let DATA,USER=null,VIEW='home',VIEW_PI=null,VIEW_DI=null;
+let DATA,USER=null,VIEW='home',VIEW_PHASE=null,VIEW_TASK=null;
 
 // ── Auth ──
-function toggleAuth(){
-  if(USER)doLogout();
-  else document.getElementById('login-dropdown').classList.toggle('hidden');
+function handleGoogleSignIn(response){
+  const payload=JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+  const mapping=EMAIL_ROLES[payload.email.toLowerCase()];
+  if(mapping){USER=mapping.uid;LS.set('auth',USER);LS.set('authMethod','google');LS.set('googleName',payload.name)}
+  else{document.getElementById('login-err').textContent='Email not authorized: '+payload.email;document.getElementById('login-err').classList.remove('hidden');return}
+  document.getElementById('login-dropdown').classList.add('hidden');render();
 }
+function initGoogleSignIn(){if(typeof google==='undefined'||!google.accounts)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleSignIn,auto_select:false});google.accounts.id.renderButton(document.getElementById('g-signin-btn'),{theme:'outline',size:'large',width:268})}
+let _gsiR=0;function waitForGSI(){if(typeof google!=='undefined'&&google.accounts){initGoogleSignIn();return}if(_gsiR++<20)setTimeout(waitForGSI,250)}
+
+function toggleAuth(){if(USER)doLogout();else document.getElementById('login-dropdown').classList.toggle('hidden')}
 function doLogin(){
-  const uid=document.getElementById('login-user').value;
-  const pin=document.getElementById('login-pin').value;
-  const err=document.getElementById('login-err');
-  err.classList.add('hidden');
-  if(!uid){err.textContent='Select a name';err.classList.remove('hidden');return}
-  DATA=loadData();
-  if(DATA.pins[uid]!==pin){err.textContent='Wrong PIN';err.classList.remove('hidden');return}
-  USER=uid;LS.set('auth',uid);
-  document.getElementById('login-dropdown').classList.add('hidden');
-  document.getElementById('login-pin').value='';
-  render();
+  const uid=document.getElementById('login-user').value,pin=document.getElementById('login-pin').value;
+  if(!uid){document.getElementById('login-err').textContent='Select a name';document.getElementById('login-err').classList.remove('hidden');return}
+  DATA=loadData();if(DATA.pins[uid]!==pin){document.getElementById('login-err').textContent='Wrong PIN';document.getElementById('login-err').classList.remove('hidden');return}
+  USER=uid;LS.set('auth',uid);LS.set('authMethod','pin');document.getElementById('login-dropdown').classList.add('hidden');document.getElementById('login-pin').value='';render();
 }
-function doLogout(){
-  const wasGoogle=LS.get('authMethod',null)==='google';
-  LS.set('auth',null);LS.set('authMethod',null);LS.set('googleName',null);LS.set('googleEmail',null);
-  USER=null;
-  document.getElementById('login-user').value='';
-  document.getElementById('login-pin').value='';
-  if(wasGoogle&&typeof google!=='undefined'&&google.accounts){
-    google.accounts.id.disableAutoSelect();
-  }
-  render();
-}
+function doLogout(){LS.set('auth',null);LS.set('authMethod',null);USER=null;render()}
 function isAdmin(){return USER==='raoul'}
 function isLoggedIn(){return USER!==null}
 
 // ── Navigation ──
-function navHome(){VIEW='home';VIEW_PI=null;VIEW_DI=null;render()}
-function navPhase(pi){VIEW='phase';VIEW_PI=pi;VIEW_DI=null;render()}
-function navDay(pi,di){VIEW='day';VIEW_PI=pi;VIEW_DI=di;render()}
+function navHome(){VIEW='home';VIEW_PHASE=null;VIEW_TASK=null;render()}
+function navPhase(phase){VIEW='phase';VIEW_PHASE=phase;VIEW_TASK=null;render()}
+function navTask(taskId){VIEW='task';VIEW_TASK=taskId;render()}
 
-// ── Day data helpers ──
-function getDayExtra(date){
-  return DATA.dayData[date]||{notes:'',links:[],materials:[],status:'planned'};
+// ── Helpers ──
+function todayStr(){return new Date().toISOString().slice(0,10)}
+function getTask(id){return DATA.tasks.find(t=>t.id===id)}
+function getPhases(){const seen=[];DATA.tasks.forEach(t=>{if(!seen.includes(t.phase))seen.push(t.phase)});return seen}
+function getTasksForPhase(phase){return DATA.tasks.filter(t=>t.phase===phase).sort((a,b)=>a.order-b.order)}
+function getTasksForDate(date){return DATA.tasks.filter(t=>t.scheduledDate===date).sort((a,b)=>a.order-b.order)}
+function getEffectiveStatus(task){if(task.status==='done')return'done';if(task.scheduledDate<todayStr())return'overdue';return task.status||'planned'}
+function nextAvailableDay(afterDate){return AVAILABLE_DAYS.find(d=>d>afterDate)||null}
+function depsMetFor(task){return task.dependsOn.every(depId=>{const dep=getTask(depId);return dep&&dep.status==='done'})}
+
+// ── Schedule Push ──
+function pushScheduleFrom(taskId){
+  const task=getTask(taskId);if(!task)return;
+  // Get all undone tasks scheduled on or after this task's date, sorted by order
+  const toMove=DATA.tasks.filter(t=>t.status!=='done'&&t.scheduledDate>=task.scheduledDate).sort((a,b)=>a.order-b.order);
+  // Reassign dates sequentially from available days starting after previous day
+  let dayIdx=AVAILABLE_DAYS.indexOf(task.scheduledDate);
+  if(dayIdx<0)dayIdx=AVAILABLE_DAYS.findIndex(d=>d>=task.scheduledDate);
+  // Shift by 1: start from next available day
+  dayIdx++;
+  toMove.forEach(t=>{
+    if(dayIdx<AVAILABLE_DAYS.length){t.scheduledDate=AVAILABLE_DAYS[dayIdx];dayIdx++}
+  });
+  saveData(DATA);render();
 }
-function setDayExtra(date,extra){
-  DATA.dayData[date]=extra;saveData(DATA);
+
+function rescheduleTask(taskId,newDate){
+  const task=getTask(taskId);if(!task)return;
+  task.scheduledDate=newDate;
+  saveData(DATA);render();
 }
 
 // ── Render ──
 function render(){
   DATA=loadData();
-  updateHeaderAuth();
-  const bc=document.getElementById('breadcrumb');
-  const c=document.getElementById('content');
-
-  if(VIEW==='home'){
-    bc.classList.add('hidden');
-    c.innerHTML=renderHome();
-  }else if(VIEW==='phase'){
-    bc.classList.remove('hidden');
-    bc.innerHTML=`<span onclick="navHome()">Home</span> / ${esc(DATA.phases[VIEW_PI].name)}`;
-    c.innerHTML=renderPhaseView(VIEW_PI);
-  }else if(VIEW==='day'){
-    bc.classList.remove('hidden');
-    const p=DATA.phases[VIEW_PI];
-    const d=p.days[VIEW_DI];
-    bc.innerHTML=`<span onclick="navHome()">Home</span> / <span onclick="navPhase(${VIEW_PI})">${esc(p.name)}</span> / ${esc(d.label)}`;
-    c.innerHTML=renderDayView(VIEW_PI,VIEW_DI);
-  }
+  const lbl=document.getElementById('header-user-label'),btn=document.getElementById('auth-btn');
+  if(isLoggedIn()){lbl.textContent=(LS.get('googleName',null)||USER.charAt(0).toUpperCase()+USER.slice(1))+(isAdmin()?' (Admin)':'');btn.textContent='Log Out'}
+  else{lbl.textContent='';btn.textContent='Log In'}
+  const bc=document.getElementById('breadcrumb'),c=document.getElementById('content');
+  if(VIEW==='home'){bc.classList.add('hidden');c.innerHTML=renderHome()}
+  else if(VIEW==='phase'){bc.classList.remove('hidden');bc.innerHTML=`<span onclick="navHome()">Home</span> / ${esc(VIEW_PHASE)}`;c.innerHTML=renderPhaseView()}
+  else if(VIEW==='task'){bc.classList.remove('hidden');const t=getTask(VIEW_TASK);const ph=t?t.phase:'';bc.innerHTML=`<span onclick="navHome()">Home</span> / <span onclick="navPhase('${escAttr(ph)}')">${esc(ph)}</span> / ${esc(t?t.work:'')}`;c.innerHTML=renderTaskView()}
 }
 
-function updateHeaderAuth(){
-  const lbl=document.getElementById('header-user-label');
-  const btn=document.getElementById('auth-btn');
-  if(isLoggedIn()){
-    const gName=LS.get('googleName',null);
-    const method=LS.get('authMethod',null);
-    if(method==='google'&&gName){
-      lbl.textContent=gName+(isAdmin()?' (Admin)':'');
-    }else{
-      lbl.textContent=USER.charAt(0).toUpperCase()+USER.slice(1)+(isAdmin()?' (Admin)':'');
-    }
-    btn.textContent='Log Out';
-  }else{
-    lbl.textContent='';btn.textContent='Log In';
-  }
-}
-
-// ── HOME VIEW ──
 function renderHome(){
   let h='';
-  // Summary
-  const totalDays=DATA.phases.reduce((s,p)=>s+p.days.length,0);
-  const allDates=DATA.phases.flatMap(p=>p.days.map(d=>d.date));
-  const slotsUsed=allDates.reduce((s,dt)=>s+(DATA.workers[dt]||[]).length,0);
-  let doneDays=0;allDates.forEach(dt=>{const x=getDayExtra(dt);if(x.status==='done')doneDays++});
-
+  const total=DATA.tasks.length;
+  const done=DATA.tasks.filter(t=>t.status==='done').length;
+  const overdue=DATA.tasks.filter(t=>getEffectiveStatus(t)==='overdue').length;
   h+=`<div class="summary-bar">
-    <div class="summary-stat"><div class="num">${totalDays}</div><div class="label">Work Days</div></div>
-    <div class="summary-stat"><div class="num">${DATA.phases.length}</div><div class="label">Phases</div></div>
-    <div class="summary-stat"><div class="num">${doneDays}/${totalDays}</div><div class="label">Completed</div></div>
-    <div class="summary-stat"><div class="num">${slotsUsed}</div><div class="label">Signups</div></div>`;
-  if(isLoggedIn()&&!isAdmin()){
-    let my=0;allDates.forEach(dt=>{if((DATA.workers[dt]||[]).includes(USER))my++});
-    h+=`<div class="summary-stat"><div class="num">${my}</div><div class="label">My Days</div></div>`;
-  }
-  h+=`</div>`;
+    <div class="summary-stat"><div class="num">${total}</div><div class="label">Tasks</div></div>
+    <div class="summary-stat"><div class="num">${done}/${total}</div><div class="label">Done</div></div>
+    <div class="summary-stat"><div class="num">${overdue}</div><div class="label">Overdue</div></div>
+    <div class="summary-stat"><div class="num">${getPhases().length}</div><div class="label">Phases</div></div>
+  </div>`;
 
   // Overdue banner
-  const today=todayStr();
-  const overdueItems=[];
-  DATA.phases.forEach((p,pi)=>{
-    p.days.forEach((d,di)=>{
-      const extra=getDayExtra(d.date);
-      if(d.date<today&&(extra.status||'planned')!=='done'&&!extra.rolledTo){
-        overdueItems.push({pi,di,d,p});
-      }
-    });
-  });
-  if(overdueItems.length){
-    h+=`<div class="overdue-banner"><h3>Overdue (${overdueItems.length})</h3>`;
-    overdueItems.forEach(item=>{
-      h+=`<div class="overdue-item">
-        <span class="overdue-item-text"><strong>${esc(item.d.label)}</strong> — ${esc(item.d.work)}</span>`;
-      if(isAdmin()) h+=`<button class="rollover-btn" onclick="rollForward(${item.pi},${item.di})">Roll →</button>`;
+  if(overdue>0){
+    const items=DATA.tasks.filter(t=>getEffectiveStatus(t)==='overdue');
+    h+=`<div class="overdue-banner"><h3>Overdue (${items.length})</h3>`;
+    items.forEach(t=>{
+      h+=`<div class="overdue-item"><span style="flex:1;cursor:pointer" onclick="navTask('${t.id}')"><strong>${dayLabel(t.scheduledDate)}</strong> — ${esc(t.work)}</span>`;
+      if(isAdmin())h+=`<button class="btn btn-warn btn-sm" onclick="event.stopPropagation();pushScheduleFrom('${t.id}')">Push →</button>`;
       h+=`</div>`;
     });
-    if(isAdmin()&&overdueItems.length>1){
-      h+=`<div style="margin-top:8px"><button class="rollover-btn" style="width:100%;padding:8px" onclick="rollAllForward()">Roll All Forward</button></div>`;
-    }
     h+=`</div>`;
   }
 
   // Scope
   if(isAdmin()){
-    h+=`<div class="info-card"><h2>Scope</h2>
-      <textarea id="scope-edit" style="width:100%;min-height:100px;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical">${DATA.scope.join('\n')}</textarea>
-      <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="saveScope()">Save</button></div>`;
+    h+=`<div class="info-card"><h2>Scope</h2><textarea id="scope-edit" style="width:100%;min-height:80px;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical">${DATA.scope.join('\n')}</textarea><button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="DATA.scope=document.getElementById('scope-edit').value.split('\\n').filter(l=>l.trim());saveData(DATA);render()">Save</button></div>`;
   }else{
-    h+=`<div class="info-card"><h2>Scope</h2><ul>${DATA.scope.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
-    <p style="margin-top:8px;color:#888;font-size:13px"><strong>Crew:</strong> Raoul + laborer (Mon + off Fri). Target: Sep 30.</p></div>`;
+    h+=`<div class="info-card"><h2>Scope</h2><ul>${DATA.scope.map(s=>`<li>${esc(s)}</li>`).join('')}</ul></div>`;
   }
 
   // Phase cards
-  DATA.phases.forEach((p,pi)=>{
-    const total=p.days.length;
-    let done=0;p.days.forEach(d=>{const x=getDayExtra(d.date);if(x.status==='done')done++});
-    const pct=total?Math.round(done/total*100):0;
-    const workers=new Set();p.days.forEach(d=>(DATA.workers[d.date]||[]).forEach(w=>workers.add(w)));
-
-    h+=`<div class="phase-card" onclick="navPhase(${pi})">
-      <div class="phase-card-header"><h2>${esc(p.name)}</h2><span class="phase-card-dates">${esc(p.dates)}</span></div>
-      <div class="phase-card-body">
-        <div class="phase-stats"><span><strong>${total}</strong> days</span><span><strong>${done}</strong> done</span><span><strong>${workers.size}</strong> workers</span></div>
-        <div class="phase-card-milestone">${esc(p.milestone)}</div>
-        <div class="phase-progress"><div class="phase-progress-fill" style="width:${pct}%"></div></div>
-      </div></div>`;
+  getPhases().forEach(phase=>{
+    const tasks=getTasksForPhase(phase);
+    const pDone=tasks.filter(t=>t.status==='done').length;
+    const pct=tasks.length?Math.round(pDone/tasks.length*100):0;
+    const dates=tasks.map(t=>t.scheduledDate).sort();
+    const dateRange=dates.length?dayLabel(dates[0])+'–'+dayLabel(dates[dates.length-1]):'';
+    h+=`<div class="phase-card" onclick="navPhase('${escAttr(phase)}')">
+      <div class="phase-card-header"><h2>${esc(phase)}</h2><span class="phase-card-dates">${dateRange}</span></div>
+      <div class="phase-card-body"><div class="phase-stats"><span><strong>${tasks.length}</strong> tasks</span><span><strong>${pDone}</strong> done</span></div>
+      <div class="phase-progress"><div class="phase-progress-fill" style="width:${pct}%"></div></div></div></div>`;
   });
 
-  if(isAdmin()){
-    h+=`<div style="padding:8px 16px"><button class="btn btn-primary" onclick="addPhaseModal()">+ Add Phase</button></div>`;
-  }
+  if(isAdmin())h+=`<div style="padding:8px 16px"><button class="btn btn-primary" onclick="addTaskModal()">+ Add Task</button></div>`;
 
   // Risks
   if(isAdmin()){
-    h+=`<div class="info-card"><h2 style="color:#a06828">Risks & Notes</h2>
-      <textarea id="risks-edit" style="width:100%;min-height:80px;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical">${DATA.risks.join('\n')}</textarea>
-      <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="saveRisks()">Save</button></div>`;
+    h+=`<div class="info-card"><h2 style="color:#a06828">Risks & Notes</h2><textarea id="risks-edit" style="width:100%;min-height:60px;padding:10px;border:1px solid #d0dce8;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical">${DATA.risks.join('\n')}</textarea><button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="DATA.risks=document.getElementById('risks-edit').value.split('\\n').filter(l=>l.trim());saveData(DATA);render()">Save</button></div>`;
   }else{
     h+=`<div class="info-card"><h2 style="color:#a06828">Risks & Notes</h2><ul>${DATA.risks.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div>`;
   }
-
-  h+=`<div class="app-footer">864 Farr Ave, Escondido — Apartment Conversion Project</div>`;
+  h+=`<div class="app-footer">864 Farr Ave, Escondido — Apartment Conversion</div>`;
   return h;
 }
 
-// ── PHASE VIEW ──
-function renderPhaseView(pi){
-  const p=DATA.phases[pi];
+function renderPhaseView(){
+  const tasks=getTasksForPhase(VIEW_PHASE);
   let h='';
-
-  // Phase materials
-  if(p.materials&&p.materials.length){
-    h+=`<div class="info-card"><h2>Materials — ${esc(p.name)}</h2><ul class="materials-list">`;
-    p.materials.forEach((m,mi)=>{
-      h+=`<li><span style="font-size:14px">${esc(m)}</span></li>`;
-    });
-    h+=`</ul></div>`;
-  }
-
-  // Day cards
-  p.days.forEach((d,di)=>{
-    const extra=getDayExtra(d.date);
-    const assigned=DATA.workers[d.date]||[];
-    const effectiveStatus=getEffectiveStatus(d.date,extra.status);
-    const statusClass='status-'+effectiveStatus;
-    const statusLabel=effectiveStatus.charAt(0).toUpperCase()+effectiveStatus.slice(1).replace('-',' ');
-
-    h+=`<div class="day-card" onclick="navDay(${pi},${di})"><div class="day-card-inner">
-      <div class="day-card-date">${esc(d.label)}${d.type?`<span class="day-type">${esc(d.type)}</span>`:''}</div>
-      <div class="day-card-work">${esc(d.work)}${getRolledInText(d.date)}</div>
-      <div class="day-card-right">
-        <span class="day-card-status ${statusClass}" onclick="event.stopPropagation();cycleStatus('${d.date}')">${statusLabel}</span>
-        <div class="day-card-workers">${assigned.map(w=>`<span class="worker-badge ${w}">${w.charAt(0).toUpperCase()}</span>`).join('')}</div>
-      </div>
-    </div></div>`;
+  tasks.forEach(t=>{
+    const st=getEffectiveStatus(t);
+    const workers=DATA.workers[t.id]||[];
+    h+=`<div class="task-card" onclick="navTask('${t.id}')"><div class="task-card-inner">
+      <div class="task-card-date">${dayLabel(t.scheduledDate)}<span class="day-type">${dayType(t.scheduledDate)}</span></div>
+      <div class="task-card-work">${esc(t.work)}${t.dependsOn.length?`<div class="task-deps">requires ${t.dependsOn.length} task${t.dependsOn.length>1?'s':''}</div>`:''}</div>
+      <div class="task-card-right">
+        <span class="task-status status-${st}" onclick="event.stopPropagation();cycleStatus('${t.id}')">${st.replace('-',' ')}</span>
+        <div class="task-card-workers">${workers.map(w=>`<span class="worker-badge ${w}">${w.charAt(0).toUpperCase()}</span>`).join('')}</div>
+      </div></div></div>`;
   });
-
-  if(isAdmin()){
-    h+=`<div style="padding:8px 16px"><button class="btn btn-primary" onclick="addDayModal(${pi})">+ Add Day</button></div>`;
-  }
-
-  h+=`<div class="info-card"><div class="phase-card-milestone" style="font-size:15px">${esc(p.milestone)}</div></div>`;
+  if(isAdmin())h+=`<div style="padding:8px 16px"><button class="btn btn-primary" onclick="addTaskModal('${escAttr(VIEW_PHASE)}')">+ Add Task</button></div>`;
   return h;
 }
 
-// ── DAY DETAIL VIEW ──
-function renderDayView(pi,di){
-  const p=DATA.phases[pi];
-  const d=p.days[di];
-  const extra=getDayExtra(d.date);
-  const assigned=DATA.workers[d.date]||[];
-  let h='';
-
-  h+=`<div class="day-detail">
-    <div class="day-detail-header">
-      <h2>${esc(d.label)} — ${esc(d.work)}</h2>
-      <div class="day-detail-sub">${esc(p.name)} · ${d.type?esc(d.type)+' · ':''}${d.date}</div>
-    </div>
-    <div class="day-detail-body">`;
+function renderTaskView(){
+  const t=getTask(VIEW_TASK);if(!t)return'<p>Task not found</p>';
+  const st=getEffectiveStatus(t);
+  const workers=DATA.workers[t.id]||[];
+  let h=`<div class="task-detail"><div class="task-detail-header"><h2>${esc(t.work)}</h2><div class="task-detail-sub">${esc(t.phase)} · ${dayLabel(t.scheduledDate)} · ${dayType(t.scheduledDate)||t.scheduledDate}</div></div><div class="task-detail-body">`;
 
   // Status
-  const effectiveStatus=getEffectiveStatus(d.date,extra.status);
   h+=`<div class="detail-section"><h3>Status</h3><div class="status-picker">`;
   ['planned','in-progress','done'].forEach(s=>{
-    const active=(extra.status||'planned')===s?` active-${s}`:'';
-    const label=s.charAt(0).toUpperCase()+s.slice(1);
-    if(isAdmin()){
-      h+=`<button class="${active}" onclick="setStatus('${d.date}','${s}')">${label}</button>`;
-    }else{
-      h+=`<button class="${active}" disabled>${label}</button>`;
-    }
+    const active=t.status===s?` active-${s}`:'';
+    if(isAdmin())h+=`<button class="${active}" onclick="setTaskStatus('${t.id}','${s}')">${s.replace('-',' ')}</button>`;
+    else h+=`<button class="${active}" disabled>${s.replace('-',' ')}</button>`;
   });
   h+=`</div>`;
-  if(effectiveStatus==='overdue'){
-    h+=`<div style="margin-top:10px;padding:10px 14px;background:#f8d7da;border-radius:6px;font-size:13px;color:#721c24;display:flex;align-items:center;justify-content:space-between">
-      <span>This day is past due and not marked done.</span>`;
-    if(isAdmin()) h+=`<button class="rollover-btn" onclick="rollForward(${pi},${di})">Roll Forward</button>`;
-    h+=`</div>`;
-  }
-  // Rolled-in items
-  const rolledIn=getRolledItems(d.date);
-  if(rolledIn.length){
-    h+=`<div style="margin-top:10px;padding:10px 14px;background:#fff3cd;border-radius:6px;font-size:13px;color:#856404">
-      <strong>Rolled in from previous days:</strong><ul style="margin:6px 0 0;padding-left:18px">`;
-    rolledIn.forEach(r=>h+=`<li>${esc(r)}</li>`);
-    h+=`</ul></div>`;
-  }
+  if(st==='overdue')h+=`<div style="margin-top:10px;padding:8px 12px;background:#f8d7da;border-radius:6px;font-size:13px;color:#721c24">Past due. <button class="btn btn-warn btn-sm" onclick="pushScheduleFrom('${t.id}')" style="margin-left:8px">Push schedule from here →</button></div>`;
   h+=`</div>`;
 
-  // Move controls (admin only)
+  // Scheduled date
   if(isAdmin()){
-    h+=`<div class="detail-section"><h3>Move</h3><div class="move-controls">`;
-    if(di>0) h+=`<button onclick="moveDay(${pi},${di},${di-1})">↑ Up</button>`;
-    if(di<p.days.length-1) h+=`<button onclick="moveDay(${pi},${di},${di+1})">↓ Down</button>`;
-    h+=`<select onchange="moveDayToPhase(${pi},${di},this.value);this.value=''">
-      <option value="">Move to phase...</option>`;
-    DATA.phases.forEach((op,opi)=>{
-      if(opi!==pi) h+=`<option value="${opi}">${esc(op.name)}</option>`;
-    });
-    h+=`</select></div></div>`;
+    h+=`<div class="detail-section"><h3>Scheduled Date</h3>
+      <input type="date" value="${t.scheduledDate}" onchange="rescheduleTask('${t.id}',this.value)">
+      <div class="push-controls"><button class="btn btn-warn btn-sm" onclick="pushScheduleFrom('${t.id}')">Push all from here →</button></div></div>`;
+  }else{
+    h+=`<div class="detail-section"><h3>Scheduled Date</h3><p style="font-size:15px">${dayLabel(t.scheduledDate)} (${dayType(t.scheduledDate)||t.scheduledDate})</p></div>`;
   }
 
-  // Work description (admin editable)
+  // Work (editable)
   h+=`<div class="detail-section"><h3>Work</h3>`;
+  if(isAdmin())h+=`<input type="text" value="${escAttr(t.work)}" onchange="updateTaskField('${t.id}','work',this.value)">`;
+  else h+=`<p style="font-size:15px">${esc(t.work)}</p>`;
+  h+=`</div>`;
+
+  // Dependencies
+  h+=`<div class="detail-section"><h3>Dependencies</h3><div style="display:flex;flex-wrap:wrap;gap:4px">`;
+  if(t.dependsOn.length){
+    t.dependsOn.forEach(depId=>{
+      const dep=getTask(depId);
+      if(dep){
+        const met=dep.status==='done';
+        h+=`<span class="dep-tag ${met?'':'unmet'}" onclick="navTask('${depId}')" style="cursor:pointer">${met?'✓':''} ${esc(dep.work.slice(0,30))}${dep.work.length>30?'...':''}</span>`;
+      }
+    });
+  }else h+=`<span style="color:#aaa;font-size:14px">None (can start anytime)</span>`;
+  h+=`</div>`;
   if(isAdmin()){
-    h+=`<input type="text" id="day-work-edit" value="${escAttr(d.work)}" onchange="updateWork(${pi},${di},this.value)">`;
-  }else{
-    h+=`<p style="font-size:15px">${esc(d.work)}</p>`;
+    h+=`<div style="margin-top:8px"><select id="add-dep" style="padding:6px;border:1px solid #d0dce8;border-radius:6px;font-size:13px;width:70%"><option value="">Add dependency...</option>`;
+    DATA.tasks.filter(x=>x.id!==t.id&&!t.dependsOn.includes(x.id)).forEach(x=>{
+      h+=`<option value="${x.id}">${esc(x.work.slice(0,40))}</option>`;
+    });
+    h+=`</select> <button class="btn btn-primary btn-sm" onclick="addDep('${t.id}')">Add</button></div>`;
   }
   h+=`</div>`;
 
   // Workers
   h+=`<div class="detail-section"><h3>Workers</h3><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">`;
-  assigned.forEach(w=>{
-    h+=`<span class="worker-badge ${w}">${w.charAt(0).toUpperCase()+w.slice(1)}</span>`;
-  });
-  if(assigned.length===0) h+=`<span style="color:#aaa;font-size:14px">No one signed up yet</span>`;
-  if(isLoggedIn()&&!isAdmin()){
-    const mine=assigned.includes(USER);
-    h+=`<button class="worker-toggle ${mine?'signed-up':''}" onclick="toggleWorker('${d.date}')">${mine?'✓ Signed Up':'+ Sign Up'}</button>`;
-  }
+  workers.forEach(w=>h+=`<span class="worker-badge ${w}">${w.charAt(0).toUpperCase()+w.slice(1)}</span>`);
+  if(!workers.length)h+=`<span style="color:#aaa;font-size:14px">No one signed up</span>`;
+  if(isLoggedIn()&&!isAdmin()){const mine=workers.includes(USER);h+=`<button class="worker-toggle ${mine?'signed-up':''}" onclick="toggleWorker('${t.id}')">${mine?'✓ Signed Up':'+ Sign Up'}</button>`}
   h+=`</div></div>`;
 
-  // Materials for this day
-  const dayMats=d.materials||[];
-  if(dayMats.length||isAdmin()){
-    h+=`<div class="detail-section"><h3>Materials Needed</h3>`;
-    if(dayMats.length){
-      h+=`<ul class="materials-list">`;
-      dayMats.forEach((m,mi)=>{
-        h+=`<li><span class="mat-text" style="font-size:14px">${esc(m)}</span>`;
-        if(isAdmin()) h+=`<span class="link-remove" onclick="removeDayMaterial(${pi},${di},${mi})">✕</span>`;
-        h+=`</li>`;
-      });
-      h+=`</ul>`;
-    }else{
-      h+=`<p style="color:#aaa;font-size:14px">None listed</p>`;
-    }
-    if(isAdmin()){
-      h+=`<div style="display:flex;gap:6px;margin-top:8px">
-        <input type="text" id="new-mat" placeholder="Add material..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px">
-        <button class="btn btn-primary btn-sm" onclick="addDayMaterial(${pi},${di})">Add</button></div>`;
-    }
-    h+=`</div>`;
-  }
+  // Materials
+  h+=`<div class="detail-section"><h3>Materials</h3>`;
+  if(t.materials.length){h+=`<ul class="materials-list">`;t.materials.forEach((m,i)=>{h+=`<li><span style="font-size:14px">${esc(m)}</span>${isAdmin()?`<span class="link-remove" onclick="removeMat('${t.id}',${i})">✕</span>`:''}</li>`});h+=`</ul>`}
+  else h+=`<p style="color:#aaa;font-size:14px">None</p>`;
+  if(isAdmin())h+=`<div style="display:flex;gap:6px;margin-top:8px"><input type="text" id="new-mat" placeholder="Add material..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"><button class="btn btn-primary btn-sm" onclick="addMat('${t.id}')">Add</button></div>`;
+  h+=`</div>`;
 
   // Notes
   h+=`<div class="detail-section"><h3>Notes</h3>`;
-  if(isAdmin()){
-    h+=`<textarea id="day-notes" onchange="saveNotes('${d.date}',this.value)">${esc(extra.notes||'')}</textarea>`;
-    // Also show default notes from data
-    if(d.notes) h+=`<p style="margin-top:6px;font-size:13px;color:#6a8aaa"><em>${esc(d.notes)}</em></p>`;
-  }else{
-    const allNotes=(extra.notes||'')+(d.notes?'\n'+d.notes:'');
-    h+=allNotes.trim()?`<p style="font-size:14px;white-space:pre-wrap">${esc(allNotes.trim())}</p>`:`<p style="color:#aaa;font-size:14px">No notes</p>`;
-  }
+  if(isAdmin())h+=`<textarea id="task-notes" onchange="updateTaskField('${t.id}','notes',this.value)">${esc(t.notes||'')}</textarea>`;
+  else h+=t.notes?`<p style="font-size:14px;white-space:pre-wrap">${esc(t.notes)}</p>`:`<p style="color:#aaa;font-size:14px">No notes</p>`;
   h+=`</div>`;
 
-  // Links / Photos / Videos
-  const links=extra.links||[];
+  // Links
   h+=`<div class="detail-section"><h3>Photos / Videos / Links</h3>`;
-  if(links.length){
-    links.forEach((lnk,li)=>{
-      const icon=lnk.type==='photo'?'📷':lnk.type==='video'?'🎥':'🔗';
-      h+=`<div class="link-item">
-        <span class="link-icon">${icon}</span>
-        <a href="${escAttr(lnk.url)}" target="_blank" rel="noopener" style="flex:1;font-size:14px">${esc(lnk.title||lnk.url)}</a>`;
-      if(isAdmin()) h+=`<span class="link-remove" onclick="removeLink('${d.date}',${li})">✕</span>`;
-      h+=`</div>`;
-    });
-  }else{
-    h+=`<p style="color:#aaa;font-size:14px">None added</p>`;
-  }
-  if(isAdmin()){
-    h+=`<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
-      <div style="display:flex;gap:6px">
-        <select id="link-type" style="padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:13px;width:100px">
-          <option value="link">Link</option><option value="photo">Photo</option><option value="video">Video</option>
-        </select>
-        <input type="text" id="link-url" placeholder="URL..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px">
-      </div>
-      <div style="display:flex;gap:6px">
-        <input type="text" id="link-title" placeholder="Title (optional)..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px">
-        <button class="btn btn-primary btn-sm" onclick="addLink('${d.date}')">Add</button>
-      </div></div>`;
-  }
+  if(t.links.length){t.links.forEach((lnk,i)=>{const icon=lnk.type==='photo'?'📷':lnk.type==='video'?'🎥':'🔗';h+=`<div class="link-item"><span>${icon}</span><a href="${escAttr(lnk.url)}" target="_blank" style="flex:1;font-size:14px">${esc(lnk.title||lnk.url)}</a>${isAdmin()?`<span class="link-remove" onclick="removeLink('${t.id}',${i})">✕</span>`:''}</div>`})}
+  else h+=`<p style="color:#aaa;font-size:14px">None</p>`;
+  if(isAdmin())h+=`<div style="margin-top:8px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;gap:6px"><select id="link-type" style="padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:13px;width:100px"><option value="link">Link</option><option value="photo">Photo</option><option value="video">Video</option></select><input type="text" id="link-url" placeholder="URL..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"></div><div style="display:flex;gap:6px"><input type="text" id="link-title" placeholder="Title..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"><button class="btn btn-primary btn-sm" onclick="addLink('${t.id}')">Add</button></div></div>`;
   h+=`</div>`;
 
-  // Admin: delete day
+  // Move / Phase / Order
   if(isAdmin()){
-    h+=`<div class="detail-section" style="border:none"><button class="btn btn-danger" onclick="removeDayPrompt(${pi},${di})">Delete This Day</button></div>`;
+    h+=`<div class="detail-section"><h3>Move & Order</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
+        <label style="font-size:13px">Phase:</label>
+        <select onchange="updateTaskField('${t.id}','phase',this.value);VIEW_PHASE=this.value;render()" style="padding:6px;border:1px solid #d0dce8;border-radius:6px;font-size:13px">`;
+    getPhases().forEach(p=>h+=`<option value="${escAttr(p)}" ${p===t.phase?'selected':''}>${esc(p)}</option>`);
+    h+=`</select></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="font-size:13px">Order:</label>
+        <input type="number" value="${t.order}" style="width:70px;padding:6px;border:1px solid #d0dce8;border-radius:6px;font-size:13px" onchange="updateTaskField('${t.id}','order',parseInt(this.value));render()">
+      </div></div>`;
+    h+=`<div class="detail-section" style="border:none"><button class="btn btn-danger" onclick="if(confirm('Delete this task?')){DATA.tasks=DATA.tasks.filter(x=>x.id!=='${t.id}');saveData(DATA);navPhase('${escAttr(t.phase)}')}">Delete Task</button></div>`;
   }
 
   h+=`</div></div>`;
   return h;
 }
 
-// ── Status & Rollover ──
-function todayStr(){return new Date().toISOString().slice(0,10)}
-
-function getEffectiveStatus(date,storedStatus){
-  const s=storedStatus||'planned';
-  if(s==='done')return 'done';
-  if(date<todayStr())return 'overdue';
-  return s;
-}
-
-function cycleStatus(date){
-  if(!isAdmin())return;
-  const extra=getDayExtra(date);
-  const cur=extra.status||'planned';
-  const cycle={planned:'in-progress','in-progress':'done',done:'planned',overdue:'in-progress'};
-  extra.status=cycle[cur]||'planned';
-  setDayExtra(date,extra);
-  render();
-}
-
-function getNextScheduledDate(afterDate){
-  const allDays=DATA.phases.flatMap(p=>p.days);
-  const future=allDays.filter(d=>d.date>afterDate).sort((a,b)=>a.date.localeCompare(b.date));
-  return future.length?future[0]:null;
-}
-
-function rollForward(pi,di){
-  const d=DATA.phases[pi].days[di];
-  const extra=getDayExtra(d.date);
-  const next=getNextScheduledDate(d.date);
-  if(!next){alert('No future day to roll forward to.');return}
-
-  // Store rollover info
-  const nextExtra=getDayExtra(next.date);
-  if(!nextExtra.rolledIn)nextExtra.rolledIn=[];
-  nextExtra.rolledIn.push({from:d.date,fromLabel:d.label,work:d.work});
-  setDayExtra(next.date,nextExtra);
-
-  // Mark original as done (rolled)
-  extra.status='done';
-  extra.rolledTo=next.date;
-  setDayExtra(d.date,extra);
-
-  render();
-}
-
-// Auto-rollover on load: check all past non-done days
-function autoRollover(){
-  const today=todayStr();
-  const allDays=DATA.phases.flatMap((p,pi)=>p.days.map((d,di)=>({...d,pi,di})));
-  const overdue=allDays.filter(d=>{
-    const extra=getDayExtra(d.date);
-    return d.date<today&&(extra.status||'planned')!=='done'&&!extra.rolledTo;
-  });
-  overdue.forEach(d=>{
-    const next=getNextScheduledDate(d.date);
-    if(!next)return;
-    const nextExtra=getDayExtra(next.date);
-    if(!nextExtra.rolledIn)nextExtra.rolledIn=[];
-    // Don't double-roll
-    if(nextExtra.rolledIn.some(r=>r.from===d.date))return;
-    nextExtra.rolledIn.push({from:d.date,fromLabel:d.label,work:d.work});
-    setDayExtra(next.date,nextExtra);
-  });
-}
-
-function rollAllForward(){
-  const today=todayStr();
-  DATA.phases.forEach((p,pi)=>{
-    p.days.forEach((d,di)=>{
-      const extra=getDayExtra(d.date);
-      if(d.date<today&&(extra.status||'planned')!=='done'&&!extra.rolledTo){
-        rollForward(pi,di);
-      }
-    });
-  });
-  render();
-}
-
-function getRolledItems(date){
-  const extra=getDayExtra(date);
-  return(extra.rolledIn||[]).map(r=>`${r.fromLabel}: ${r.work}`);
-}
-
-function getRolledInText(date){
-  const items=getRolledItems(date);
-  if(!items.length)return '';
-  return `<div style="font-size:11px;color:#856404;margin-top:2px">+${items.length} rolled in</div>`;
-}
-
-// ── Move ──
-function moveDay(pi,di,newDi){
-  const days=DATA.phases[pi].days;
-  const [day]=days.splice(di,1);
-  days.splice(newDi,0,day);
-  saveData(DATA);
-  VIEW_DI=newDi;
-  render();
-}
-
-function moveDayToPhase(fromPi,di,toPi){
-  if(toPi===''||toPi===null)return;
-  toPi=parseInt(toPi);
-  const [day]=DATA.phases[fromPi].days.splice(di,1);
-  DATA.phases[toPi].days.push(day);
-  DATA.phases[toPi].days.sort((a,b)=>a.date.localeCompare(b.date));
-  saveData(DATA);
-  VIEW='phase';VIEW_PI=toPi;VIEW_DI=null;
-  render();
-}
-
 // ── Actions ──
-function saveScope(){
-  DATA.scope=document.getElementById('scope-edit').value.split('\n').filter(l=>l.trim());
+function cycleStatus(taskId){
+  if(!isAdmin())return;
+  const t=getTask(taskId);if(!t)return;
+  const cycle={planned:'in-progress','in-progress':'done',done:'planned'};
+  t.status=cycle[t.status||'planned']||'planned';
+  if(t.status==='done')t.completedDate=todayStr();
+  else t.completedDate=null;
   saveData(DATA);render();
 }
-function saveRisks(){
-  DATA.risks=document.getElementById('risks-edit').value.split('\n').filter(l=>l.trim());
+function setTaskStatus(taskId,status){
+  const t=getTask(taskId);if(!t)return;
+  t.status=status;
+  t.completedDate=status==='done'?todayStr():null;
   saveData(DATA);render();
 }
-function updateWork(pi,di,val){
-  DATA.phases[pi].days[di].work=val;saveData(DATA);
-}
-function setStatus(date,status){
-  const extra=getDayExtra(date);extra.status=status;setDayExtra(date,extra);render();
-}
-function saveNotes(date,val){
-  const extra=getDayExtra(date);extra.notes=val;setDayExtra(date,extra);
-}
-function addLink(date){
-  const type=document.getElementById('link-type').value;
-  const url=document.getElementById('link-url').value;
-  const title=document.getElementById('link-title').value;
-  if(!url)return;
-  const extra=getDayExtra(date);
-  if(!extra.links)extra.links=[];
-  extra.links.push({type,url,title});
-  setDayExtra(date,extra);render();
-}
-function removeLink(date,li){
-  const extra=getDayExtra(date);extra.links.splice(li,1);setDayExtra(date,extra);render();
-}
-function addDayMaterial(pi,di){
-  const val=document.getElementById('new-mat').value.trim();
-  if(!val)return;
-  if(!DATA.phases[pi].days[di].materials)DATA.phases[pi].days[di].materials=[];
-  DATA.phases[pi].days[di].materials.push(val);
-  saveData(DATA);render();
-}
-function removeDayMaterial(pi,di,mi){
-  DATA.phases[pi].days[di].materials.splice(mi,1);saveData(DATA);render();
-}
-function toggleWorker(date){
-  if(!DATA.workers[date])DATA.workers[date]=[];
-  const arr=DATA.workers[date];
-  const idx=arr.indexOf(USER);
+function updateTaskField(taskId,field,val){const t=getTask(taskId);if(!t)return;t[field]=val;saveData(DATA)}
+function toggleWorker(taskId){
+  if(!DATA.workers[taskId])DATA.workers[taskId]=[];
+  const arr=DATA.workers[taskId],idx=arr.indexOf(USER);
   if(idx>=0)arr.splice(idx,1);else arr.push(USER);
   saveData(DATA);render();
 }
-function removeDayPrompt(pi,di){
-  if(confirm('Remove '+DATA.phases[pi].days[di].label+'?')){
-    const date=DATA.phases[pi].days[di].date;
-    DATA.phases[pi].days.splice(di,1);
-    delete DATA.workers[date];delete DATA.dayData[date];
-    saveData(DATA);navPhase(pi);
-  }
+function addMat(taskId){const v=document.getElementById('new-mat').value.trim();if(!v)return;const t=getTask(taskId);t.materials.push(v);saveData(DATA);render()}
+function removeMat(taskId,i){const t=getTask(taskId);t.materials.splice(i,1);saveData(DATA);render()}
+function addLink(taskId){
+  const type=document.getElementById('link-type').value,url=document.getElementById('link-url').value,title=document.getElementById('link-title').value;
+  if(!url)return;const t=getTask(taskId);t.links.push({type,url,title});saveData(DATA);render();
+}
+function removeLink(taskId,i){const t=getTask(taskId);t.links.splice(i,1);saveData(DATA);render()}
+function addDep(taskId){const depId=document.getElementById('add-dep').value;if(!depId)return;const t=getTask(taskId);if(!t.dependsOn.includes(depId))t.dependsOn.push(depId);saveData(DATA);render()}
+
+// ── Add Task Modal ──
+function addTaskModal(phase){
+  const phases=getPhases();
+  showModal(`<h2>Add Task</h2>
+    <label>Work Description</label><textarea id="md-work" placeholder="What needs to be done..."></textarea>
+    <label>Phase</label><select id="md-phase">${phases.map(p=>`<option value="${escAttr(p)}" ${p===phase?'selected':''}>${esc(p)}</option>`).join('')}<option value="__new">+ New Phase...</option></select>
+    <div id="md-newphase-wrap" class="hidden"><label>New Phase Name</label><input id="md-newphase" placeholder="Phase 7: ..."></div>
+    <label>Scheduled Date</label><input type="date" id="md-date">
+    <label>Order (priority number)</label><input type="number" id="md-order" value="${DATA.tasks.length+1}">
+    <div class="modal-btns"><button class="btn-cancel" onclick="hideModal()">Cancel</button><button class="btn-primary" onclick="doAddTask()">Add</button></div>`);
+  document.getElementById('md-phase').addEventListener('change',function(){
+    document.getElementById('md-newphase-wrap').classList.toggle('hidden',this.value!=='__new');
+  });
+}
+function doAddTask(){
+  let phase=document.getElementById('md-phase').value;
+  if(phase==='__new')phase=document.getElementById('md-newphase').value;
+  const work=document.getElementById('md-work').value,date=document.getElementById('md-date').value,order=parseInt(document.getElementById('md-order').value)||DATA.tasks.length+1;
+  if(!work||!phase||!date)return;
+  _id++;
+  DATA.tasks.push({id:'t'+_id,phase,work,scheduledDate:date,completedDate:null,status:'planned',order,dependsOn:[],materials:[],notes:'',links:[]});
+  saveData(DATA);hideModal();render();
 }
 
-// ── Modals ──
+// ── Utils ──
 function showModal(html){document.getElementById('modal').innerHTML=html;document.getElementById('modal-overlay').classList.remove('hidden')}
 function hideModal(){document.getElementById('modal-overlay').classList.add('hidden')}
-
-function addDayModal(pi){
-  showModal(`<h2>Add Day to ${esc(DATA.phases[pi].name)}</h2>
-    <label>Date</label><input id="md-date" type="date">
-    <label>Label (e.g. M 7/6)</label><input id="md-label" placeholder="M 7/6">
-    <label>Type (WFH, off, etc)</label><input id="md-type" placeholder="WFH">
-    <label>Work Description</label><textarea id="md-work" placeholder="What we're doing..."></textarea>
-    <div class="modal-btns"><button class="btn-cancel" onclick="hideModal()">Cancel</button><button class="btn-primary" onclick="addDay(${pi})">Add</button></div>`);
-}
-function addDay(pi){
-  const date=document.getElementById('md-date').value;
-  const label=document.getElementById('md-label').value;
-  const type=document.getElementById('md-type').value;
-  const work=document.getElementById('md-work').value;
-  if(!date||!label||!work)return;
-  DATA.phases[pi].days.push({date,label,type,work,status:'planned',notes:'',links:[],materials:[]});
-  DATA.phases[pi].days.sort((a,b)=>a.date.localeCompare(b.date));
-  saveData(DATA);hideModal();render();
-}
-function addPhaseModal(){
-  showModal(`<h2>Add Phase</h2>
-    <label>Phase Name</label><input id="md-pname" placeholder="Phase 7: ...">
-    <label>Date Range</label><input id="md-pdates" placeholder="10/1–10/15">
-    <label>Milestone</label><textarea id="md-pmilestone" placeholder="What this phase achieves..."></textarea>
-    <div class="modal-btns"><button class="btn-cancel" onclick="hideModal()">Cancel</button><button class="btn-primary" onclick="addPhase()">Add</button></div>`);
-}
-function addPhase(){
-  const name=document.getElementById('md-pname').value;
-  const dates=document.getElementById('md-pdates').value;
-  const milestone=document.getElementById('md-pmilestone').value;
-  if(!name)return;
-  DATA.phases.push({name,dates:dates||'',milestone:milestone||'',days:[],materials:[]});
-  saveData(DATA);hideModal();render();
-}
-
-// ── Utilities ──
 function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
-function escAttr(s){return(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+function escAttr(s){return(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/'/g,'&#39;')}
 
-// ── Event listeners ──
-document.addEventListener('click',function(e){
-  const dd=document.getElementById('login-dropdown');
-  const btn=document.getElementById('auth-btn');
-  if(!dd.classList.contains('hidden')&&!dd.contains(e.target)&&e.target!==btn)dd.classList.add('hidden');
-});
+// Events
+document.addEventListener('click',e=>{const dd=document.getElementById('login-dropdown');if(!dd.classList.contains('hidden')&&!dd.contains(e.target)&&e.target!==document.getElementById('auth-btn'))dd.classList.add('hidden')});
 document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)hideModal()});
 
-// ── Init ──
+// Init
 (function(){
   DATA=loadData();
   const saved=LS.get('auth',null);
-  // Restore session — Google users don't need PIN check
-  if(saved){
-    const method=LS.get('authMethod',null);
-    if(method==='google'||DATA.pins[saved]){
-      USER=saved;
-    }
-  }
-  autoRollover();
-  render();
-  waitForGSI();
+  if(saved){const method=LS.get('authMethod',null);if(method==='google'||DATA.pins[saved])USER=saved}
+  // Sync _id counter
+  DATA.tasks.forEach(t=>{const n=parseInt(t.id.replace('t',''));if(n>_id)_id=n});
+  render();waitForGSI();
 })();
 </script>
 </body>
