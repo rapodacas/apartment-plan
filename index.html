@@ -482,8 +482,7 @@ function renderTaskView(){
   // Scheduled date
   if(isAdmin()){
     h+=`<div class="detail-section"><h3>Scheduled Date</h3>
-      <input type="date" value="${t.scheduledDate}" onchange="rescheduleTask('${t.id}',this.value)">
-      <div class="push-controls"><button class="btn btn-warn btn-sm" onclick="pushScheduleFrom('${t.id}')">Push all from here →</button></div></div>`;
+      <input type="date" value="${t.scheduledDate}" onchange="rescheduleTask('${t.id}',this.value)"></div>`;
   }else{
     h+=`<div class="detail-section"><h3>Scheduled Date</h3><p style="font-size:15px">${dayLabel(t.scheduledDate)} (${dayType(t.scheduledDate)||t.scheduledDate})</p></div>`;
   }
