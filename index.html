@@ -283,16 +283,50 @@ function saveData(d){LS.set('pins',d.pins);LS.set('scope',d.scope);LS.set('risks
 
 let DATA,USER=null,VIEW='home',VIEW_PHASE=null,VIEW_TASK=null;
 
-// ── Auth ──
+// ── Auth (OAuth2 token client for Drive API access) ──
+let ACCESS_TOKEN=null;
+let tokenClient=null;
+
 function handleGoogleSignIn(response){
   const payload=JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
   const mapping=EMAIL_ROLES[payload.email.toLowerCase()];
-  if(mapping){USER=mapping.uid;LS.set('auth',USER);LS.set('authMethod','google');LS.set('googleName',payload.name)}
+  if(mapping){USER=mapping.uid;LS.set('auth',USER);LS.set('authMethod','google');LS.set('googleName',payload.name);LS.set('googleEmail',payload.email)}
   else{document.getElementById('login-err').textContent='Email not authorized: '+payload.email;document.getElementById('login-err').classList.remove('hidden');return}
-  document.getElementById('login-dropdown').classList.add('hidden');render();
+  document.getElementById('login-dropdown').classList.add('hidden');
+  // Request Drive access token
+  if(tokenClient)tokenClient.requestAccessToken({prompt:''});
+  render();
 }
-function initGoogleSignIn(){if(typeof google==='undefined'||!google.accounts)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleSignIn,auto_select:false});google.accounts.id.renderButton(document.getElementById('g-signin-btn'),{theme:'outline',size:'large',width:268})}
+
+function initGoogleSignIn(){
+  if(typeof google==='undefined'||!google.accounts)return;
+  // ID token for identity
+  google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleSignIn,auto_select:false});
+  google.accounts.id.renderButton(document.getElementById('g-signin-btn'),{theme:'outline',size:'large',width:268});
+  // Token client for Drive API
+  tokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:GOOGLE_CLIENT_ID,
+    scope:'https://www.googleapis.com/auth/drive.file',
+    callback:(resp)=>{
+      if(resp.access_token){ACCESS_TOKEN=resp.access_token;console.log('Drive access granted')}
+    }
+  });
+}
 let _gsiR=0;function waitForGSI(){if(typeof google!=='undefined'&&google.accounts){initGoogleSignIn();return}if(_gsiR++<20)setTimeout(waitForGSI,250)}
+
+// Ensure we have a Drive token (re-request if expired)
+function ensureDriveToken(){
+  return new Promise((resolve,reject)=>{
+    if(ACCESS_TOKEN){resolve(ACCESS_TOKEN);return}
+    if(!tokenClient){reject('No Google auth');return}
+    const origCb=tokenClient.callback;
+    tokenClient.callback=(resp)=>{
+      if(resp.access_token){ACCESS_TOKEN=resp.access_token;resolve(ACCESS_TOKEN)}
+      else reject('Token request failed');
+    };
+    tokenClient.requestAccessToken({prompt:'consent'});
+  });
+}
 
 function toggleAuth(){if(USER)doLogout();else document.getElementById('login-dropdown').classList.toggle('hidden')}
 function doLogin(){
@@ -501,11 +535,40 @@ function renderTaskView(){
   else h+=t.notes?`<p style="font-size:14px;white-space:pre-wrap">${esc(t.notes)}</p>`:`<p style="color:#aaa;font-size:14px">No notes</p>`;
   h+=`</div>`;
 
-  // Links
+  // Media
   h+=`<div class="detail-section"><h3>Photos / Videos / Links</h3>`;
-  if(t.links.length){t.links.forEach((lnk,i)=>{const icon=lnk.type==='photo'?'📷':lnk.type==='video'?'🎥':'🔗';h+=`<div class="link-item"><span>${icon}</span><a href="${escAttr(lnk.url)}" target="_blank" style="flex:1;font-size:14px">${esc(lnk.title||lnk.url)}</a>${isAdmin()?`<span class="link-remove" onclick="removeLink('${t.id}',${i})">✕</span>`:''}</div>`})}
-  else h+=`<p style="color:#aaa;font-size:14px">None</p>`;
-  if(isAdmin())h+=`<div style="margin-top:8px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;gap:6px"><select id="link-type" style="padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:13px;width:100px"><option value="link">Link</option><option value="photo">Photo</option><option value="video">Video</option></select><input type="text" id="link-url" placeholder="URL..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"></div><div style="display:flex;gap:6px"><input type="text" id="link-title" placeholder="Title..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"><button class="btn btn-primary btn-sm" onclick="addLink('${t.id}')">Add</button></div></div>`;
+  // Photo thumbnails
+  const photos=t.links.filter(l=>l.type==='photo');
+  const videos=t.links.filter(l=>l.type==='video');
+  const links=t.links.filter(l=>l.type==='link'||(!l.type));
+  if(photos.length){
+    h+=`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">`;
+    photos.forEach((p,i)=>{
+      const idx=t.links.indexOf(p);
+      h+=`<div style="position:relative;width:80px;height:80px;border-radius:6px;overflow:hidden;border:1px solid #ddd">
+        <a href="${escAttr(p.viewUrl||p.url)}" target="_blank"><img src="${escAttr(p.url)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentElement.innerHTML='📷'"></a>
+        ${isAdmin()?`<span onclick="removeLink('${t.id}',${idx})" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</span>`:''}
+      </div>`;
+    });
+    h+=`</div>`;
+  }
+  if(videos.length){
+    videos.forEach(v=>{const idx=t.links.indexOf(v);h+=`<div class="link-item"><span>🎥</span><a href="${escAttr(v.url)}" target="_blank" style="flex:1;font-size:14px">${esc(v.title||'Video')}</a>${isAdmin()?`<span class="link-remove" onclick="removeLink('${t.id}',${idx})">✕</span>`:''}</div>`});
+  }
+  if(links.length){
+    links.forEach(l=>{const idx=t.links.indexOf(l);h+=`<div class="link-item"><span>🔗</span><a href="${escAttr(l.url)}" target="_blank" style="flex:1;font-size:14px">${esc(l.title||l.url)}</a>${isAdmin()?`<span class="link-remove" onclick="removeLink('${t.id}',${idx})">✕</span>`:''}</div>`});
+  }
+  if(!t.links.length)h+=`<p style="color:#aaa;font-size:14px">None</p>`;
+
+  // Capture buttons (admin + Google auth required for upload)
+  if(isAdmin()){
+    h+=`<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="capturePhoto('${t.id}')">📷 Take Photo</button>
+      <button class="btn btn-primary btn-sm" onclick="recordVideo('${t.id}')">🎥 Record 5s Video</button>
+    </div>`;
+    // Manual link add
+    h+=`<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;gap:6px"><select id="link-type" style="padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:13px;width:100px"><option value="link">Link</option><option value="photo">Photo URL</option><option value="video">Video URL</option></select><input type="text" id="link-url" placeholder="URL..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"></div><div style="display:flex;gap:6px"><input type="text" id="link-title" placeholder="Title..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"><button class="btn btn-primary btn-sm" onclick="addLink('${t.id}')">Add</button></div></div>`;
+  }
   h+=`</div>`;
 
   // Move / Phase / Order
@@ -525,6 +588,131 @@ function renderTaskView(){
 
   h+=`</div></div>`;
   return h;
+}
+
+// ── Photo/Video Capture & Upload ──
+const DRIVE_FOLDER_NAME='ApartmentBuild';
+let _driveFolderId=null;
+
+async function getOrCreateFolder(){
+  if(_driveFolderId)return _driveFolderId;
+  const token=await ensureDriveToken();
+  // Search for existing folder
+  const searchResp=await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${DRIVE_FOLDER_NAME}'+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&fields=files(id)`,{headers:{Authorization:'Bearer '+token}});
+  const searchData=await searchResp.json();
+  if(searchData.files&&searchData.files.length>0){_driveFolderId=searchData.files[0].id;return _driveFolderId}
+  // Create folder
+  const createResp=await fetch('https://www.googleapis.com/drive/v3/files',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({name:DRIVE_FOLDER_NAME,mimeType:'application/vnd.google-apps.folder'})});
+  const createData=await createResp.json();
+  _driveFolderId=createData.id;return _driveFolderId;
+}
+
+async function uploadToDrive(blob,filename,mimeType){
+  const token=await ensureDriveToken();
+  const folderId=await getOrCreateFolder();
+  // Multipart upload
+  const metadata={name:filename,parents:[folderId]};
+  const form=new FormData();
+  form.append('metadata',new Blob([JSON.stringify(metadata)],{type:'application/json'}));
+  form.append('file',blob);
+  const resp=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink,webContentLink',{method:'POST',headers:{Authorization:'Bearer '+token},body:form});
+  const data=await resp.json();
+  if(!data.id)throw new Error('Upload failed: '+JSON.stringify(data));
+  // Make viewable by link
+  await fetch(`https://www.googleapis.com/drive/v3/files/${data.id}/permissions`,{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({role:'reader',type:'anyone'})});
+  return{id:data.id,url:data.webViewLink||`https://drive.google.com/file/d/${data.id}/view`,directUrl:`https://drive.google.com/uc?id=${data.id}`};
+}
+
+// Compress photo via canvas
+function compressPhoto(file,maxWidth=1920,quality=0.8){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>{
+      let w=img.width,h=img.height;
+      if(w>maxWidth){h=Math.round(h*(maxWidth/w));w=maxWidth}
+      const canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      canvas.toBlob(blob=>resolve(blob),'image/jpeg',quality);
+    };
+    img.onerror=reject;
+    img.src=URL.createObjectURL(file);
+  });
+}
+
+// Record 5-sec video
+function recordVideo(taskId){
+  showModal(`<h2>Record Video (5 sec)</h2>
+    <video id="vid-preview" autoplay playsinline muted style="width:100%;border-radius:8px;background:#000;max-height:300px"></video>
+    <p id="vid-status" style="text-align:center;margin:10px 0;font-size:14px;color:#666">Starting camera...</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="stopVideoCapture();hideModal()">Cancel</button>
+      <button class="btn-primary" id="vid-record-btn" onclick="startRecording('${taskId}')" disabled>Record</button>
+    </div>`);
+  startVideoPreview();
+}
+
+let _mediaStream=null,_mediaRecorder=null,_videoChunks=[];
+
+async function startVideoPreview(){
+  try{
+    _mediaStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false});
+    document.getElementById('vid-preview').srcObject=_mediaStream;
+    document.getElementById('vid-status').textContent='Ready — tap Record';
+    document.getElementById('vid-record-btn').disabled=false;
+  }catch(e){document.getElementById('vid-status').textContent='Camera error: '+e.message}
+}
+
+function startRecording(taskId){
+  _videoChunks=[];
+  const options={mimeType:'video/webm;codecs=vp8',videoBitsPerSecond:1000000};
+  try{_mediaRecorder=new MediaRecorder(_mediaStream,options)}catch(e){_mediaRecorder=new MediaRecorder(_mediaStream)}
+  _mediaRecorder.ondataavailable=e=>{if(e.data.size>0)_videoChunks.push(e.data)};
+  _mediaRecorder.onstop=async()=>{
+    const blob=new Blob(_videoChunks,{type:'video/webm'});
+    document.getElementById('vid-status').textContent='Uploading...';
+    document.getElementById('vid-record-btn').disabled=true;
+    try{
+      const ts=Date.now();
+      const result=await uploadToDrive(blob,`video_${taskId}_${ts}.webm`,'video/webm');
+      const t=getTask(taskId);
+      t.links.push({type:'video',url:result.url,title:`Video ${new Date().toLocaleDateString()}`,driveId:result.id});
+      saveData(DATA);
+      stopVideoCapture();hideModal();render();
+    }catch(e){document.getElementById('vid-status').textContent='Upload failed: '+e.message;document.getElementById('vid-record-btn').disabled=false}
+  };
+  _mediaRecorder.start();
+  document.getElementById('vid-status').textContent='Recording... 5';
+  document.getElementById('vid-record-btn').textContent='Recording...';
+  document.getElementById('vid-record-btn').disabled=true;
+  let countdown=5;
+  const intv=setInterval(()=>{countdown--;document.getElementById('vid-status').textContent=countdown>0?`Recording... ${countdown}`:'Stopping...';if(countdown<=0){clearInterval(intv);_mediaRecorder.stop()}},1000);
+}
+
+function stopVideoCapture(){
+  if(_mediaStream){_mediaStream.getTracks().forEach(t=>t.stop());_mediaStream=null}
+  if(_mediaRecorder&&_mediaRecorder.state!=='inactive'){_mediaRecorder.stop();_mediaRecorder=null}
+}
+
+// Photo capture (file input trigger)
+function capturePhoto(taskId){
+  const input=document.createElement('input');
+  input.type='file';input.accept='image/*';input.capture='environment';
+  input.onchange=async()=>{
+    if(!input.files[0])return;
+    showModal(`<h2>Uploading Photo...</h2><p style="text-align:center;font-size:14px;color:#666" id="photo-status">Compressing...</p>`);
+    try{
+      const compressed=await compressPhoto(input.files[0]);
+      document.getElementById('photo-status').textContent=`Compressed to ${Math.round(compressed.size/1024)}KB. Uploading...`;
+      const ts=Date.now();
+      const result=await uploadToDrive(compressed,`photo_${taskId}_${ts}.jpg`,'image/jpeg');
+      const t=getTask(taskId);
+      t.links.push({type:'photo',url:result.directUrl,title:`Photo ${new Date().toLocaleDateString()}`,driveId:result.id,viewUrl:result.url});
+      saveData(DATA);hideModal();render();
+    }catch(e){document.getElementById('photo-status').textContent='Error: '+e.message}
+  };
+  input.click();
 }
 
 // ── Actions ──
