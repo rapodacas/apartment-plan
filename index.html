@@ -276,7 +276,7 @@ function loadData(){
     scope:LS.get('scope',DEFAULT_SCOPE),
     risks:LS.get('risks',DEFAULT_RISKS),
     tasks:LS.get('tasks',DEFAULT_TASKS),
-    workers:LS.get('workers',{}) // {taskId: ['charlie','vinny']}
+    workers:LS.get('workers',{}) // {date: ['charlie','vinny']} — workers commit to DAYS, not tasks
   };
 }
 function saveData(d){LS.set('pins',d.pins);LS.set('scope',d.scope);LS.set('risks',d.risks);LS.set('tasks',d.tasks);LS.set('workers',d.workers)}
@@ -415,7 +415,7 @@ function renderPhaseView(){
   let h='';
   tasks.forEach(t=>{
     const st=getEffectiveStatus(t);
-    const workers=DATA.workers[t.id]||[];
+    const workers=DATA.workers[t.scheduledDate]||[];
     h+=`<div class="task-card" onclick="navTask('${t.id}')"><div class="task-card-inner">
       <div class="task-card-date">${dayLabel(t.scheduledDate)}<span class="day-type">${dayType(t.scheduledDate)}</span></div>
       <div class="task-card-work">${esc(t.work)}${t.dependsOn.length?`<div class="task-deps">requires ${t.dependsOn.length} task${t.dependsOn.length>1?'s':''}</div>`:''}</div>
@@ -431,7 +431,7 @@ function renderPhaseView(){
 function renderTaskView(){
   const t=getTask(VIEW_TASK);if(!t)return'<p>Task not found</p>';
   const st=getEffectiveStatus(t);
-  const workers=DATA.workers[t.id]||[];
+  const workers=DATA.workers[t.scheduledDate]||[];
   let h=`<div class="task-detail"><div class="task-detail-header"><h2>${esc(t.work)}</h2><div class="task-detail-sub">${esc(t.phase)} · ${dayLabel(t.scheduledDate)} · ${dayType(t.scheduledDate)||t.scheduledDate}</div></div><div class="task-detail-body">`;
 
   // Status
@@ -485,7 +485,7 @@ function renderTaskView(){
   h+=`<div class="detail-section"><h3>Workers</h3><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">`;
   workers.forEach(w=>h+=`<span class="worker-badge ${w}">${w.charAt(0).toUpperCase()+w.slice(1)}</span>`);
   if(!workers.length)h+=`<span style="color:#aaa;font-size:14px">No one signed up</span>`;
-  if(isLoggedIn()&&!isAdmin()){const mine=workers.includes(USER);h+=`<button class="worker-toggle ${mine?'signed-up':''}" onclick="toggleWorker('${t.id}')">${mine?'✓ Signed Up':'+ Sign Up'}</button>`}
+  if(isLoggedIn()&&!isAdmin()){const mine=workers.includes(USER);h+=`<button class="worker-toggle ${mine?'signed-up':''}" onclick="toggleWorker('${t.scheduledDate}')">${mine?'✓ Signed Up':'+ Sign Up'}</button>`}
   h+=`</div></div>`;
 
   // Materials
@@ -544,9 +544,9 @@ function setTaskStatus(taskId,status){
   saveData(DATA);render();
 }
 function updateTaskField(taskId,field,val){const t=getTask(taskId);if(!t)return;t[field]=val;saveData(DATA)}
-function toggleWorker(taskId){
-  if(!DATA.workers[taskId])DATA.workers[taskId]=[];
-  const arr=DATA.workers[taskId],idx=arr.indexOf(USER);
+function toggleWorker(date){
+  if(!DATA.workers[date])DATA.workers[date]=[];
+  const arr=DATA.workers[date],idx=arr.indexOf(USER);
   if(idx>=0)arr.splice(idx,1);else arr.push(USER);
   saveData(DATA);render();
 }
