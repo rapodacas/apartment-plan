@@ -293,8 +293,6 @@ function handleGoogleSignIn(response){
   if(mapping){USER=mapping.uid;LS.set('auth',USER);LS.set('authMethod','google');LS.set('googleName',payload.name);LS.set('googleEmail',payload.email)}
   else{document.getElementById('login-err').textContent='Email not authorized: '+payload.email;document.getElementById('login-err').classList.remove('hidden');return}
   document.getElementById('login-dropdown').classList.add('hidden');
-  // Request Drive access token
-  if(tokenClient)tokenClient.requestAccessToken({prompt:''});
   render();
 }
 
@@ -560,12 +558,19 @@ function renderTaskView(){
   }
   if(!t.links.length)h+=`<p style="color:#aaa;font-size:14px">None</p>`;
 
-  // Capture buttons (admin + Google auth required for upload)
+  // Capture buttons (admin + Drive token required)
   if(isAdmin()){
-    h+=`<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-primary btn-sm" onclick="capturePhoto('${t.id}')">📷 Take Photo</button>
-      <button class="btn btn-primary btn-sm" onclick="recordVideo('${t.id}')">🎥 Record 5s Video</button>
-    </div>`;
+    if(ACCESS_TOKEN){
+      h+=`<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="capturePhoto('${t.id}')">📷 Take Photo</button>
+        <button class="btn btn-primary btn-sm" onclick="recordVideo('${t.id}')">🎥 Record 5s Video</button>
+      </div>`;
+    }else{
+      h+=`<div style="margin-top:10px;padding:10px 14px;background:#fff3cd;border-radius:6px;font-size:13px;color:#856404;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span>Connect Google Drive to capture photos &amp; videos.</span>
+        <button class="btn btn-sm" style="background:#e67e22;color:#fff" onclick="requestDriveAccess()">Connect Drive</button>
+      </div>`;
+    }
     // Manual link add
     h+=`<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;gap:6px"><select id="link-type" style="padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:13px;width:100px"><option value="link">Link</option><option value="photo">Photo URL</option><option value="video">Video URL</option></select><input type="text" id="link-url" placeholder="URL..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"></div><div style="display:flex;gap:6px"><input type="text" id="link-title" placeholder="Title..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"><button class="btn btn-primary btn-sm" onclick="addLink('${t.id}')">Add</button></div></div>`;
   }
@@ -588,6 +593,16 @@ function renderTaskView(){
 
   h+=`</div></div>`;
   return h;
+}
+
+// ── Drive Access (user-gesture triggered, won't be popup-blocked) ──
+function requestDriveAccess(){
+  if(!tokenClient){alert('Sign in with Google first.');return}
+  tokenClient.callback=(resp)=>{
+    if(resp.access_token){ACCESS_TOKEN=resp.access_token;console.log('Drive access granted');render()}
+    else{alert('Drive access was not granted. Please try again and click Allow.')}
+  };
+  tokenClient.requestAccessToken({prompt:'consent'});
 }
 
 // ── Photo/Video Capture & Upload ──
