@@ -442,7 +442,7 @@ function renderTaskView(){
     else h+=`<button class="${active}" disabled>${s.replace('-',' ')}</button>`;
   });
   h+=`</div>`;
-  if(st==='overdue')h+=`<div style="margin-top:10px;padding:8px 12px;background:#f8d7da;border-radius:6px;font-size:13px;color:#721c24">Past due. <button class="btn btn-warn btn-sm" onclick="pushScheduleFrom('${t.id}')" style="margin-left:8px">Push schedule from here →</button></div>`;
+  if(st==='overdue'){h+=`<div style="margin-top:10px;padding:8px 12px;background:#f8d7da;border-radius:6px;font-size:13px;color:#721c24">Past due.`;if(isAdmin())h+=` <button class="btn btn-warn btn-sm" onclick="pushScheduleFrom('${t.id}')" style="margin-left:8px">Push schedule from here →</button>`;h+=`</div>`}
   h+=`</div>`;
 
   // Scheduled date
