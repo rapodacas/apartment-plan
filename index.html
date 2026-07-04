@@ -7,9 +7,104 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh;font-size:16px}
+
+/* ── Theme Variables ── */
+:root{
+  --bg:#0d1117;--bg-card:#161b22;--bg-card-alt:#1c2533;--bg-input:#0d1117;
+  --text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-bg:#1a3a5c;--accent-hover:#264d73;
+  --border:#21262d;--border-light:#30363d;
+  --green:#3fb950;--green-bg:#0d2818;--yellow:#d29922;--yellow-bg:#3d2e00;--red:#f85149;--red-bg:#3d1418;
+  --header-bg:linear-gradient(135deg,#1a3a5c,#264d73);
+  --worker-raoul-bg:#1a3a5c;--worker-raoul-c:#58a6ff;
+  --worker-charlie-bg:#3a1a5c;--worker-charlie-c:#bc8cff;
+  --worker-vinny-bg:#1a5c3a;--worker-vinny-c:#3fb950;
+  --worker-joaquin-bg:#5c3a1a;--worker-joaquin-c:#d29922;
+  --modal-cancel-bg:#21262d;--modal-cancel-c:#8b949e;
+}
+body.light{
+  --bg:#f0f4f8;--bg-card:#fff;--bg-card-alt:#dce8f5;--bg-input:#fff;
+  --text:#2d2d2d;--text-muted:#6a8aaa;--accent:#2a6a9a;--accent-bg:#2a4a6a;--accent-hover:#3a6a9a;
+  --border:#e0e8f0;--border-light:#d0dce8;
+  --green:#155724;--green-bg:#d4edda;--yellow:#856404;--yellow-bg:#fff3cd;--red:#721c24;--red-bg:#f8d7da;
+  --header-bg:linear-gradient(135deg,#2a4a6a,#3a6a9a);
+  --worker-raoul-bg:#2a4a6a;--worker-raoul-c:#fff;
+  --worker-charlie-bg:#6a3a9a;--worker-charlie-c:#fff;
+  --worker-vinny-bg:#3a9a6a;--worker-vinny-c:#fff;
+  --worker-joaquin-bg:#9a6a3a;--worker-joaquin-c:#fff;
+  --modal-cancel-bg:#eee;--modal-cancel-c:#555;
+}
+/* Light overrides for all hardcoded dark colors */
+body.light{background:#f0f4f8;color:#2d2d2d}
+body.light #app-header{background:linear-gradient(135deg,#2a4a6a,#3a6a9a);border-color:#d0dce8}
+body.light #login-dropdown{background:#fff;border-color:#d0dce8;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+body.light #login-dropdown select,body.light #login-dropdown input{background:#fff;color:#2d2d2d;border-color:#d0dce8}
+body.light #login-dropdown button.pin-btn{background:#2a4a6a}
+body.light .login-err{color:#c44}
+body.light .login-divider{color:#aaa}
+body.light .login-divider::before,body.light .login-divider::after{background:#ddd}
+body.light .breadcrumb{background:#e8eef4;color:#6a8aaa;border-color:#d0dce8}
+body.light .breadcrumb span{color:#2a6a9a}
+body.light .info-card{background:#fff;border-color:#e0e8f0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+body.light .info-card h2{color:#2a4a6a}
+body.light .summary-stat{background:#fff;border-color:#e0e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+body.light .summary-stat .num{color:#2a4a6a}
+body.light .summary-stat .label{color:#888}
+body.light .phase-card{background:#fff;border-color:#e0e8f0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+body.light .phase-card:hover{border-color:#2a6a9a;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+body.light .phase-card-header{background:#2a4a6a}
+body.light .phase-card-body{color:#2d2d2d}
+body.light .phase-stats{color:#6a8aaa}
+body.light .phase-stats strong{color:#2a4a6a}
+body.light .phase-progress{background:#e0e8f0}
+body.light .phase-progress-fill{background:#3a9a6a}
+body.light .task-card{background:#fff;border-color:#e0e8f0}
+body.light .task-card:hover{border-color:#2a6a9a}
+body.light .task-card:nth-child(odd) .task-card-inner{background:#dce8f5}
+body.light .task-card:nth-child(even) .task-card-inner{background:#fff}
+body.light .task-card-date .day-type{color:#6a8aaa}
+body.light .task-deps{color:#aaa}
+body.light .status-planned{background:#e0e8f0;color:#6a8aaa;border-color:#d0dce8}
+body.light .status-in-progress{background:#fff3cd;color:#856404;border-color:#856404}
+body.light .status-done{background:#d4edda;color:#155724;border-color:#155724}
+body.light .status-overdue{background:#f8d7da;color:#721c24;border-color:#721c24}
+body.light .task-detail-header{background:#2a4a6a}
+body.light .task-detail-body{background:#fff;border-color:#e0e8f0}
+body.light .detail-section{border-color:#eef2f6}
+body.light .detail-section h3{color:#2a4a6a}
+body.light .detail-section textarea,body.light .detail-section input[type="text"],body.light .detail-section input[type="date"]{background:#fff;color:#2d2d2d;border-color:#d0dce8}
+body.light .status-picker button{background:#fff;color:#666;border-color:#d0dce8}
+body.light .status-picker button.active-planned{border-color:#6a8aaa;background:#e0e8f0;color:#6a8aaa}
+body.light .status-picker button.active-in-progress{border-color:#856404;background:#fff3cd;color:#856404}
+body.light .status-picker button.active-done{border-color:#155724;background:#d4edda;color:#155724}
+body.light .mat-pill{background:#eef4fa;color:#2a4a6a;border-color:#d0dce8}
+body.light .link-item{border-color:#f0f4f8}
+body.light .link-remove{color:#c44}
+body.light .worker-badge.raoul{background:#2a4a6a;color:#fff}
+body.light .worker-badge.charlie{background:#6a3a9a;color:#fff}
+body.light .worker-badge.vinny{background:#3a9a6a;color:#fff}
+body.light .worker-badge.joaquin{background:#9a6a3a;color:#fff}
+body.light .worker-toggle{background:#fff;color:#2d2d2d;border-color:#d0dce8}
+body.light .worker-toggle.signed-up{background:#3a9a6a;color:#fff;border-color:#3a9a6a}
+body.light .btn-primary{background:#2a4a6a;color:#fff}
+body.light .btn-primary:hover{background:#3a6a9a}
+body.light .btn-danger{background:#c44;color:#fff}
+body.light .btn-warn{background:#e67e22;color:#fff}
+body.light .dep-tag{background:#eef4fa;color:#2a4a6a;border-color:#d0dce8}
+body.light .dep-tag.unmet{background:#f8d7da;color:#721c24;border-color:#721c24}
+body.light .push-controls select,body.light .push-controls input{background:#fff;color:#2d2d2d;border-color:#d0dce8}
+body.light .overdue-banner{background:#f8d7da;color:#721c24;border-color:#c44}
+body.light .overdue-item{border-color:rgba(114,28,36,.1)}
+body.light .app-footer{color:#999}
+body.light .modal{background:#fff;border-color:#d0dce8}
+body.light .modal h2{color:#2a4a6a}
+body.light .modal label{color:#555}
+body.light .modal input,body.light .modal select,body.light .modal textarea{background:#fff;color:#2d2d2d;border-color:#d0dce8}
+body.light .modal-btns .btn-primary{background:#2a4a6a;color:#fff}
+body.light .modal-btns .btn-cancel{background:#eee;color:#555}
+
+body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px;transition:background .2s,color .2s}
 .hidden{display:none!important}
-a{color:#58a6ff;text-decoration:none}
+a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
 
 #app-header{background:linear-gradient(135deg,#1a3a5c,#264d73);color:#fff;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid #30363d}
@@ -145,6 +240,7 @@ a:hover{text-decoration:underline}
   <h1 onclick="navHome()">864 Farr Ave — Apartment Build</h1>
   <div class="header-right">
     <span id="header-user-label"></span>
+    <button id="theme-btn" onclick="toggleTheme()" title="Toggle theme"></button>
     <button id="auth-btn" onclick="toggleAuth()"></button>
   </div>
 </div>
@@ -805,8 +901,25 @@ function escAttr(s){return(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;').re
 document.addEventListener('click',e=>{const dd=document.getElementById('login-dropdown');if(!dd.classList.contains('hidden')&&!dd.contains(e.target)&&e.target!==document.getElementById('auth-btn'))dd.classList.add('hidden')});
 document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)hideModal()});
 
+// ── Theme ──
+function toggleTheme(){
+  const isLight=document.body.classList.toggle('light');
+  localStorage.setItem('apt-theme',isLight?'light':'dark');
+  updateThemeBtn();
+}
+function updateThemeBtn(){
+  const btn=document.getElementById('theme-btn');
+  if(btn)btn.textContent=document.body.classList.contains('light')?'Dark':'Light';
+}
+function initTheme(){
+  const saved=localStorage.getItem('apt-theme');
+  if(saved==='light')document.body.classList.add('light');
+  updateThemeBtn();
+}
+
 // Init
 (function(){
+  initTheme();
   DATA=loadData();
   const saved=LS.get('auth',null);
   if(saved){const method=LS.get('authMethod',null);if(method==='google'||DATA.pins[saved])USER=saved}
