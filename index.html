@@ -90,9 +90,9 @@ a:hover{text-decoration:underline}
 .status-picker button.active-in-progress{border-color:#856404;background:#fff3cd;color:#856404}
 .status-picker button.active-done{border-color:#155724;background:#d4edda;color:#155724}
 
-.materials-list{list-style:none;padding:0}
-.materials-list li{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:14px;border-bottom:1px solid #f0f4f8}
-.materials-list li:last-child{border:none}
+.mat-pills{display:flex;flex-wrap:wrap;gap:6px}
+.mat-pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:4px 10px;border-radius:14px;background:#eef4fa;color:#2a4a6a;border:1px solid #d0dce8}
+.mat-pill .link-remove{padding:0 2px;font-size:11px}
 .link-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f4f8;font-size:14px}
 .link-item:last-child{border:none}
 .link-remove{color:#c44;cursor:pointer;font-size:12px;padding:2px 6px}
@@ -490,7 +490,7 @@ function renderTaskView(){
 
   // Materials
   h+=`<div class="detail-section"><h3>Materials</h3>`;
-  if(t.materials.length){h+=`<ul class="materials-list">`;t.materials.forEach((m,i)=>{h+=`<li><span style="font-size:14px">${esc(m)}</span>${isAdmin()?`<span class="link-remove" onclick="removeMat('${t.id}',${i})">✕</span>`:''}</li>`});h+=`</ul>`}
+  if(t.materials.length){h+=`<div class="mat-pills">`;t.materials.forEach((m,i)=>{h+=`<span class="mat-pill">${esc(m)}${isAdmin()?`<span class="link-remove" onclick="removeMat('${t.id}',${i})">✕</span>`:''}</span>`});h+=`</div>`}
   else h+=`<p style="color:#aaa;font-size:14px">None</p>`;
   if(isAdmin())h+=`<div style="display:flex;gap:6px;margin-top:8px"><input type="text" id="new-mat" placeholder="Add material..." style="flex:1;padding:8px;border:1px solid #d0dce8;border-radius:6px;font-size:14px"><button class="btn btn-primary btn-sm" onclick="addMat('${t.id}')">Add</button></div>`;
   h+=`</div>`;
