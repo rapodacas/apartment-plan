@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Apartment Build — 864 Farr Ave</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 
@@ -361,21 +363,74 @@ const DEFAULT_RISKS=[
   'Laborer ramp: Phases 1–2 ideal for training. By Phase 4 they\'re useful.'
 ];
 
-// ── Storage ──
+// ── Firebase ──
+const firebaseConfig={
+  apiKey:"AIzaSyB2l9ho3Hmb4TJIorQZSY27MoKVJbxxsEA",
+  authDomain:"apartment-plan.firebaseapp.com",
+  databaseURL:"https://apartment-plan-default-rtdb.firebaseio.com",
+  projectId:"apartment-plan",
+  storageBucket:"apartment-plan.firebasestorage.app",
+  messagingSenderId:"500021660433",
+  appId:"1:500021660433:web:fb65a2b823d995a9079ab0"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+const planRef=db.ref('plan');
+let _firebaseReady=false;
+let _skipNextFirebaseUpdate=false;
+
+// ── Storage (Firebase primary, localStorage fallback) ──
 const LS={
   get(k,def){try{const v=localStorage.getItem('apt2-'+k);return v?JSON.parse(v):def}catch{return def}},
   set(k,v){localStorage.setItem('apt2-'+k,JSON.stringify(v))}
 };
+
 function loadData(){
+  // Load from localStorage (immediate, may be stale)
   return{
     pins:LS.get('pins',DEFAULT_PINS),
     scope:LS.get('scope',DEFAULT_SCOPE),
     risks:LS.get('risks',DEFAULT_RISKS),
     tasks:LS.get('tasks',DEFAULT_TASKS),
-    workers:LS.get('workers',{}) // {date: ['charlie','vinny']} — workers commit to DAYS, not tasks
+    workers:LS.get('workers',{})
   };
 }
-function saveData(d){LS.set('pins',d.pins);LS.set('scope',d.scope);LS.set('risks',d.risks);LS.set('tasks',d.tasks);LS.set('workers',d.workers)}
+
+function saveData(d){
+  // Save to localStorage (immediate)
+  LS.set('pins',d.pins);LS.set('scope',d.scope);LS.set('risks',d.risks);LS.set('tasks',d.tasks);LS.set('workers',d.workers);
+  // Save to Firebase (async, syncs to all users)
+  _skipNextFirebaseUpdate=true;
+  planRef.set({scope:d.scope,risks:d.risks,tasks:d.tasks,workers:d.workers}).catch(e=>console.error('Firebase save error:',e));
+}
+
+// Listen for real-time updates from other users
+function initFirebaseSync(){
+  planRef.on('value',snapshot=>{
+    if(_skipNextFirebaseUpdate){_skipNextFirebaseUpdate=false;return}
+    const val=snapshot.val();
+    if(!val)return;
+    // Update localStorage with Firebase data
+    if(val.scope)LS.set('scope',val.scope);
+    if(val.risks)LS.set('risks',val.risks);
+    if(val.tasks)LS.set('tasks',val.tasks);
+    if(val.workers)LS.set('workers',val.workers);
+    // Reload and re-render
+    DATA=loadData();
+    _firebaseReady=true;
+    render();
+    console.log('Synced from Firebase');
+  },err=>{console.error('Firebase listen error:',err)});
+}
+
+// Seed Firebase if empty (first time only)
+async function seedFirebaseIfEmpty(){
+  const snapshot=await planRef.once('value');
+  if(!snapshot.val()){
+    console.log('Seeding Firebase with default data...');
+    await planRef.set({scope:DEFAULT_SCOPE,risks:DEFAULT_RISKS,tasks:DEFAULT_TASKS,workers:{}});
+  }
+}
 
 let DATA,USER=null,VIEW='home',VIEW_PHASE=null,VIEW_TASK=null;
 
@@ -925,7 +980,10 @@ function initTheme(){
   if(saved){const method=LS.get('authMethod',null);if(method==='google'||DATA.pins[saved])USER=saved}
   // Sync _id counter
   DATA.tasks.forEach(t=>{const n=parseInt(t.id.replace('t',''));if(n>_id)_id=n});
-  render();waitForGSI();
+  render();
+  waitForGSI();
+  // Start Firebase sync
+  seedFirebaseIfEmpty().then(()=>initFirebaseSync()).catch(e=>console.error('Firebase init error:',e));
 })();
 </script>
 </body>
