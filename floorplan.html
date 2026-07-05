@@ -17,122 +17,178 @@ svg{max-width:100%;height:auto}
 </head>
 <body>
 <h1>864 Farr Ave — Apartment Conversion</h1>
-<p class="subtitle">Floor Plan — Not to Scale (1 unit = 1 foot)</p>
+<p class="subtitle">Floor Plan — Approximate (1 grid unit = 2 feet)</p>
 
-<svg viewBox="-40 -40 520 480" width="700" xmlns="http://www.w3.org/2000/svg" style="background:#0d1117;border-radius:12px;border:1px solid #21262d">
+<svg viewBox="-20 -60 560 520" width="750" xmlns="http://www.w3.org/2000/svg" style="background:#0d1117;border-radius:12px;border:1px solid #21262d">
   <defs>
     <pattern id="hatch" patternUnits="userSpaceOnUse" width="8" height="8">
-      <path d="M0,8 L8,0" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+      <path d="M0,8 L8,0" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
     </pattern>
-    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#8b949e"/>
-    </marker>
+    <pattern id="grid" patternUnits="userSpaceOnUse" width="20" height="20">
+      <rect width="20" height="20" fill="none" stroke="rgba(255,255,255,.03)" stroke-width=".5"/>
+    </pattern>
   </defs>
 
+  <!-- Grid background -->
+  <rect x="-20" y="-60" width="560" height="520" fill="url(#grid)"/>
+
   <!-- Compass -->
-  <g transform="translate(430,20)">
-    <text x="0" y="0" text-anchor="middle" font-size="11" fill="#58a6ff" font-weight="700">N</text>
-    <line x1="0" y1="4" x2="0" y2="20" stroke="#58a6ff" stroke-width="1.5" marker-end="none"/>
-    <polygon points="0,4 -4,14 4,14" fill="#58a6ff"/>
-    <text x="0" y="32" text-anchor="middle" font-size="9" fill="#8b949e">S</text>
+  <g transform="translate(500,-30)">
+    <polygon points="0,-18 -5,-8 5,-8" fill="#58a6ff"/>
+    <line x1="0" y1="-8" x2="0" y2="8" stroke="#58a6ff" stroke-width="1.5"/>
+    <text x="0" y="-22" text-anchor="middle" font-size="11" fill="#58a6ff" font-weight="700">N</text>
   </g>
 
-  <!-- ═══ NORTH PATIO (full 14×20) ═══ -->
-  <!-- Unenclosed portion (14×10) - the open patio area -->
-  <rect x="0" y="0" width="280" height="100" rx="0" fill="none" stroke="#30363d" stroke-width="1" stroke-dasharray="6,4"/>
-  <text x="140" y="55" text-anchor="middle" font-size="11" fill="#30363d">Open Patio</text>
-  <text x="140" y="70" text-anchor="middle" font-size="9" fill="#30363d">14×10 (unenclosed)</text>
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- NORTH PATIO — full 14×20 area              -->
+  <!-- Only west 14×10 is enclosed as kitchen      -->
+  <!-- East side of kitchen is OPEN                -->
+  <!-- ═══════════════════════════════════════════ -->
 
-  <!-- KITCHEN (14×10 enclosed portion of north patio) - ground level -->
-  <rect x="0" y="100" width="280" height="100" rx="2" fill="#1a3a2a" stroke="#3fb950" stroke-width="2"/>
-  <rect x="0" y="100" width="280" height="100" fill="url(#hatch)"/>
-  <text x="140" y="145" text-anchor="middle" font-size="14" fill="#3fb950" font-weight="600">KITCHEN</text>
-  <text x="140" y="162" text-anchor="middle" font-size="11" fill="#3fb950">14 × 10 (ground level)</text>
-  <text x="140" y="178" text-anchor="middle" font-size="9" fill="rgba(63,185,80,.6)">Partially enclosed — north side open?</text>
+  <!-- Open patio portion (east half, not enclosed) -->
+  <rect x="140" y="0" width="140" height="100" rx="0" fill="none" stroke="#30363d" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="210" y="45" text-anchor="middle" font-size="10" fill="#30363d">Open Patio</text>
+  <text x="210" y="58" text-anchor="middle" font-size="9" fill="#30363d">(unenclosed)</text>
 
-  <!-- Dimension lines - Kitchen width -->
-  <line x1="0" y1="210" x2="280" y2="210" stroke="#8b949e" stroke-width="0.5"/>
-  <text x="140" y="224" text-anchor="middle" font-size="10" fill="#8b949e">14'</text>
+  <!-- KITCHEN — 14×10 enclosed, ground level, east side open -->
+  <rect x="0" y="0" width="140" height="100" rx="2" fill="#1a3a2a" stroke="#3fb950" stroke-width="2"/>
+  <rect x="0" y="0" width="140" height="100" fill="url(#hatch)"/>
+  <!-- East wall is open - dashed line -->
+  <line x1="140" y1="0" x2="140" y2="100" stroke="#3fb950" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="70" y="40" text-anchor="middle" font-size="14" fill="#3fb950" font-weight="600">KITCHEN</text>
+  <text x="70" y="57" text-anchor="middle" font-size="11" fill="#3fb950">14 × 10</text>
+  <text x="70" y="72" text-anchor="middle" font-size="9" fill="rgba(63,185,80,.6)">Ground level</text>
+  <text x="70" y="85" text-anchor="middle" font-size="8" fill="rgba(63,185,80,.5)">East side open →</text>
 
-  <!-- ═══ OFFICE (10×12) — raised foundation ═══ -->
-  <rect x="40" y="200" width="200" height="120" rx="2" fill="#1a2a4a" stroke="#58a6ff" stroke-width="2.5"/>
-  <text x="140" y="252" text-anchor="middle" font-size="15" fill="#58a6ff" font-weight="700">OFFICE</text>
-  <text x="140" y="270" text-anchor="middle" font-size="11" fill="#58a6ff">10 × 12</text>
-  <text x="140" y="286" text-anchor="middle" font-size="9" fill="rgba(88,166,255,.6)">Raised foundation · Conditioned</text>
-  <text x="140" y="299" text-anchor="middle" font-size="9" fill="rgba(88,166,255,.5)">EXISTING CORE</text>
+  <!-- Kitchen dimension -->
+  <line x1="0" y1="-10" x2="140" y2="-10" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="0" y1="-14" x2="0" y2="-6" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="140" y1="-14" x2="140" y2="-6" stroke="#8b949e" stroke-width=".5"/>
+  <text x="70" y="-16" text-anchor="middle" font-size="9" fill="#8b949e">14'</text>
 
-  <!-- Dimension lines - Office -->
-  <line x1="30" y1="200" x2="30" y2="320" stroke="#8b949e" stroke-width="0.5"/>
-  <text x="20" y="265" text-anchor="middle" font-size="10" fill="#8b949e" transform="rotate(-90,20,265)">12'</text>
-  <line x1="40" y1="330" x2="240" y2="330" stroke="#8b949e" stroke-width="0.5"/>
-  <text x="140" y="344" text-anchor="middle" font-size="10" fill="#8b949e">10'</text>
+  <!-- North patio full width dimension -->
+  <line x1="0" y1="-30" x2="280" y2="-30" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="0" y1="-34" x2="0" y2="-26" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="280" y1="-34" x2="280" y2="-26" stroke="#8b949e" stroke-width=".5"/>
+  <text x="140" y="-34" text-anchor="middle" font-size="9" fill="#8b949e">20' (full north patio)</text>
 
-  <!-- ═══ EAST ADDITION (12×8) — fully enclosed ═══ -->
-  <rect x="240" y="200" width="160" height="120" rx="2" fill="#2a1a3a" stroke="#bc8cff" stroke-width="2"/>
-  <rect x="240" y="200" width="160" height="120" fill="url(#hatch)"/>
-  <text x="320" y="252" text-anchor="middle" font-size="14" fill="#bc8cff" font-weight="600">EAST ROOM</text>
-  <text x="320" y="270" text-anchor="middle" font-size="11" fill="#bc8cff">12 × 8</text>
-  <text x="320" y="286" text-anchor="middle" font-size="9" fill="rgba(188,140,255,.6)">Fully enclosed addition</text>
+  <!-- Kitchen height dimension -->
+  <line x1="-14" y1="0" x2="-14" y2="100" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="-18" y1="0" x2="-10" y2="0" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="-18" y1="100" x2="-10" y2="100" stroke="#8b949e" stroke-width=".5"/>
+  <text x="-10" y="55" text-anchor="middle" font-size="9" fill="#8b949e" transform="rotate(-90,-10,55)">10'</text>
 
-  <!-- Dimension lines - East room -->
-  <line x1="240" y1="330" x2="400" y2="330" stroke="#8b949e" stroke-width="0.5"/>
-  <text x="320" y="344" text-anchor="middle" font-size="10" fill="#8b949e">8'</text>
-  <line x1="410" y1="200" x2="410" y2="320" stroke="#8b949e" stroke-width="0.5"/>
-  <text x="424" y="265" text-anchor="middle" font-size="10" fill="#8b949e" transform="rotate(-90,424,265)">12'</text>
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- OFFICE — 10×12, raised foundation           -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="40" y="100" width="200" height="120" rx="2" fill="#1a2a4a" stroke="#58a6ff" stroke-width="2.5"/>
+  <text x="140" y="150" text-anchor="middle" font-size="16" fill="#58a6ff" font-weight="700">OFFICE</text>
+  <text x="140" y="168" text-anchor="middle" font-size="12" fill="#58a6ff">10 × 12</text>
+  <text x="140" y="183" text-anchor="middle" font-size="9" fill="rgba(88,166,255,.6)">Raised foundation · Conditioned</text>
+  <text x="140" y="196" text-anchor="middle" font-size="9" fill="rgba(88,166,255,.4)">EXISTING CORE</text>
 
-  <!-- ═══ NEW BATHROOM (raised addition) ═══ -->
-  <rect x="40" y="320" width="100" height="60" rx="2" fill="#3a2a1a" stroke="#d29922" stroke-width="2"/>
-  <text x="90" y="348" text-anchor="middle" font-size="12" fill="#d29922" font-weight="600">NEW BATH</text>
-  <text x="90" y="363" text-anchor="middle" font-size="9" fill="rgba(210,153,34,.6)">Raised · Plumbing</text>
-  <text x="90" y="375" text-anchor="middle" font-size="8" fill="rgba(210,153,34,.5)">Size TBD?</text>
+  <!-- Office dimensions -->
+  <line x1="40" y1="230" x2="240" y2="230" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="40" y1="226" x2="40" y2="234" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="240" y1="226" x2="240" y2="234" stroke="#8b949e" stroke-width=".5"/>
+  <text x="140" y="244" text-anchor="middle" font-size="9" fill="#8b949e">10'</text>
 
-  <!-- ═══ EXISTING OUTDOOR BATHROOM (8×8 → cut to ~4×8) ═══ -->
-  <!-- Original 8×8 outline (dashed) -->
-  <rect x="-80" y="200" width="120" height="80" rx="2" fill="none" stroke="#f85149" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="-20" y="218" text-anchor="middle" font-size="8" fill="rgba(248,81,73,.5)">Original 8×8</text>
+  <line x1="250" y1="100" x2="250" y2="220" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="246" y1="100" x2="254" y2="100" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="246" y1="220" x2="254" y2="220" stroke="#8b949e" stroke-width=".5"/>
+  <text x="260" y="165" text-anchor="middle" font-size="9" fill="#8b949e" transform="rotate(-90,260,165)">12'</text>
 
-  <!-- Remaining ~4×8 -->
-  <rect x="-80" y="200" width="120" height="40" rx="2" fill="#3d1418" stroke="#f85149" stroke-width="2"/>
-  <text x="-20" y="222" text-anchor="middle" font-size="11" fill="#f85149" font-weight="600">EXIST. BATH</text>
-  <text x="-20" y="234" text-anchor="middle" font-size="9" fill="rgba(248,81,73,.6)">~4×8 (halved)</text>
+  <!-- Step down indicator office→kitchen -->
+  <text x="140" y="108" text-anchor="middle" font-size="7" fill="#8b949e">▲ step up from ground ▲</text>
 
-  <!-- ═══ FENCE LINE ═══ -->
-  <line x1="-90" y1="400" x2="420" y2="400" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="10,5"/>
-  <text x="165" y="418" text-anchor="middle" font-size="10" fill="#8b949e">FENCE LINE</text>
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- EAST ROOM — 12×8, fully enclosed, raised    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="240" y="100" width="160" height="120" rx="2" fill="#2a1a3a" stroke="#bc8cff" stroke-width="2"/>
+  <rect x="240" y="100" width="160" height="120" fill="url(#hatch)"/>
+  <text x="320" y="150" text-anchor="middle" font-size="14" fill="#bc8cff" font-weight="600">EAST ROOM</text>
+  <text x="320" y="168" text-anchor="middle" font-size="12" fill="#bc8cff">12 × 8</text>
+  <text x="320" y="183" text-anchor="middle" font-size="9" fill="rgba(188,140,255,.6)">Fully enclosed · Raised</text>
 
-  <!-- ═══ CONNECTION INDICATORS ═══ -->
-  <!-- Office to Kitchen connection -->
-  <line x1="140" y1="200" x2="140" y2="200" stroke="#58a6ff" stroke-width="0"/>
-  <rect x="60" y="196" width="160" height="8" fill="#0d1117" stroke="none"/>
-  <text x="140" y="203" text-anchor="middle" font-size="8" fill="#8b949e">step down to ground level</text>
+  <!-- East room dimensions -->
+  <line x1="240" y1="230" x2="400" y2="230" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="240" y1="226" x2="240" y2="234" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="400" y1="226" x2="400" y2="234" stroke="#8b949e" stroke-width=".5"/>
+  <text x="320" y="244" text-anchor="middle" font-size="9" fill="#8b949e">8'</text>
 
-  <!-- Office to East connection -->
-  <rect x="236" y="240" width="8" height="40" fill="#0d1117" stroke="none"/>
-  <text x="242" y="238" text-anchor="middle" font-size="7" fill="#8b949e" transform="rotate(-90,242,238)">opens into</text>
+  <line x1="410" y1="100" x2="410" y2="220" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="406" y1="100" x2="414" y2="100" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="406" y1="220" x2="414" y2="220" stroke="#8b949e" stroke-width=".5"/>
+  <text x="424" y="165" text-anchor="middle" font-size="9" fill="#8b949e" transform="rotate(-90,424,165)">12'</text>
 
-  <!-- ═══ LABELS: Areas ═══ -->
-  <!-- Property/yard reference -->
-  <text x="-20" y="400" text-anchor="start" font-size="9" fill="#30363d" transform="rotate(-90,-20,400)">YARD / PROPERTY</text>
+  <!-- Connection: Office → East Room -->
+  <rect x="238" y="140" width="4" height="40" fill="#0d1117"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- EXISTING BATHROOM — 8×8 cut to 4×8          -->
+  <!-- Southeast: 5' south, 8' east of patio       -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <!-- 5' south of office bottom (y=220) = y=270 -->
+  <!-- 8' east of east patio edge... the east patio is the east room at x=400 -->
+  <!-- Actually, "east 8 feet from the patio" — the patio being the east patio -->
+  <!-- Wait, let me reconsider: 8' east from office? That puts it at office x+200+80=x320 -->
+  <!-- Actually the bathroom is 8x8 "next to" the office. Let me place it SE of office -->
+  <!-- 5' south of office (y=220+50=270), offset east -->
+
+  <!-- Original 8×8 outline (dashed - demo portion) -->
+  <rect x="280" y="270" width="80" height="80" rx="2" fill="none" stroke="#f85149" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="320" y="340" text-anchor="middle" font-size="7" fill="rgba(248,81,73,.4)">demo'd half</text>
+
+  <!-- Remaining 4×8 bathroom -->
+  <rect x="280" y="270" width="80" height="40" rx="2" fill="#3d1418" stroke="#f85149" stroke-width="2"/>
+  <text x="320" y="288" text-anchor="middle" font-size="11" fill="#f85149" font-weight="600">BATH</text>
+  <text x="320" y="302" text-anchor="middle" font-size="9" fill="rgba(248,81,73,.6)">4 × 8 (halved)</text>
+
+  <!-- Gap labels -->
+  <line x1="240" y1="225" x2="280" y2="270" stroke="#30363d" stroke-width=".5" stroke-dasharray="3,3"/>
+  <text x="255" y="250" text-anchor="middle" font-size="8" fill="#30363d">5' gap south</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- FENCE — south and east                      -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <!-- South fence -->
+  <line x1="-10" y1="380" x2="440" y2="380" stroke="#8b949e" stroke-width="2" stroke-dasharray="12,6"/>
+  <!-- East fence -->
+  <line x1="440" y1="380" x2="440" y2="-40" stroke="#8b949e" stroke-width="2" stroke-dasharray="12,6"/>
+
+  <!-- Fence labels -->
+  <text x="220" y="396" text-anchor="middle" font-size="10" fill="#8b949e" font-weight="600">FENCE (south)</text>
+  <text x="453" y="170" text-anchor="middle" font-size="10" fill="#8b949e" font-weight="600" transform="rotate(90,453,170)">FENCE (east)</text>
+
+  <!-- Gate indicator -->
+  <rect x="190" y="376" width="40" height="8" rx="2" fill="#0d1117" stroke="#8b949e" stroke-width="1"/>
+  <text x="210" y="415" text-anchor="middle" font-size="8" fill="#8b949e">GATE</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LANDSCAPING AREA                             -->
+  <!-- ═══════════════════════════════════════════ -->
+  <text x="80" y="310" text-anchor="middle" font-size="10" fill="#30363d">Landscaping</text>
+  <text x="80" y="323" text-anchor="middle" font-size="9" fill="#30363d">area</text>
 
 </svg>
 
 <div class="legend">
-  <div class="legend-item"><div class="legend-swatch" style="background:#1a2a4a;border-color:#58a6ff"></div>Existing Office (core)</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#1a3a2a;border-color:#3fb950"></div>Kitchen (new enclosure)</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#2a1a3a;border-color:#bc8cff"></div>East Room (new enclosure)</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#3a2a1a;border-color:#d29922"></div>New Bathroom (raised)</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#3d1418;border-color:#f85149"></div>Existing Bath (halved)</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#1a2a4a;border-color:#58a6ff"></div>Existing Office (raised, core)</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#1a3a2a;border-color:#3fb950"></div>Kitchen (ground level, east open)</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#2a1a3a;border-color:#bc8cff"></div>East Room (raised, fully enclosed)</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#3d1418;border-color:#f85149"></div>Bathroom (8×8 cut to 4×8)</div>
   <div class="legend-item"><div class="legend-swatch" style="background:none;border-color:#30363d;border-style:dashed"></div>Demo / Open</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:none;border-color:#8b949e;border-style:dashed"></div>Fence</div>
 </div>
 
 <p class="note">
-  This is my best guess at the layout based on descriptions. Things I'm unsure about and need your input:<br>
-  <strong>1)</strong> Where exactly is the existing outdoor bathroom relative to the office? I put it west.<br>
-  <strong>2)</strong> Where does the new bathroom attach? I put it south of the office.<br>
-  <strong>3)</strong> Which side(s) of the kitchen stay open?<br>
-  <strong>4)</strong> New bathroom dimensions?<br>
-  <strong>5)</strong> Does the east room share the office's raised foundation or is it ground level?<br>
-  <strong>6)</strong> Where does the fence go relative to all this?
+  Updated with Raoul's corrections 7/5/2026. Remaining questions:<br>
+  <strong>1)</strong> Bathroom "5' south and 8' east from the patio" — is that from the east patio edge or the office edge?<br>
+  <strong>2)</strong> Which half of the 8×8 bathroom is kept — north half or south half?<br>
+  <strong>3)</strong> Does the fence connect to the building on both ends, or does it extend beyond?<br>
+  <strong>4)</strong> Where is the gate in the fence?
 </p>
 
 </body>
