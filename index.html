@@ -590,7 +590,7 @@ function renderHome(){
   }else{
     h+=`<div class="info-card"><h2 style="color:#a06828">Risks & Notes</h2><ul>${DATA.risks.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div>`;
   }
-  h+=`<div class="app-footer">864 Farr Ave, Escondido — Apartment Conversion</div>`;
+  h+=`<div class="app-footer"><a href="floorplan.html" target="_blank">View Floor Plan</a> · 864 Farr Ave, Escondido</div>`;
   return h;
 }
 
