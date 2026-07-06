@@ -495,8 +495,11 @@ function isLoggedIn(){return USER!==null}
 
 // ── Navigation ──
 function navHome(){VIEW='home';VIEW_PHASE=null;VIEW_TASK=null;render()}
-function navPhase(phase){VIEW='phase';VIEW_PHASE=decodeURIComponent(phase);VIEW_TASK=null;render()}
-function encPhase(p){return encodeURIComponent(p)}
+function navPhase(idx){
+  if(typeof idx==='number'){VIEW='phase';VIEW_PHASE=getPhases()[idx];VIEW_TASK=null;render()}
+  else{VIEW='phase';VIEW_PHASE=idx;VIEW_TASK=null;render()} // legacy string support
+}
+function phaseIdx(name){return getPhases().indexOf(name)}
 function navTask(taskId){VIEW='task';VIEW_TASK=taskId;render()}
 
 // ── Helpers ──
@@ -540,7 +543,7 @@ function render(){
   const bc=document.getElementById('breadcrumb'),c=document.getElementById('content');
   if(VIEW==='home'){bc.classList.add('hidden');c.innerHTML=renderHome()}
   else if(VIEW==='phase'){bc.classList.remove('hidden');bc.innerHTML=`<span onclick="navHome()">Home</span> / ${esc(VIEW_PHASE)}`;c.innerHTML=renderPhaseView()}
-  else if(VIEW==='task'){bc.classList.remove('hidden');const t=getTask(VIEW_TASK);const ph=t?t.phase:'';bc.innerHTML=`<span onclick="navHome()">Home</span> / <span onclick="navPhase('${encPhase(ph)}')">${esc(ph)}</span> / ${esc(t?t.work:'')}`;c.innerHTML=renderTaskView()}
+  else if(VIEW==='task'){bc.classList.remove('hidden');const t=getTask(VIEW_TASK);const ph=t?t.phase:'';bc.innerHTML=`<span onclick="navHome()">Home</span> / <span onclick="navPhase(${phaseIdx(ph)})">${esc(ph)}</span> / ${esc(t?t.work:'')}`;c.innerHTML=renderTaskView()}
 }
 
 function renderHome(){
@@ -575,13 +578,13 @@ function renderHome(){
   }
 
   // Phase cards
-  getPhases().forEach(phase=>{
+  getPhases().forEach((phase,pi)=>{
     const tasks=getTasksForPhase(phase);
     const pDone=tasks.filter(t=>t.status==='done').length;
     const pct=tasks.length?Math.round(pDone/tasks.length*100):0;
     const dates=tasks.map(t=>t.scheduledDate).sort();
     const dateRange=dates.length?dayLabel(dates[0])+'–'+dayLabel(dates[dates.length-1]):'';
-    h+=`<div class="phase-card" onclick="navPhase('${encPhase(phase)}')">
+    h+=`<div class="phase-card" onclick="navPhase(${pi})">
       <div class="phase-card-header"><h2>${esc(phase)}</h2><span class="phase-card-dates">${dateRange}</span></div>
       <div class="phase-card-body"><div class="phase-stats"><span><strong>${tasks.length}</strong> tasks</span><span><strong>${pDone}</strong> done</span></div>
       <div class="phase-progress"><div class="phase-progress-fill" style="width:${pct}%"></div></div></div></div>`;
@@ -744,7 +747,7 @@ function renderTaskView(){
         <label style="font-size:13px">Order:</label>
         <input type="number" value="${t.order}" style="width:70px;padding:6px;border:1px solid #d0dce8;border-radius:6px;font-size:13px" onchange="updateTaskField('${t.id}','order',parseInt(this.value));render()">
       </div></div>`;
-    h+=`<div class="detail-section" style="border:none"><button class="btn btn-danger" onclick="if(confirm('Delete this task?')){DATA.tasks=DATA.tasks.filter(x=>x.id!=='${t.id}');saveData(DATA);navPhase('${encPhase(t.phase)}')}">Delete Task</button></div>`;
+    h+=`<div class="detail-section" style="border:none"><button class="btn btn-danger" onclick="if(confirm('Delete this task?')){DATA.tasks=DATA.tasks.filter(x=>x.id!=='${t.id}');saveData(DATA);navPhase(phaseIdx(t.phase))}">Delete Task</button></div>`;
   }
 
   h+=`</div></div>`;
