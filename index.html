@@ -311,12 +311,12 @@ const DEFAULT_TASKS=[
   {id:'t3',phase:'Phase 1: Demo & Site Prep',work:'Layout & string lines, dig/prep kitchen slab',scheduledDate:'2026-07-06',completedDate:null,status:'planned',order:3,dependsOn:['t2'],materials:['String line','Stakes','Chalk line','Laser level','Tape measure','Shovels','Gravel'],notes:'',links:[]},
   {id:'t4',phase:'Phase 1: Demo & Site Prep',work:'Grade north patio, prep for slab/pier footings',scheduledDate:'2026-07-11',completedDate:null,status:'planned',order:4,dependsOn:['t3'],materials:['Shovels','Rake','Tamper','Gravel','Level'],notes:'',links:[]},
   // Phase 2
-  {id:'t5',phase:'Phase 2: Foundation & Framing',work:'Pour kitchen slab or set piers (north 14×10)',scheduledDate:'2026-07-13',completedDate:null,status:'planned',order:5,dependsOn:['t4'],materials:['Concrete','Rebar','Form boards','Screed board','Float/trowel','Level'],notes:'If slab: need concrete truck or 60+ bags Quikrete. If piers: 12-16 pier blocks + 4×6 beams.',links:[]},
-  {id:'t6',phase:'Phase 2: Foundation & Framing',work:'Build raised bathroom platform',scheduledDate:'2026-07-17',completedDate:null,status:'planned',order:6,dependsOn:['t4'],materials:['PT 2×6 joists','PT 4×4 posts','Plywood subfloor (3/4")','Joist hangers','Concrete','Level'],notes:'Platform needs to match existing office floor height. PT lumber for ground contact.',links:[]},
-  {id:'t7',phase:'Phase 2: Foundation & Framing',work:'Continue bathroom platform',scheduledDate:'2026-07-18',completedDate:null,status:'planned',order:7,dependsOn:['t6'],materials:[],notes:'',links:[]},
-  {id:'t8',phase:'Phase 2: Foundation & Framing',work:'Frame east walls (12×8) — full enclosure',scheduledDate:'2026-07-20',completedDate:null,status:'planned',order:8,dependsOn:['t5','t7'],materials:['2×4 studs','2×4 plates','Framing nails','Speed square','Circular saw','Tape measure'],notes:'Build walls on ground, tilt up. Need helper to hold.',links:[]},
-  {id:'t9',phase:'Phase 2: Foundation & Framing',work:'Frame north walls (14×10), headers',scheduledDate:'2026-07-25',completedDate:null,status:'planned',order:9,dependsOn:['t5'],materials:['2×4 studs','Header lumber','Jack/king studs','Cripples'],notes:'Partial enclosure — determine which sides stay open.',links:[]},
-  {id:'t10',phase:'Phase 2: Foundation & Framing',work:'Frame bathroom, tie into office',scheduledDate:'2026-07-27',completedDate:null,status:'planned',order:10,dependsOn:['t7'],materials:['2×4 studs','Lag bolts (for tie-in)','Simpson ties'],notes:'Tie new framing into existing office wall.',links:[]},
+  {id:'t5',phase:'Phase 2: Foundation & Framing',work:'Pour kitchen slab or set piers (10×14 area, north of east room)',scheduledDate:'2026-07-13',completedDate:null,status:'planned',order:5,dependsOn:['t4'],materials:['Concrete','Rebar','Form boards','Screed board','Float/trowel','Level'],notes:'Kitchen is 10\' E-W × 14\' N-S, ground level. If slab: need concrete truck or 60+ bags Quikrete. If piers: pier blocks + beams.',links:[]},
+  {id:'t6',phase:'Phase 2: Foundation & Framing',work:'Build raised bathroom platform (8×4.5) south of east room',scheduledDate:'2026-07-17',completedDate:null,status:'planned',order:6,dependsOn:['t4'],materials:['PT 2×6 joists','PT 4×4 posts','Plywood subfloor (3/4")','Joist hangers','Concrete','Level'],notes:'2\' taken from east room + 2.5\' extending south. Platform matches east room floor height.',links:[]},
+  {id:'t7',phase:'Phase 2: Foundation & Framing',work:'Continue bathroom platform + build 4\' steps (north of east room)',scheduledDate:'2026-07-18',completedDate:null,status:'planned',order:7,dependsOn:['t6'],materials:['PT lumber','Concrete','Stair stringers'],notes:'Steps are 4\' wide against east wall, connecting ground-level kitchen up to raised east room.',links:[]},
+  {id:'t8',phase:'Phase 2: Foundation & Framing',work:'Frame east room walls (8×10) — full enclosure',scheduledDate:'2026-07-20',completedDate:null,status:'planned',order:8,dependsOn:['t5','t7'],materials:['2×4 studs','2×4 plates','Framing nails','Speed square','Circular saw','Tape measure'],notes:'8\' E-W × 10\' N-S (lost 2\' to bathroom). Build walls on ground, tilt up. 6\' opening centered on west wall into office.',links:[]},
+  {id:'t9',phase:'Phase 2: Foundation & Framing',work:'Frame kitchen walls (10×14), east side open, headers',scheduledDate:'2026-07-25',completedDate:null,status:'planned',order:9,dependsOn:['t5'],materials:['2×4 studs','Header lumber','Jack/king studs','Cripples'],notes:'10\' E-W × 14\' N-S. East wall stays open. East boundary aligns with east room east wall.',links:[]},
+  {id:'t10',phase:'Phase 2: Foundation & Framing',work:'Frame bathroom walls (8×4.5), tie into east room south wall',scheduledDate:'2026-07-27',completedDate:null,status:'planned',order:10,dependsOn:['t7'],materials:['2×4 studs','Lag bolts (for tie-in)','Simpson ties'],notes:'Bathroom extends 2.5\' south beyond office floor line. Raised foundation, ties into east room.',links:[]},
   {id:'t11',phase:'Phase 2: Foundation & Framing',work:'Sheathe walls, housewrap',scheduledDate:'2026-07-31',completedDate:null,status:'planned',order:11,dependsOn:['t8','t9','t10'],materials:['OSB/plywood sheathing','Tyvek housewrap','Housewrap tape','Cap nails','Stapler'],notes:'',links:[]},
   {id:'t12',phase:'Phase 2: Foundation & Framing',work:'Complete sheathing & housewrap',scheduledDate:'2026-08-01',completedDate:null,status:'planned',order:12,dependsOn:['t11'],materials:[],notes:'',links:[]},
   // Phase 3
@@ -349,12 +349,16 @@ const DEFAULT_TASKS=[
 _id=34;
 
 const DEFAULT_SCOPE=[
-  '10×12 conditioned office on raised foundation (existing core)',
-  'East patio 12×8 → fully enclosed addition',
-  'North patio 14×20 → partially enclosed 14×10 ground-level kitchen',
-  'New small raised bathroom addition',
-  'Existing 8×8 outdoor bathroom → cut to ~4×8',
-  'Fence + landscaping'
+  'Office 10×12 — raised foundation, conditioned, existing core (120 sf)',
+  'East Room 8×10 — raised, fully enclosed addition (80 sf)',
+  'New Bathroom 8×4.5 — raised, south of east room, 2\' from room + 2.5\' extension (36 sf)',
+  'Kitchen 10×14 — ground level, north of east room, east side open (140 sf)',
+  'Existing Bathroom 4×8 — halved from 8×8, SE corner against east fence (32 sf, detached)',
+  '6\' opening centered on office east wall into east room',
+  '4\' steps at north of east room against east wall (kitchen to raised level)',
+  'Fence along south (2.5\' from new bath) and east (8\' from building)',
+  'Gate on east fence, 5\' north of existing bathroom',
+  'Total building: 376 sq ft + 32 sf detached bath'
 ];
 const DEFAULT_RISKS=[
   'Permits: Determine strategy now — inspection delays could push schedule.',
