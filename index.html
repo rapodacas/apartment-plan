@@ -420,7 +420,7 @@ function initFirebaseSync(){
     if(val.tasks)LS.set('tasks',val.tasks);
     if(val.workers)LS.set('workers',val.workers);
     // Reload and re-render
-    DATA=loadData();
+    DATA=loadData();fixAllTasks();
     _firebaseReady=true;
     render();
     console.log('Synced from Firebase');
@@ -486,7 +486,7 @@ function toggleAuth(){if(USER)doLogout();else document.getElementById('login-dro
 function doLogin(){
   const uid=document.getElementById('login-user').value,pin=document.getElementById('login-pin').value;
   if(!uid){document.getElementById('login-err').textContent='Select a name';document.getElementById('login-err').classList.remove('hidden');return}
-  DATA=loadData();if(DATA.pins[uid]!==pin){document.getElementById('login-err').textContent='Wrong PIN';document.getElementById('login-err').classList.remove('hidden');return}
+  DATA=loadData();fixAllTasks();if(DATA.pins[uid]!==pin){document.getElementById('login-err').textContent='Wrong PIN';document.getElementById('login-err').classList.remove('hidden');return}
   USER=uid;LS.set('auth',uid);LS.set('authMethod','pin');document.getElementById('login-dropdown').classList.add('hidden');document.getElementById('login-pin').value='';render();
 }
 function doLogout(){LS.set('auth',null);LS.set('authMethod',null);USER=null;render()}
@@ -505,6 +505,9 @@ function navTask(taskId){VIEW='task';VIEW_TASK=taskId;render()}
 // ── Helpers ──
 function todayStr(){return new Date().toISOString().slice(0,10)}
 function getTask(id){return DATA.tasks.find(t=>t.id===id)}
+// Firebase drops empty arrays — normalize task fields
+function fixTask(t){t.dependsOn=t.dependsOn||[];t.materials=t.materials||[];t.links=t.links||[];t.notes=t.notes||'';return t}
+function fixAllTasks(){DATA.tasks.forEach(fixTask)}
 function getPhases(){const seen=[];DATA.tasks.forEach(t=>{if(!seen.includes(t.phase))seen.push(t.phase)});return seen}
 function getTasksForPhase(phase){return DATA.tasks.filter(t=>t.phase===phase).sort((a,b)=>a.order-b.order)}
 function getTasksForDate(date){return DATA.tasks.filter(t=>t.scheduledDate===date).sort((a,b)=>a.order-b.order)}
@@ -536,7 +539,7 @@ function rescheduleTask(taskId,newDate){
 
 // ── Render ──
 function render(){
-  DATA=loadData();
+  DATA=loadData();fixAllTasks();
   const lbl=document.getElementById('header-user-label'),btn=document.getElementById('auth-btn');
   if(isLoggedIn()){lbl.textContent=(LS.get('googleName',null)||USER.charAt(0).toUpperCase()+USER.slice(1))+(isAdmin()?' (Admin)':'');btn.textContent='Log Out'}
   else{lbl.textContent='';btn.textContent='Log In'}
@@ -983,7 +986,7 @@ function initTheme(){
 // Init
 (function(){
   initTheme();
-  DATA=loadData();
+  DATA=loadData();fixAllTasks();
   const saved=LS.get('auth',null);
   if(saved){const method=LS.get('authMethod',null);if(method==='google'||DATA.pins[saved])USER=saved}
   // Sync _id counter
