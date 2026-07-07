@@ -49,8 +49,7 @@ body.light #login-dropdown button.pin-btn{background:#2a4a6a}
 body.light .login-err{color:#c44}
 body.light .login-divider{color:#aaa}
 body.light .login-divider::before,body.light .login-divider::after{background:#ddd}
-body.light .breadcrumb{background:#e8eef4;color:#6a8aaa;border-color:#d0dce8}
-body.light .breadcrumb span{color:#2a6a9a}
+/* breadcrumb removed — bottom nav replaces it */
 body.light .info-card{background:#fff;border-color:#e0e8f0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 body.light .info-card h2{color:#2a4a6a}
 body.light .summary-stat{background:#fff;border-color:#e0e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
@@ -109,7 +108,56 @@ body.light .modal input,body.light .modal select,body.light .modal textarea{back
 body.light .modal-btns .btn-primary{background:#2a4a6a;color:#fff}
 body.light .modal-btns .btn-cancel{background:#eee;color:#555}
 
-body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px;transition:background .2s,color .2s}
+body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px;transition:background .2s,color .2s;padding-bottom:60px}
+
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#161b22;border-top:1px solid #30363d;z-index:100;height:56px}
+.bottom-nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;color:#8b949e;font-size:10px;cursor:pointer;padding:6px;font-weight:600}
+.bottom-nav button.active{color:#58a6ff}
+.bottom-nav button .nav-icon{font-size:20px}
+body.light .bottom-nav{background:#fff;border-top-color:#d0dce8}
+body.light .bottom-nav button{color:#6a8aaa}
+body.light .bottom-nav button.active{color:#2a6a9a}
+
+/* Tab content */
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* Phases accordion */
+.phase-acc{margin:8px 16px;border-radius:10px;border:1px solid #21262d;overflow:hidden}
+.phase-acc-header{background:#1a3a5c;color:#fff;padding:14px 18px;font-size:15px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.phase-acc-header .arrow{transition:transform .2s}
+.phase-acc-header.open .arrow{transform:rotate(180deg)}
+.phase-acc-body{display:none;background:#161b22}
+.phase-acc-body.open{display:block}
+.phase-task{display:flex;align-items:center;padding:12px 18px;gap:12px;border-bottom:1px solid #21262d;cursor:pointer}
+.phase-task:last-child{border:none}
+.phase-task:nth-child(odd){background:#1c2533}
+.phase-task .pt-date{min-width:60px;font-weight:700;font-size:14px}
+.phase-task .pt-date span{font-size:10px;color:#8b949e;font-weight:400;display:block}
+.phase-task .pt-work{flex:1;font-size:14px}
+.pt-status{font-size:11px;padding:3px 8px;border-radius:8px;font-weight:600}
+.pt-status.overdue{background:#3d1418;color:#f85149}
+.pt-status.planned{background:#1c2533;color:#8b949e}
+.pt-status.in-progress{background:#3d2e00;color:#d29922}
+.pt-status.done{background:#0d2818;color:#3fb950}
+.phase-acc-progress{height:4px;background:#21262d;margin:0 18px 12px}
+.phase-acc-progress-fill{height:100%;background:#3fb950;border-radius:2px}
+.phase-task-workers{display:flex;gap:3px;flex-wrap:wrap}
+
+body.light .phase-acc{border-color:#e0e8f0}
+body.light .phase-acc-header{background:#2a4a6a}
+body.light .phase-acc-body{background:#fff}
+body.light .phase-task:nth-child(odd){background:#dce8f5}
+body.light .phase-task{border-color:#e0e8f0}
+body.light .pt-status.overdue{background:#f8d7da;color:#721c24}
+body.light .pt-status.planned{background:#e0e8f0;color:#6a8aaa}
+body.light .pt-status.in-progress{background:#fff3cd;color:#856404}
+body.light .pt-status.done{background:#d4edda;color:#155724}
+body.light .phase-acc-progress{background:#e0e8f0}
+
+/* Task placeholder */
+.task-placeholder{text-align:center;padding:60px 20px;color:#8b949e;font-size:15px}
 .hidden{display:none!important}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
@@ -129,9 +177,7 @@ a:hover{text-decoration:underline}
 .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:#30363d}
 #g-signin-btn{display:flex;justify-content:center;margin-bottom:6px}
 
-.breadcrumb{padding:12px 18px;font-size:16px;color:#8b949e;background:#161b22;border-bottom:1px solid #21262d}
-.breadcrumb span{cursor:pointer;color:#58a6ff}
-.breadcrumb span:hover{text-decoration:underline}
+/* breadcrumb CSS removed */
 
 .info-card{background:#161b22;margin:14px 16px;border-radius:10px;padding:20px 22px;border:1px solid #21262d}
 .info-card h2{font-size:19px;color:#58a6ff;margin-bottom:12px}
@@ -328,8 +374,22 @@ body.light .toast .toast-title{color:#2a6a9a}
 </div>
 
 <div id="toast-container" class="toast-container"></div>
-<div id="breadcrumb" class="breadcrumb hidden"></div>
-<div id="content"></div>
+
+<div id="tab-calendar" class="tab-content active"></div>
+<div id="tab-phases" class="tab-content"></div>
+<div id="tab-task" class="tab-content"></div>
+
+<div class="bottom-nav" id="bottom-nav">
+  <button class="active" id="btn-calendar" onclick="switchTab('calendar')">
+    <span class="nav-icon">&#x1F4C5;</span>Calendar
+  </button>
+  <button id="btn-phases" onclick="switchTab('phases')">
+    <span class="nav-icon">&#x1F4CB;</span>Phases
+  </button>
+  <button id="btn-task" onclick="switchTab('task')">
+    <span class="nav-icon">&#x1F527;</span>Task
+  </button>
+</div>
 
 <div id="modal-overlay" class="modal-overlay hidden">
   <div id="modal" class="modal"></div>
@@ -503,7 +563,7 @@ async function seedFirebaseIfEmpty(){
   }
 }
 
-let DATA,USER=null,VIEW='home',VIEW_PHASE=null,VIEW_TASK=null,HOME_TAB='calendar';
+let DATA,USER=null,TAB='calendar',SELECTED_TASK=null,EXPANDED_PHASE=null;
 
 // ── Auth (OAuth2 token client for Drive API access) ──
 let ACCESS_TOKEN=null;
@@ -561,13 +621,20 @@ function isAdmin(){return USER==='raoul'}
 function isLoggedIn(){return USER!==null}
 
 // ── Navigation ──
-function navHome(){VIEW='home';VIEW_PHASE=null;VIEW_TASK=null;render()}
+function switchTab(tab){
+  TAB=tab;render();
+}
+function navHome(){TAB='calendar';render()}
 function navPhase(idx){
-  if(typeof idx==='number'){VIEW='phase';VIEW_PHASE=getPhases()[idx];VIEW_TASK=null;render()}
-  else{VIEW='phase';VIEW_PHASE=idx;VIEW_TASK=null;render()} // legacy string support
+  const phase=typeof idx==='number'?getPhases()[idx]:idx;
+  EXPANDED_PHASE=phase;
+  TAB='phases';render();
+  // Scroll to the expanded phase
+  setTimeout(()=>{const el=document.getElementById('phase-acc-'+slugify(phase));if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},50);
 }
 function phaseIdx(name){return getPhases().indexOf(name)}
-function navTask(taskId){VIEW='task';VIEW_TASK=taskId;render()}
+function navTask(taskId){SELECTED_TASK=taskId;TAB='task';render()}
+function slugify(s){return(s||'').replace(/[^a-zA-Z0-9]/g,'-').toLowerCase()}
 
 // ── Helpers ──
 function todayStr(){return new Date().toISOString().slice(0,10)}
@@ -610,13 +677,22 @@ function render(){
   const lbl=document.getElementById('header-user-label'),btn=document.getElementById('auth-btn');
   if(isLoggedIn()){lbl.textContent=(LS.get('googleName',null)||USER.charAt(0).toUpperCase()+USER.slice(1))+(isAdmin()?' (Admin)':'');btn.textContent='Log Out'}
   else{lbl.textContent='';btn.textContent='Log In'}
-  const bc=document.getElementById('breadcrumb'),c=document.getElementById('content');
-  if(VIEW==='home'){bc.classList.add('hidden');c.innerHTML=renderHome()}
-  else if(VIEW==='phase'){bc.classList.remove('hidden');bc.innerHTML=`<span onclick="navHome()">Home</span> / ${esc(VIEW_PHASE)}`;c.innerHTML=renderPhaseView()}
-  else if(VIEW==='task'){bc.classList.remove('hidden');const t=getTask(VIEW_TASK);const ph=t?t.phase:'';bc.innerHTML=`<span onclick="navHome()">Home</span> / <span onclick="navPhase(${phaseIdx(ph)})">${esc(ph)}</span> / ${esc(t?t.work:'')}`;c.innerHTML=renderTaskView()}
+
+  // Update tab content
+  document.getElementById('tab-calendar').innerHTML=renderCalendarTab();
+  document.getElementById('tab-phases').innerHTML=renderPhasesTab();
+  document.getElementById('tab-task').innerHTML=renderTaskTab();
+
+  // Toggle active tab
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.remove('active'));
+  const tabEl=document.getElementById('tab-'+TAB);
+  if(tabEl)tabEl.classList.add('active');
+  const btnEl=document.getElementById('btn-'+TAB);
+  if(btnEl)btnEl.classList.add('active');
 }
 
-function renderHome(){
+function renderCalendarTab(){
   let h='';
   const total=DATA.tasks.length;
   const done=DATA.tasks.filter(t=>t.status==='done').length;
@@ -642,21 +718,19 @@ function renderHome(){
     h+=`<div class="overdue-banner"><h3>Overdue (${items.length})</h3>`;
     items.forEach(t=>{
       h+=`<div class="overdue-item"><span style="flex:1;cursor:pointer" onclick="navTask('${t.id}')"><strong>${dayLabel(t.scheduledDate)}</strong> — ${esc(t.work)}</span>`;
-      if(isAdmin())h+=`<button class="btn btn-warn btn-sm" onclick="event.stopPropagation();pushScheduleFrom('${t.id}')">Push →</button>`;
+      if(isAdmin())h+=`<button class="btn btn-warn btn-sm" onclick="event.stopPropagation();pushScheduleFrom('${t.id}')">Push &rarr;</button>`;
       h+=`</div>`;
     });
     h+=`</div>`;
   }
 
-  // View toggle
-  h+=`<div class="view-toggle">
-    <button class="${HOME_TAB==='calendar'?'active':''}" onclick="HOME_TAB='calendar';render()">Calendar</button>
-    <button class="${HOME_TAB==='phases'?'active':''}" onclick="HOME_TAB='phases';render()">Phases</button>
-  </div>`;
+  h+=renderCalendar();
+  h+=`<div class="app-footer"><a href="floorplan.html" target="_blank">View Floor Plan</a> &middot; 864 Farr Ave, Escondido</div>`;
+  return h;
+}
 
-  if(HOME_TAB==='calendar'){
-    h+=renderCalendar();
-  }else{
+function renderPhasesTab(){
+  let h='';
 
   // Scope
   if(isAdmin()){
@@ -665,17 +739,30 @@ function renderHome(){
     h+=`<div class="info-card"><h2>Scope</h2><ul>${DATA.scope.map(s=>`<li>${esc(s)}</li>`).join('')}</ul></div>`;
   }
 
-  // Phase cards
+  // Phase accordions
   getPhases().forEach((phase,pi)=>{
     const tasks=getTasksForPhase(phase);
     const pDone=tasks.filter(t=>t.status==='done').length;
     const pct=tasks.length?Math.round(pDone/tasks.length*100):0;
-    const dates=tasks.map(t=>t.scheduledDate).sort();
-    const dateRange=dates.length?dayLabel(dates[0])+'–'+dayLabel(dates[dates.length-1]):'';
-    h+=`<div class="phase-card" onclick="navPhase(${pi})">
-      <div class="phase-card-header"><h2>${esc(phase)}</h2><span class="phase-card-dates">${dateRange}</span></div>
-      <div class="phase-card-body"><div class="phase-stats"><span><strong>${tasks.length}</strong> tasks</span><span><strong>${pDone}</strong> done</span></div>
-      <div class="phase-progress"><div class="phase-progress-fill" style="width:${pct}%"></div></div></div></div>`;
+    const isOpen=EXPANDED_PHASE===phase;
+    h+=`<div class="phase-acc" id="phase-acc-${slugify(phase)}">
+      <div class="phase-acc-header ${isOpen?'open':''}" onclick="toggleAcc(this,'${escAttr(phase)}')">
+        <span>${esc(phase)}</span>
+        <span style="font-size:12px;opacity:.7">${pDone}/${tasks.length} <span class="arrow">&#x25BC;</span></span>
+      </div>
+      <div class="phase-acc-body ${isOpen?'open':''}">
+        <div class="phase-acc-progress"><div class="phase-acc-progress-fill" style="width:${pct}%"></div></div>`;
+    tasks.forEach(t=>{
+      const st=getEffectiveStatus(t);
+      const workers=DATA.workers[t.scheduledDate]||[];
+      h+=`<div class="phase-task" onclick="navTask('${t.id}')">
+        <div class="pt-date">${dayLabel(t.scheduledDate)}<span>${dayType(t.scheduledDate)}</span></div>
+        <div class="pt-work">${esc(t.work)}</div>
+        <div class="phase-task-workers">${workers.map(w=>`<span class="worker-badge ${w}" style="font-size:10px;padding:2px 6px">${w.charAt(0).toUpperCase()}</span>`).join('')}</div>
+        <span class="pt-status ${st}">${st.replace('-',' ')}</span>
+      </div>`;
+    });
+    h+=`</div></div>`;
   });
 
   if(isAdmin())h+=`<div style="padding:8px 16px"><button class="btn btn-primary" onclick="addTaskModal()">+ Add Task</button></div>`;
@@ -686,10 +773,26 @@ function renderHome(){
   }else{
     h+=`<div class="info-card"><h2 style="color:#a06828">Risks & Notes</h2><ul>${DATA.risks.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div>`;
   }
-  } // end phases tab
 
-  h+=`<div class="app-footer"><a href="floorplan.html" target="_blank">View Floor Plan</a> · 864 Farr Ave, Escondido</div>`;
   return h;
+}
+
+function renderTaskTab(){
+  if(!SELECTED_TASK)return '<div class="task-placeholder">Select a task from the Phases or Calendar tab</div>';
+  return renderTaskView();
+}
+
+function toggleAcc(header,phaseName){
+  // Toggle this phase
+  if(EXPANDED_PHASE===phaseName)EXPANDED_PHASE=null;
+  else EXPANDED_PHASE=phaseName;
+  // Re-render just the accordion states without full render to avoid losing scroll
+  document.querySelectorAll('.phase-acc-header').forEach(h=>h.classList.remove('open'));
+  document.querySelectorAll('.phase-acc-body').forEach(b=>b.classList.remove('open'));
+  if(EXPANDED_PHASE){
+    header.classList.add('open');
+    header.nextElementSibling.classList.add('open');
+  }
 }
 
 function renderCalendar(){
@@ -798,26 +901,10 @@ function navDayView(date){
   }
 }
 
-function renderPhaseView(){
-  const tasks=getTasksForPhase(VIEW_PHASE);
-  let h='';
-  tasks.forEach(t=>{
-    const st=getEffectiveStatus(t);
-    const workers=DATA.workers[t.scheduledDate]||[];
-    h+=`<div class="task-card" onclick="navTask('${t.id}')"><div class="task-card-inner">
-      <div class="task-card-date">${dayLabel(t.scheduledDate)}<span class="day-type">${dayType(t.scheduledDate)}</span></div>
-      <div class="task-card-work">${esc(t.work)}${t.dependsOn.length?`<div class="task-deps">requires ${t.dependsOn.length} task${t.dependsOn.length>1?'s':''}</div>`:''}</div>
-      <div class="task-card-right">
-        <span class="task-status status-${st}" onclick="event.stopPropagation();cycleStatus('${t.id}')">${st.replace('-',' ')}</span>
-        <div class="task-card-workers">${workers.map(w=>`<span class="worker-badge ${w}">${w.charAt(0).toUpperCase()}</span>`).join('')}</div>
-      </div></div></div>`;
-  });
-  if(isAdmin())h+=`<div style="padding:8px 16px"><button class="btn btn-primary" onclick="addTaskModal('${escAttr(VIEW_PHASE)}')">+ Add Task</button></div>`;
-  return h;
-}
+// renderPhaseView removed — phases now use accordion in renderPhasesTab
 
 function renderTaskView(){
-  const t=getTask(VIEW_TASK);if(!t)return'<p>Task not found</p>';
+  const t=getTask(SELECTED_TASK);if(!t)return'<p>Task not found</p>';
   const st=getEffectiveStatus(t);
   const workers=DATA.workers[t.scheduledDate]||[];
   let h=`<div class="task-detail"><div class="task-detail-header"><h2>${esc(t.work)}</h2><div class="task-detail-sub">${esc(t.phase)} · ${dayLabel(t.scheduledDate)} · ${dayType(t.scheduledDate)||t.scheduledDate}</div></div><div class="task-detail-body">`;
@@ -936,14 +1023,14 @@ function renderTaskView(){
     h+=`<div class="detail-section"><h3>Move & Order</h3>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
         <label style="font-size:13px">Phase:</label>
-        <select onchange="updateTaskField('${t.id}','phase',this.value);VIEW_PHASE=this.value;render()" style="padding:6px;border:1px solid #d0dce8;border-radius:6px;font-size:13px">`;
+        <select onchange="updateTaskField('${t.id}','phase',this.value);render()" style="padding:6px;border:1px solid #d0dce8;border-radius:6px;font-size:13px">`;
     getPhases().forEach(p=>h+=`<option value="${escAttr(p)}" ${p===t.phase?'selected':''}>${esc(p)}</option>`);
     h+=`</select></div>
       <div style="display:flex;gap:8px;align-items:center">
         <label style="font-size:13px">Order:</label>
         <input type="number" value="${t.order}" style="width:70px;padding:6px;border:1px solid #d0dce8;border-radius:6px;font-size:13px" onchange="updateTaskField('${t.id}','order',parseInt(this.value));render()">
       </div></div>`;
-    h+=`<div class="detail-section" style="border:none"><button class="btn btn-danger" onclick="if(confirm('Delete this task?')){DATA.tasks=DATA.tasks.filter(x=>x.id!=='${t.id}');saveData(DATA);navPhase(phaseIdx(t.phase))}">Delete Task</button></div>`;
+    h+=`<div class="detail-section" style="border:none"><button class="btn btn-danger" onclick="if(confirm('Delete this task?')){DATA.tasks=DATA.tasks.filter(x=>x.id!=='${t.id}');saveData(DATA);switchTab('phases')}">Delete Task</button></div>`;
   }
 
   h+=`</div></div>`;
@@ -963,7 +1050,7 @@ async function initServiceWorker(){
     // Listen for messages from SW (scroll to day on notification click)
     navigator.serviceWorker.addEventListener('message',e=>{
       if(e.data?.type==='SCROLL_TO_DAY'&&e.data.date){
-        HOME_TAB='calendar';VIEW='home';render();
+        TAB='calendar';render();
         setTimeout(()=>{const el=document.getElementById('day-'+e.data.date);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.animation='toastIn .3s ease'}},100);
       }
     });
@@ -1038,7 +1125,7 @@ function showToast(title,body,date){
   toast.innerHTML=`<div class="toast-title">${esc(title)}</div>${esc(body)}`;
   toast.onclick=()=>{
     toast.remove();
-    if(date){HOME_TAB='calendar';VIEW='home';render();
+    if(date){TAB='calendar';render();
       setTimeout(()=>{const el=document.getElementById('day-'+date);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='2px solid #58a6ff';setTimeout(()=>el.style.outline='',3000)}},100);
     }
   };
