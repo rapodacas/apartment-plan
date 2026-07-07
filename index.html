@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Apartment Build — 864 Farr Ave</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a3a5c">
+<link rel="apple-touch-icon" href="icon-192.png">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
@@ -273,6 +278,15 @@ body.light .cal-worker.charlie{background:#6a3a9a;color:#fff}
 body.light .cal-worker.vinny{background:#3a9a6a;color:#fff}
 body.light .cal-worker.joaquin{background:#9a6a3a;color:#fff}
 
+/* Toast notifications */
+.toast-container{position:fixed;top:60px;right:16px;z-index:300;display:flex;flex-direction:column;gap:8px;max-width:340px}
+.toast{background:#1a3a5c;border:1px solid #58a6ff;border-radius:10px;padding:14px 18px;color:#e6edf3;font-size:14px;box-shadow:0 4px 20px rgba(0,0,0,.4);cursor:pointer;animation:toastIn .3s ease;line-height:1.5}
+.toast .toast-title{font-weight:700;font-size:15px;margin-bottom:4px;color:#58a6ff}
+.toast .toast-close{position:absolute;top:8px;right:10px;color:#8b949e;cursor:pointer;font-size:14px}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+body.light .toast{background:#fff;border-color:#2a6a9a;color:#2d2d2d;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+body.light .toast .toast-title{color:#2a6a9a}
+
 .app-footer{text-align:center;padding:20px;font-size:14px;color:#8b949e}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
@@ -313,6 +327,7 @@ body.light .cal-worker.joaquin{background:#9a6a3a;color:#fff}
   <button class="pin-btn" onclick="doLogin()">Log In with PIN</button>
 </div>
 
+<div id="toast-container" class="toast-container"></div>
 <div id="breadcrumb" class="breadcrumb hidden"></div>
 <div id="content"></div>
 
@@ -433,6 +448,7 @@ const db=firebase.database();
 const planRef=db.ref('plan');
 let _firebaseReady=false;
 let _skipNextFirebaseUpdate=false;
+let _prevWorkers=null; // for detecting signup changes
 
 // ── Storage (Firebase primary, localStorage fallback) ──
 const LS={
@@ -612,6 +628,14 @@ function renderHome(){
     <div class="summary-stat"><div class="num">${getPhases().length}</div><div class="label">Phases</div></div>
   </div>`;
 
+  // Notification enable
+  if(isAdmin()&&checkNotificationSupport()&&!isNotificationsEnabled()){
+    h+=`<div class="info-card" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <span style="font-size:14px">Get notified when workers sign up</span>
+      <button class="btn btn-primary btn-sm" onclick="enableNotifications()">Enable Notifications</button>
+    </div>`;
+  }
+
   // Overdue banner
   if(overdue>0){
     const items=DATA.tasks.filter(t=>getEffectiveStatus(t)==='overdue');
@@ -709,7 +733,7 @@ function renderCalendar(){
 
       const onclick=tasks.length?` onclick="navDayView('${dateStr}')"`:isWork?` onclick="navDayView('${dateStr}')"`:''
 
-      h+=`<div class="${cellClass}"${onclick}>`;
+      h+=`<div class="${cellClass}" id="day-${dateStr}"${onclick}>`;
       h+=`<div class="cal-day-num">${d}</div>`;
 
       if(tasks.length){
@@ -926,6 +950,102 @@ function renderTaskView(){
   return h;
 }
 
+// ── Push Notifications ──
+const VAPID_PUBLIC='BMniAuSsNetW4QxhshvbHNZYKzeFs9jK2IkGd6yu9h3RXqohpjZvvshfKgSnkJLXh-kDCzmoq_SogFUwgSVXab4';
+const VAPID_PRIVATE='fiz4abuSZP2LVouKL-T7adHU9u75kZRXbdQSl2sdfa0';
+let _swRegistration=null;
+
+async function initServiceWorker(){
+  if(!('serviceWorker' in navigator))return;
+  try{
+    _swRegistration=await navigator.serviceWorker.register('service-worker.js');
+    console.log('SW registered');
+    // Listen for messages from SW (scroll to day on notification click)
+    navigator.serviceWorker.addEventListener('message',e=>{
+      if(e.data?.type==='SCROLL_TO_DAY'&&e.data.date){
+        HOME_TAB='calendar';VIEW='home';render();
+        setTimeout(()=>{const el=document.getElementById('day-'+e.data.date);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.animation='toastIn .3s ease'}},100);
+      }
+    });
+  }catch(e){console.error('SW registration failed:',e)}
+}
+
+async function subscribeToPush(){
+  if(!_swRegistration)return null;
+  // Check existing subscription
+  let sub=await _swRegistration.pushManager.getSubscription();
+  if(sub)return sub;
+  // Request permission
+  const perm=await Notification.requestPermission();
+  if(perm!=='granted'){console.log('Notification permission denied');return null}
+  // Subscribe
+  const vapidBytes=Uint8Array.from(atob(VAPID_PUBLIC.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+  sub=await _swRegistration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:vapidBytes});
+  return sub;
+}
+
+async function enableNotifications(){
+  const sub=await subscribeToPush();
+  if(!sub)return;
+  // Store subscription in Firebase under /subscriptions/{userId}
+  const subData=sub.toJSON();
+  await db.ref('subscriptions/'+(USER||'anon')).set(subData);
+  console.log('Push subscription saved');
+  render();
+}
+
+async function sendPushToAdmins(title,body,date){
+  // Get admin subscriptions from Firebase
+  const snapshot=await db.ref('subscriptions/raoul').once('value');
+  const subData=snapshot.val();
+  if(!subData||!subData.endpoint)return;
+
+  // Send push via the subscription endpoint
+  // Client-side push requires the web-push protocol — we'll use a lightweight fetch approach
+  // For client-to-client push, we store the notification in Firebase and let the admin's SW poll
+  // Simpler: write to a /notifications node that the admin's app watches
+  await db.ref('notifications').push({title,body,date,timestamp:Date.now(),read:false});
+}
+
+function checkNotificationSupport(){
+  return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+}
+
+function isNotificationsEnabled(){
+  return Notification.permission==='granted';
+}
+
+// Watch for new notifications (in-app)
+function initNotificationListener(){
+  db.ref('notifications').orderByChild('timestamp').startAt(Date.now()).on('child_added',snapshot=>{
+    const n=snapshot.val();
+    if(!n||n.read)return;
+    showToast(n.title,n.body,n.date);
+    // Show browser notification if page not focused
+    if(document.hidden&&Notification.permission==='granted'){
+      new Notification(n.title,{body:n.body,icon:'icon-192.png',tag:'signup-'+n.date});
+    }
+    // Mark as read
+    snapshot.ref.update({read:true});
+  });
+}
+
+// Toast UI
+function showToast(title,body,date){
+  const container=document.getElementById('toast-container');
+  const toast=document.createElement('div');
+  toast.className='toast';
+  toast.innerHTML=`<div class="toast-title">${esc(title)}</div>${esc(body)}`;
+  toast.onclick=()=>{
+    toast.remove();
+    if(date){HOME_TAB='calendar';VIEW='home';render();
+      setTimeout(()=>{const el=document.getElementById('day-'+date);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='2px solid #58a6ff';setTimeout(()=>el.style.outline='',3000)}},100);
+    }
+  };
+  container.appendChild(toast);
+  setTimeout(()=>{if(toast.parentNode)toast.remove()},8000);
+}
+
 // ── Drive Access (user-gesture triggered, won't be popup-blocked) ──
 function requestDriveAccess(){
   if(!tokenClient){alert('Sign in with Google first.');return}
@@ -1090,8 +1210,15 @@ function updateTaskField(taskId,field,val){const t=getTask(taskId);if(!t)return;
 function toggleWorker(date){
   if(!DATA.workers[date])DATA.workers[date]=[];
   const arr=DATA.workers[date],idx=arr.indexOf(USER);
+  const signingUp=idx<0;
   if(idx>=0)arr.splice(idx,1);else arr.push(USER);
   saveData(DATA);render();
+  // Notify admin when someone signs up
+  if(signingUp&&USER&&USER!=='raoul'){
+    const name=USER.charAt(0).toUpperCase()+USER.slice(1);
+    const dl=dayLabel(date);
+    sendPushToAdmins('Worker Signup',`${name} signed up for ${dl}`,date);
+  }
 }
 function addMat(taskId){const v=document.getElementById('new-mat').value.trim();if(!v)return;const t=getTask(taskId);t.materials.push(v);saveData(DATA);render()}
 function removeMat(taskId,i){const t=getTask(taskId);t.materials.splice(i,1);saveData(DATA);render()}
@@ -1163,7 +1290,8 @@ function initTheme(){
   render();
   waitForGSI();
   // Start Firebase sync
-  seedFirebaseIfEmpty().then(()=>initFirebaseSync()).catch(e=>console.error('Firebase init error:',e));
+  seedFirebaseIfEmpty().then(()=>{initFirebaseSync();initNotificationListener()}).catch(e=>console.error('Firebase init error:',e));
+  initServiceWorker();
 })();
 </script>
 </body>
