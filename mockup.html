@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UI Mockup — Bottom Nav</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh;padding-bottom:60px}
+
+.header{background:linear-gradient(135deg,#1a3a5c,#264d73);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.header h1{font-size:17px;font-weight:600}
+
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#161b22;border-top:1px solid #30363d;z-index:100;height:56px}
+.bottom-nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;color:#8b949e;font-size:10px;cursor:pointer;padding:6px;font-weight:600}
+.bottom-nav button.active{color:#58a6ff}
+.bottom-nav button .nav-icon{font-size:20px}
+.bottom-nav button .nav-dot{width:4px;height:4px;border-radius:50%;background:#f85149;display:none}
+
+/* Tab content */
+.tab-content{display:none;padding:12px 0}
+.tab-content.active{display:block}
+
+/* Calendar (simplified) */
+.cal-month{background:#161b22;margin:12px 16px;border-radius:10px;border:1px solid #21262d;overflow:hidden}
+.cal-month-header{background:#1a3a5c;color:#fff;padding:10px 16px;font-size:15px;font-weight:600;text-align:center}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#21262d;padding:1px}
+.cal-dow{background:#0d1117;padding:5px;text-align:center;font-size:11px;color:#8b949e;font-weight:600}
+.cal-cell{background:#0d1117;min-height:52px;padding:4px 5px;font-size:12px}
+.cal-cell.work{background:#161b22}
+.cal-cell.today{box-shadow:inset 0 0 0 2px #58a6ff}
+.cal-day-num{font-weight:700;font-size:13px;color:#8b949e;margin-bottom:2px}
+.cal-cell.work .cal-day-num{color:#e6edf3}
+.cal-badge{font-size:9px;padding:1px 4px;border-radius:4px;background:#3d2e00;color:#d29922;display:inline-block}
+.cal-badge.done{background:#0d2818;color:#3fb950}
+.cal-badge.overdue{background:#3d1418;color:#f85149}
+.cal-w{font-size:8px;padding:1px 3px;border-radius:4px;font-weight:700;display:inline-block;margin-top:1px}
+.cal-w.j{background:#5c3a1a;color:#d29922}
+.cal-w.v{background:#1a5c3a;color:#3fb950}
+
+/* Phases accordion */
+.phase-acc{margin:8px 16px;border-radius:10px;border:1px solid #21262d;overflow:hidden}
+.phase-acc-header{background:#1a3a5c;color:#fff;padding:14px 18px;font-size:15px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.phase-acc-header .arrow{transition:transform .2s}
+.phase-acc-header.open .arrow{transform:rotate(180deg)}
+.phase-acc-body{display:none;background:#161b22}
+.phase-acc-body.open{display:block}
+.phase-task{display:flex;align-items:center;padding:12px 18px;gap:12px;border-bottom:1px solid #21262d;cursor:pointer}
+.phase-task:last-child{border:none}
+.phase-task:nth-child(odd){background:#1c2533}
+.phase-task .pt-date{min-width:60px;font-weight:700;font-size:14px}
+.phase-task .pt-date span{font-size:10px;color:#8b949e;font-weight:400;display:block}
+.phase-task .pt-work{flex:1;font-size:14px}
+.pt-status{font-size:11px;padding:3px 8px;border-radius:8px;font-weight:600}
+.pt-status.overdue{background:#3d1418;color:#f85149}
+.pt-status.planned{background:#1c2533;color:#8b949e}
+.pt-status.done{background:#0d2818;color:#3fb950}
+.phase-progress{height:4px;background:#21262d;margin:0 18px 12px}
+.phase-progress-fill{height:100%;background:#3fb950;border-radius:2px}
+
+/* Task detail */
+.task-header{background:#1a3a5c;color:#fff;padding:18px 20px;margin:12px 16px 0;border-radius:10px 10px 0 0}
+.task-header h2{font-size:19px;margin:0 0 4px}
+.task-header .sub{font-size:13px;opacity:.8}
+.task-body{background:#161b22;border:1px solid #21262d;border-top:none;margin:0 16px;border-radius:0 0 10px 10px}
+.task-section{padding:16px 20px;border-bottom:1px solid #21262d}
+.task-section:last-child{border:none}
+.task-section h3{font-size:15px;color:#58a6ff;margin-bottom:8px;font-weight:600}
+.status-btns{display:flex;gap:6px}
+.status-btns button{padding:8px 14px;border:2px solid #30363d;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;background:#0d1117;color:#8b949e}
+.status-btns button.active{border-color:#d29922;background:#3d2e00;color:#d29922}
+.mat-pill{display:inline-block;font-size:12px;padding:4px 10px;border-radius:12px;background:#1c2533;color:#58a6ff;border:1px solid #30363d;margin:2px}
+
+.note{text-align:center;padding:20px;font-size:13px;color:#8b949e;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>864 Farr Ave — Apartment Build</h1>
+  <span style="font-size:13px;opacity:.8">Raoul (Admin)</span>
+</div>
+
+<!-- ═══ CALENDAR TAB ═══ -->
+<div class="tab-content active" id="tab-calendar">
+  <div class="cal-month">
+    <div class="cal-month-header">July 2026</div>
+    <div class="cal-grid">
+      <div class="cal-dow">Mo</div><div class="cal-dow">Tu</div><div class="cal-dow">We</div><div class="cal-dow">Th</div><div class="cal-dow">Fr</div><div class="cal-dow">Sa</div><div class="cal-dow">Su</div>
+      <div class="cal-cell"><div class="cal-day-num">29</div></div>
+      <div class="cal-cell"><div class="cal-day-num">30</div></div>
+      <div class="cal-cell"><div class="cal-day-num">1</div></div>
+      <div class="cal-cell"><div class="cal-day-num">2</div></div>
+      <div class="cal-cell work"><div class="cal-day-num">3</div><span class="cal-badge overdue">1</span></div>
+      <div class="cal-cell work"><div class="cal-day-num">4</div><span class="cal-badge overdue">1</span></div>
+      <div class="cal-cell"><div class="cal-day-num">5</div></div>
+      <div class="cal-cell work today"><div class="cal-day-num">6</div><span class="cal-badge">1</span><div><span class="cal-w j">J</span></div></div>
+      <div class="cal-cell"><div class="cal-day-num">7</div></div>
+      <div class="cal-cell"><div class="cal-day-num">8</div></div>
+      <div class="cal-cell"><div class="cal-day-num">9</div></div>
+      <div class="cal-cell"><div class="cal-day-num">10</div></div>
+      <div class="cal-cell work"><div class="cal-day-num">11</div><span class="cal-badge">1</span></div>
+      <div class="cal-cell"><div class="cal-day-num">12</div></div>
+      <div class="cal-cell work"><div class="cal-day-num">13</div><span class="cal-badge">1</span><div><span class="cal-w j">J</span><span class="cal-w v">V</span></div></div>
+      <div class="cal-cell"><div class="cal-day-num">14</div></div>
+      <div class="cal-cell"><div class="cal-day-num">15</div></div>
+      <div class="cal-cell"><div class="cal-day-num">16</div></div>
+      <div class="cal-cell work"><div class="cal-day-num">17</div><span class="cal-badge">1</span></div>
+      <div class="cal-cell work"><div class="cal-day-num">18</div><span class="cal-badge">1</span></div>
+      <div class="cal-cell"><div class="cal-day-num">19</div></div>
+      <div class="cal-cell work"><div class="cal-day-num">20</div><span class="cal-badge">1</span><div><span class="cal-w j">J</span></div></div>
+      <div class="cal-cell"><div class="cal-day-num">21</div></div>
+      <div class="cal-cell"><div class="cal-day-num">22</div></div>
+      <div class="cal-cell"><div class="cal-day-num">23</div></div>
+      <div class="cal-cell"><div class="cal-day-num">24</div></div>
+      <div class="cal-cell work"><div class="cal-day-num">25</div><span class="cal-badge">1</span></div>
+      <div class="cal-cell"><div class="cal-day-num">26</div></div>
+      <div class="cal-cell work"><div class="cal-day-num">27</div><span class="cal-badge">1</span></div>
+      <div class="cal-cell"><div class="cal-day-num">28</div></div>
+      <div class="cal-cell"><div class="cal-day-num">29</div></div>
+      <div class="cal-cell"><div class="cal-day-num">30</div></div>
+      <div class="cal-cell work"><div class="cal-day-num">31</div><span class="cal-badge">1</span></div>
+      <div class="cal-cell"><div class="cal-day-num">1</div></div>
+      <div class="cal-cell"><div class="cal-day-num">2</div></div>
+    </div>
+  </div>
+  <p class="note">Tap any work day to see tasks</p>
+</div>
+
+<!-- ═══ PHASES TAB ═══ -->
+<div class="tab-content" id="tab-phases">
+
+  <div class="phase-acc">
+    <div class="phase-acc-header" onclick="toggleAcc(this)">
+      <span>Phase 1: Demo & Site Prep</span>
+      <span style="font-size:12px;opacity:.7">0/4 <span class="arrow">▼</span></span>
+    </div>
+    <div class="phase-acc-body">
+      <div class="phase-progress"><div class="phase-progress-fill" style="width:0%"></div></div>
+      <div class="phase-task" onclick="showTab('tab-task')">
+        <div class="pt-date">F 7/3<span>off+hol</span></div>
+        <div class="pt-work">Demo half of outdoor bathroom</div>
+        <span class="pt-status overdue">overdue</span>
+      </div>
+      <div class="phase-task" onclick="showTab('tab-task')">
+        <div class="pt-date">Sa 7/4</div>
+        <div class="pt-work">Clear patios, debris removal</div>
+        <span class="pt-status overdue">overdue</span>
+      </div>
+      <div class="phase-task" onclick="showTab('tab-task')">
+        <div class="pt-date">M 7/6<span>WFH</span></div>
+        <div class="pt-work">Layout & string lines, dig/prep slab</div>
+        <span class="pt-status planned">planned</span>
+      </div>
+      <div class="phase-task" onclick="showTab('tab-task')">
+        <div class="pt-date">Sa 7/11</div>
+        <div class="pt-work">Grade north patio, prep footings</div>
+        <span class="pt-status planned">planned</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-acc">
+    <div class="phase-acc-header" onclick="toggleAcc(this)">
+      <span>Phase 2: Foundation & Framing</span>
+      <span style="font-size:12px;opacity:.7">0/8 <span class="arrow">▼</span></span>
+    </div>
+    <div class="phase-acc-body">
+      <div class="phase-progress"><div class="phase-progress-fill" style="width:0%"></div></div>
+      <div class="phase-task">
+        <div class="pt-date">M 7/13<span>WFH</span></div>
+        <div class="pt-work">Pour kitchen slab or set piers</div>
+        <span class="pt-status planned">planned</span>
+      </div>
+      <div class="phase-task">
+        <div class="pt-date">F 7/17<span>off</span></div>
+        <div class="pt-work">Build raised bathroom platform</div>
+        <span class="pt-status planned">planned</span>
+      </div>
+      <div class="phase-task">
+        <div class="pt-date">Sa 7/18</div>
+        <div class="pt-work">Continue platform + build steps</div>
+        <span class="pt-status planned">planned</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-acc">
+    <div class="phase-acc-header" onclick="toggleAcc(this)">
+      <span>Phase 3: Roof & Envelope</span>
+      <span style="font-size:12px;opacity:.7">0/5 <span class="arrow">▼</span></span>
+    </div>
+    <div class="phase-acc-body"></div>
+  </div>
+
+  <div class="phase-acc">
+    <div class="phase-acc-header" onclick="toggleAcc(this)">
+      <span>Phase 4: Mechanicals</span>
+      <span style="font-size:12px;opacity:.7">0/5 <span class="arrow">▼</span></span>
+    </div>
+    <div class="phase-acc-body"></div>
+  </div>
+
+  <div class="phase-acc">
+    <div class="phase-acc-header" onclick="toggleAcc(this)">
+      <span>Phase 5: Interior Finish</span>
+      <span style="font-size:12px;opacity:.7">0/7 <span class="arrow">▼</span></span>
+    </div>
+    <div class="phase-acc-body"></div>
+  </div>
+
+  <div class="phase-acc">
+    <div class="phase-acc-header" onclick="toggleAcc(this)">
+      <span>Phase 6: Fixtures, Fence & Finish</span>
+      <span style="font-size:12px;opacity:.7">0/5 <span class="arrow">▼</span></span>
+    </div>
+    <div class="phase-acc-body"></div>
+  </div>
+
+</div>
+
+<!-- ═══ TASK TAB ═══ -->
+<div class="tab-content" id="tab-task">
+  <div class="task-header">
+    <h2>Layout & string lines, dig/prep slab</h2>
+    <div class="sub">Phase 1: Demo & Site Prep · M 7/6 · WFH</div>
+  </div>
+  <div class="task-body">
+    <div class="task-section">
+      <h3>Status</h3>
+      <div class="status-btns">
+        <button>Planned</button>
+        <button class="active">In Progress</button>
+        <button>Done</button>
+      </div>
+    </div>
+    <div class="task-section">
+      <h3>Scheduled Date</h3>
+      <p style="font-size:15px">M 7/6 (WFH)</p>
+    </div>
+    <div class="task-section">
+      <h3>Workers</h3>
+      <div style="display:flex;gap:6px">
+        <span style="font-size:13px;padding:4px 10px;border-radius:10px;font-weight:600;background:#5c3a1a;color:#d29922">Joaquin</span>
+      </div>
+    </div>
+    <div class="task-section">
+      <h3>Materials</h3>
+      <span class="mat-pill">String line</span>
+      <span class="mat-pill">Stakes</span>
+      <span class="mat-pill">Chalk line</span>
+      <span class="mat-pill">Laser level</span>
+      <span class="mat-pill">Tape measure</span>
+      <span class="mat-pill">Shovels</span>
+      <span class="mat-pill">Gravel</span>
+    </div>
+    <div class="task-section">
+      <h3>Dependencies</h3>
+      <span class="mat-pill" style="background:#0d2818;color:#3fb950;border-color:#3fb950">✓ Clear patios, debris removal</span>
+    </div>
+    <div class="task-section">
+      <h3>Notes</h3>
+      <p style="font-size:14px;color:#8b949e">Kitchen is 10' E-W × 14' N-S, ground level.</p>
+    </div>
+    <div class="task-section">
+      <h3>Photos / Videos / Links</h3>
+      <p style="font-size:14px;color:#8b949e">None</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BOTTOM NAV ═══ -->
+<div class="bottom-nav">
+  <button class="active" id="btn-calendar" onclick="showTab('tab-calendar')">
+    <span class="nav-icon">📅</span>
+    Calendar
+  </button>
+  <button id="btn-phases" onclick="showTab('tab-phases')">
+    <span class="nav-icon">📋</span>
+    Phases
+  </button>
+  <button id="btn-task" onclick="showTab('tab-task')">
+    <span class="nav-icon">🔧</span>
+    Task
+  </button>
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // Activate matching button
+  const btnMap={'tab-calendar':'btn-calendar','tab-phases':'btn-phases','tab-task':'btn-task'};
+  document.getElementById(btnMap[id]).classList.add('active');
+}
+
+function toggleAcc(header){
+  header.classList.toggle('open');
+  const body=header.nextElementSibling;
+  body.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
