@@ -212,9 +212,9 @@ box(6.4, 3, 2, M.woodDark, 13, 1.5, 1.2);
 box(6.4, 0.18, 2, M.trim, 13, 3.1, 1.2);
 box(1.8, 0.3, 1.2, new THREE.MeshStandardMaterial({ color: 0xb9c2ca, roughness: 0.3, metalness: 0.6 }), 13, 3.22, 1.1);  // sink
 box(0.12, 0.9, 0.12, M.spaShell, 13.7, 3.6, 1.1);   // faucet
-// Fireplace — 45° in the west bay corner; flue ties into the NW pillar/chimney.
-// Shape per photos: brick base, arched mouth, domed top.
-const F = new THREE.Group(); F.position.set(3.1, 0, 2.7); F.rotation.y = Math.PI / 4; scene.add(F);
+// Fireplace — directly under the chimney at the NW corner, set at 45°.
+// Shape per photos: brick base, arched mouth, domed top; the NW pillar rises from it as the chimney.
+const F = new THREE.Group(); F.position.set(2.3, 0, 1.9); F.rotation.y = Math.PI / 4; scene.add(F);
 {
   box(4.6, 3.4, 3.4, M.brick, 0, 1.7, 0, F);
   const dome = new THREE.Mesh(new THREE.SphereGeometry(1.85, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2), M.brick);
@@ -222,7 +222,6 @@ const F = new THREE.Group(); F.position.set(3.1, 0, 2.7); F.rotation.y = Math.PI
   const mouth = new THREE.Mesh(new THREE.CircleGeometry(0.95, 16, 0, Math.PI),
     new THREE.MeshBasicMaterial({ color: 0x160c08 }));
   mouth.position.set(0, 3.0, 1.72); F.add(mouth);
-  box(1.1, 1.8, 1.1, M.brick, -1.2, 4.2, -1.2, F);   // flue shoulder angling toward the NW pillar
 }
 
 // ============ EAST ARCADE — NEW: two pillars (ridge + south) + two arches matching the north wall ============
