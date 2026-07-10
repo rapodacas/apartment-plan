@@ -241,36 +241,36 @@ const EARC = new THREE.Group(); scene.add(EARC);
     { c: 20.95, w: 9.4, h: 9 },    // north bay (kitchen east side / ENTRY) — center z 5.05
     { c: 8, w: 11.6, h: 9 },       // south bay (east room — open, rail + stairs) — center z 18
   ], 2, M.stuccoWhite);
-  aw.rotation.y = Math.PI / 2;     // local X 0→27 maps to global z 26→-1; depth → +X (x17-19)
-  aw.position.set(17, 0, 26);
+  aw.rotation.y = Math.PI / 2;     // local X 0→27 maps to global z 26→-1; depth → +X (x16-18)
+  aw.position.set(16, 0, 26);
   EARC.add(aw);
   // Brick to the spring line only — stucco arches above, matching the north wall
-  for (const pz of [25, 11, -0.9]) box(2.3, 4.4, 2.3, M.brick, 18, 2.2, pz, EARC);
+  for (const pz of [25, 11, -0.9]) box(2.3, 4.4, 2.3, M.brick, 17, 2.2, pz, EARC);
 }
 // Kitchen east side — CLOSED option (toggleable): arched glazing + the APARTMENT ENTRY door
 const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
 {
-  box(0.3, 8.6, 9.3, M.glass, 18, 4.3, 5.05, KCLOSED);   // arched glass infill, full bay
-  box(0.3, 8.6, 0.35, M.trim, 18, 4.3, 6.9, KCLOSED);    // mullion beside the door
-  box(0.3, 0.4, 9.3, M.trim, 18, 7.1, 5.05, KCLOSED);    // transom rail
-  box(0.4, 7, 3.2, M.woodDark, 18, 3.5, 3.6, KCLOSED);   // entry door
-  box(0.15, 0.8, 0.15, M.trim, 18.28, 3.4, 2.4, KCLOSED); // handle
+  box(0.3, 8.6, 9.3, M.glass, 17, 4.3, 5.05, KCLOSED);   // arched glass infill, full bay
+  box(0.3, 8.6, 0.35, M.trim, 17, 4.3, 6.9, KCLOSED);    // mullion beside the door
+  box(0.3, 0.4, 9.3, M.trim, 17, 7.1, 5.05, KCLOSED);    // transom rail
+  box(0.4, 7, 3.2, M.woodDark, 17, 3.5, 3.6, KCLOSED);   // entry door
+  box(0.15, 0.8, 0.15, M.trim, 17.28, 3.4, 2.4, KCLOSED); // handle
 }
 
 // East room bay — NO wall: safety rail on the raised edge + staircase down (per photos)
 const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5, metalness: 0.4 });
 {
   const R = new THREE.Group(); scene.add(R);
-  box(0.18, 0.18, 11.4, railMat, 17.5, 5.05, 18, R);     // top rail, along the raised east edge
-  box(0.12, 0.12, 11.4, railMat, 17.5, 4.2, 18, R);      // mid rail
-  for (let i = 0; i <= 6; i++) box(0.14, 3.1, 0.14, railMat, 17.5, 3.6, 12.4 + i * 1.87, R);
+  box(0.18, 0.18, 11.4, railMat, 16.9, 5.05, 18, R);     // top rail, along the raised east edge
+  box(0.12, 0.12, 11.4, railMat, 16.9, 4.2, 18, R);      // mid rail
+  for (let i = 0; i <= 6; i++) box(0.14, 3.1, 0.14, railMat, 16.9, 3.6, 12.4 + i * 1.87, R);
   // North edge of the veranda (replaces the old north wall) — overlooks the kitchen + dinette
   box(7.2, 0.18, 0.18, railMat, 13.7, 5.05, 14.2, R);
   box(7.2, 0.12, 0.12, railMat, 13.7, 4.2, 14.2, R);
   for (let i = 0; i <= 4; i++) box(0.14, 3.1, 0.14, railMat, 10.3 + i * 1.75, 3.6, 14.2, R);
   // Staircase — ~4' wide at the east edge, north side of the east room (deck → grade)
   for (let i = 0; i < 4; i++) {
-    box(3.6, 2 - i * 0.5, 1.05, M.concrete, 15, (2 - i * 0.5) / 2, 13.4 - i * 1.05, R);
+    box(3.6, 2 - i * 0.5, 1.05, M.concrete, 14.1, (2 - i * 0.5) / 2, 13.4 - i * 1.05, R);
   }
 }
 
