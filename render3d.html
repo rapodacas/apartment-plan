@@ -196,7 +196,7 @@ const NWALL = new THREE.Group(); scene.add(NWALL);
   aw.position.set(0, 0, -2); NWALL.add(aw);   // extrudes z -2 → 0
   box(2.3, 4.4, 2.3, M.brick, 9, 2.2, -1, NWALL);    // center pillar — brick to spring line
   box(2.3, 4.4, 2.3, M.brick, 17, 2.2, -1, NWALL);   // NE pillar
-  box(2.3, 11.4, 2.3, M.brick, 1, 5.7, -1, NWALL);   // NW pillar IS the chimney — through the roof
+  box(2.3, 6.8, 2.3, M.brick, 1, 8, -1, NWALL);      // NW pillar IS the chimney — rises FROM the dome, through the roof
 }
 // East arch = arched window over the kitchen sink (arch kept, glazed)
 box(5.6, 6.9, 0.25, M.glass, 13, 3.6, -1);
@@ -212,9 +212,9 @@ box(6.4, 3, 2, M.woodDark, 13, 1.5, 1.2);
 box(6.4, 0.18, 2, M.trim, 13, 3.1, 1.2);
 box(1.8, 0.3, 1.2, new THREE.MeshStandardMaterial({ color: 0xb9c2ca, roughness: 0.3, metalness: 0.6 }), 13, 3.22, 1.1);  // sink
 box(0.12, 0.9, 0.12, M.spaShell, 13.7, 3.6, 1.1);   // faucet
-// Fireplace — directly under the chimney at the NW corner, set at 45°.
-// Shape per photos: brick base, arched mouth, domed top; the NW pillar rises from it as the chimney.
-const F = new THREE.Group(); F.position.set(2.3, 0, 1.9); F.rotation.y = Math.PI / 4; scene.add(F);
+// Fireplace — dome centered directly under the chimney (NW pillar), set at 45°.
+// Shape per photos: brick base, arched mouth, domed top; the chimney rises from the dome.
+const F = new THREE.Group(); F.position.set(1, 0, -1); F.rotation.y = Math.PI / 4; scene.add(F);  // dome plan-centered under the chimney
 {
   box(4.6, 3.4, 3.4, M.brick, 0, 1.7, 0, F);
   const dome = new THREE.Mesh(new THREE.SphereGeometry(1.85, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2), M.brick);
@@ -228,9 +228,10 @@ const F = new THREE.Group(); F.position.set(2.3, 0, 1.9); F.rotation.y = Math.PI
 // Wall line x17-19 (2' thick, flush with the 1' roof overhang). Bays: z1-10 (kitchen) and z12-24 (east patio).
 const EARC = new THREE.Group(); scene.add(EARC);
 {
+  // Arches span pillar-to-pillar — they land on the brick right at the pillar tops
   const aw = archWall(27, 9, [
-    { c: 20.5, w: 7.5, h: 7.6 },   // north bay (kitchen east side) — center z 5.5
-    { c: 8, w: 10, h: 8.2 },       // south bay (east patio) — center z 18
+    { c: 20.95, w: 9.4, h: 9 },    // north bay (kitchen east side / ENTRY) — center z 5.05
+    { c: 8, w: 11.6, h: 9 },       // south bay (east room — open, rail + stairs) — center z 18
   ], 2, M.stuccoWhite);
   aw.rotation.y = Math.PI / 2;     // local X 0→27 maps to global z 26→-1; depth → +X (x17-19)
   aw.position.set(17, 0, 26);
@@ -238,12 +239,27 @@ const EARC = new THREE.Group(); scene.add(EARC);
   // Brick to the spring line only — stucco arches above, matching the north wall
   for (const pz of [25, 11, -0.9]) box(2.3, 4.4, 2.3, M.brick, 18, 2.2, pz, EARC);
 }
-// Kitchen east side — CLOSED option (toggleable): arched glazing filling the north bay
+// Kitchen east side — CLOSED option (toggleable): arched glazing + the APARTMENT ENTRY door
 const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
 {
-  box(0.3, 8, 8.6, M.glass, 18, 4.2, 5.5, KCLOSED);      // arched glass infill
-  box(0.3, 8, 0.4, M.trim, 18, 4.2, 5.5, KCLOSED);       // center mullion
-  box(0.3, 0.4, 8.6, M.trim, 18, 3.4, 5.5, KCLOSED);     // transom rail
+  box(0.3, 8.6, 9.3, M.glass, 18, 4.3, 5.05, KCLOSED);   // arched glass infill, full bay
+  box(0.3, 8.6, 0.35, M.trim, 18, 4.3, 6.9, KCLOSED);    // mullion beside the door
+  box(0.3, 0.4, 9.3, M.trim, 18, 7.1, 5.05, KCLOSED);    // transom rail
+  box(0.4, 7, 3.2, M.woodDark, 18, 3.5, 3.6, KCLOSED);   // entry door
+  box(0.15, 0.8, 0.15, M.trim, 18.28, 3.4, 2.4, KCLOSED); // handle
+}
+
+// East room bay — NO wall: safety rail on the raised edge + staircase down (per photos)
+const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5, metalness: 0.4 });
+{
+  const R = new THREE.Group(); scene.add(R);
+  box(0.18, 0.18, 11.4, railMat, 17.5, 5.05, 18, R);     // top rail, along the raised east edge
+  box(0.12, 0.12, 11.4, railMat, 17.5, 4.2, 18, R);      // mid rail
+  for (let i = 0; i <= 6; i++) box(0.14, 3.1, 0.14, railMat, 17.5, 3.6, 12.4 + i * 1.87, R);
+  // Staircase — ~4' wide at the east edge, north side of the east room (deck → grade)
+  for (let i = 0; i < 4; i++) {
+    box(3.6, 2 - i * 0.5, 1.05, M.concrete, 15, (2 - i * 0.5) / 2, 13.4 - i * 1.05, R);
+  }
 }
 
 // Arch-wall builder — semicircular arches cut from a stucco panel.
