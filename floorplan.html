@@ -13,11 +13,35 @@ h1{font-size:20px;margin-bottom:4px;color:#58a6ff}
 .legend-swatch{width:16px;height:16px;border-radius:3px;border:1px solid rgba(255,255,255,.2)}
 svg{max-width:100%;height:auto}
 .note{margin-top:12px;font-size:12px;color:#8b949e;max-width:700px;text-align:center;line-height:1.5}
+.navrow{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;justify-content:center}
+.navrow a,.navbtn{background:#161b22;border:1px solid #30363d;color:#58a6ff;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:inherit}
+.navrow a:active,.navbtn:active{background:#21262d}
+.pin{cursor:pointer}
+.pin circle{transition:r .15s}
+.pin:hover circle,.pin:active circle{r:11}
+#sheet{position:fixed;left:0;right:0;bottom:0;top:auto;max-height:82vh;background:#161b22;border-top:2px solid #30363d;border-radius:16px 16px 0 0;transform:translateY(100%);transition:transform .25s ease;z-index:50;display:flex;flex-direction:column;box-shadow:0 -8px 30px rgba(0,0,0,.5)}
+#sheet.open{transform:translateY(0)}
+#sheet-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;border-bottom:1px solid #21262d}
+#sheet-title{font-size:16px;font-weight:600}
+#sheet-close{background:none;border:none;color:#8b949e;font-size:22px;cursor:pointer;padding:0 6px}
+#sheet-body{overflow-y:auto;padding:12px 14px calc(20px + env(safe-area-inset-bottom))}
+.ph{margin-bottom:18px}
+.ph img{width:100%;border-radius:10px;border:1px solid #21262d;display:block}
+.ph .cap{font-size:13px;color:#e6edf3;margin-top:6px;line-height:1.4}
+.ph .meta{font-size:11px;color:#8b949e;margin-top:2px}
+.datehdr{font-size:12px;font-weight:700;color:#58a6ff;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+#backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
+#backdrop.open{opacity:1;pointer-events:auto}
 </style>
 </head>
 <body>
 <h1>864 Farr Ave — Apartment Conversion</h1>
 <p class="subtitle">Floor Plan — Approximate (10px = 1 foot)</p>
+<div class="navrow">
+  <a href="index.html">← Tasks</a>
+  <a href="blueprint.html">Blueprint: Existing Conditions →</a>
+  <button id="btn-timeline" class="navbtn">📷 All Photos</button>
+</div>
 
 <svg viewBox="-30 -50 340 460" width="700" xmlns="http://www.w3.org/2000/svg" style="background:#0d1117;border-radius:12px;border:1px solid #21262d">
   <defs>
@@ -194,11 +218,110 @@ svg{max-width:100%;height:auto}
 </div>
 
 <p class="note">
-  864 Farr Ave, Escondido — Updated 7/5/2026<br>
+  864 Farr Ave, Escondido — Updated 7/9/2026<br>
+  📷 Tap a camera pin on the plan to see photos of that area.<br>
   East fence 8' from building. South fence 2.5' from new bathroom. Gate on east fence 5' north of existing bathroom.<br>
   New bathroom: 2' taken from east room + 2.5' extending south. East room reduced to 8×10.<br>
   Steps: 4' wide, against east boundary, north side of east room. Office opening: 6' centered on east wall.
 </p>
 
+<div id="backdrop"></div>
+<div id="sheet">
+  <div id="sheet-head">
+    <div id="sheet-title">Photos</div>
+    <button id="sheet-close">✕</button>
+  </div>
+  <div id="sheet-body"></div>
+</div>
+
+<script>
+(async function(){
+  const svg = document.querySelector('svg');
+  const sheet = document.getElementById('sheet');
+  const backdrop = document.getElementById('backdrop');
+  const body = document.getElementById('sheet-body');
+  const title = document.getElementById('sheet-title');
+
+  let manifest = { zones: {}, photos: [] };
+  try {
+    manifest = await (await fetch('photos/manifest.json', { cache: 'no-cache' })).json();
+  } catch (e) { return; } // no photos yet — page still works
+
+  // Pin anchor points in SVG coordinates, per zone
+  const PIN_POS = {
+    'office':     [86, 154],
+    'east-room':  [168, 154],
+    'kitchen':    [168, 14],
+    'new-bath':   [110, 250],
+    'exist-bath': [230, 240],
+    'patio':      [40, 100],
+    'yard':       [20, 296],
+  };
+
+  const byZone = {};
+  for (const p of manifest.photos) (byZone[p.zone] = byZone[p.zone] || []).push(p);
+
+  const NS = 'http://www.w3.org/2000/svg';
+  for (const [zone, pos] of Object.entries(PIN_POS)) {
+    const photos = byZone[zone];
+    if (!photos || !photos.length) continue;
+    const color = (manifest.zones[zone] || {}).color || '#58a6ff';
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'pin');
+    g.setAttribute('transform', `translate(${pos[0]},${pos[1]})`);
+    g.innerHTML =
+      `<circle r="9" fill="#0d1117" stroke="${color}" stroke-width="1.8"/>` +
+      `<text y="3.5" text-anchor="middle" font-size="9">📷</text>` +
+      `<circle cx="8" cy="-8" r="5.5" fill="${color}"/>` +
+      `<text x="8" y="-5.2" text-anchor="middle" font-size="8" font-weight="700" fill="#0d1117">${photos.length}</text>`;
+    g.addEventListener('click', () => openZone(zone));
+    svg.appendChild(g);
+  }
+
+  function render(photos) {
+    body.innerHTML = '';
+    let lastDate = '';
+    for (const p of photos) {
+      if (p.date !== lastDate) {
+        lastDate = p.date;
+        const h = document.createElement('div');
+        h.className = 'datehdr';
+        h.textContent = new Date(p.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        body.appendChild(h);
+      }
+      const zl = (manifest.zones[p.zone] || {}).label || p.zone;
+      const d = document.createElement('div');
+      d.className = 'ph';
+      d.innerHTML =
+        `<a href="photos/${p.file}" target="_blank" rel="noopener"><img loading="lazy" src="photos/${p.file}" alt=""></a>` +
+        `<div class="cap">${p.caption || ''}</div>` +
+        `<div class="meta">${zl} · ${p.date}</div>`;
+      body.appendChild(d);
+    }
+  }
+
+  function open(t, photos) {
+    title.textContent = t;
+    render(photos.slice().sort((a, b) => b.date.localeCompare(a.date)));
+    sheet.classList.add('open');
+    backdrop.classList.add('open');
+    body.scrollTop = 0;
+  }
+  function openZone(zone) {
+    const zl = (manifest.zones[zone] || {}).label || zone;
+    const ps = byZone[zone] || [];
+    open(`📷 ${zl} (${ps.length})`, ps);
+  }
+  function close() {
+    sheet.classList.remove('open');
+    backdrop.classList.remove('open');
+  }
+
+  document.getElementById('sheet-close').addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  document.getElementById('btn-timeline').addEventListener('click', () =>
+    open(`📷 All Photos (${manifest.photos.length})`, manifest.photos));
+})();
+</script>
 </body>
 </html>

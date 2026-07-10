@@ -1,0 +1,26 @@
+{
+  "zones": {
+    "office": { "label": "Office", "color": "#58a6ff" },
+    "east-room": { "label": "East Room", "color": "#bc8cff" },
+    "kitchen": { "label": "Kitchen", "color": "#3fb950" },
+    "new-bath": { "label": "New Bath", "color": "#d29922" },
+    "exist-bath": { "label": "Existing Bath", "color": "#f85149" },
+    "patio": { "label": "Open Patio", "color": "#8b949e" },
+    "yard": { "label": "Yard", "color": "#6e7681" }
+  },
+  "photos": [
+    { "file": "2026-07-09/IMG_2651.jpg", "zone": "office", "date": "2026-07-09", "caption": "Office interior — desk wall, ultrawide monitor, bookshelf, French doors to deck" },
+    { "file": "2026-07-09/IMG_2653.jpg", "zone": "office", "date": "2026-07-09", "caption": "Office interior — bed corner, guitar and flag wall, high windows" },
+    { "file": "2026-07-09/IMG_2638.jpg", "zone": "east-room", "date": "2026-07-09", "caption": "Raised deck (future east room) — recliner sectional, sliding door, portable AC" },
+    { "file": "2026-07-09/IMG_2646.jpg", "zone": "east-room", "date": "2026-07-09", "caption": "Raised deck close-up — sectional, guitar case, fishing net, AC exhaust" },
+    { "file": "2026-07-09/IMG_2644.jpg", "zone": "east-room", "date": "2026-07-09", "caption": "Steps up to raised deck, north side — cabinet, microwave, staged tools" },
+    { "file": "2026-07-09/IMG_2615.jpg", "zone": "kitchen", "date": "2026-07-09", "caption": "Future kitchen footprint (ground level) — workbench, miter saw, propane, fridge staged at wall" },
+    { "file": "2026-07-09/IMG_2622.jpg", "zone": "kitchen", "date": "2026-07-09", "caption": "Samsung fridge and bins staged at future kitchen; Apodaca Villa sign" },
+    { "file": "2026-07-09/IMG_2626.jpg", "zone": "patio", "date": "2026-07-09", "caption": "West walkway — cement mixer, work table with drills, outdoor shower enclosure behind" },
+    { "file": "2026-07-09/IMG_2631.jpg", "zone": "yard", "date": "2026-07-09", "caption": "East side — vinyl fence panels staged, brick pile, sand, pomegranate tree" },
+    { "file": "2026-07-09/IMG_2632.jpg", "zone": "yard", "date": "2026-07-09", "caption": "Pavilion arches from east path — wheelbarrow, hand truck, ladders, brick stacks" },
+    { "file": "2026-07-09/IMG_2633.jpg", "zone": "yard", "date": "2026-07-09", "caption": "View from under pavilion — work zone, pizza oven, red barn shed beyond" },
+    { "file": "2026-07-09/IMG_2642.jpg", "zone": "yard", "date": "2026-07-09", "caption": "Pavilion with covered hot tub, arches; RV at left, building behind" },
+    { "file": "2026-07-09/IMG_2643.jpg", "zone": "yard", "date": "2026-07-09", "caption": "Pavilion and brick pizza oven from garden, succulents in foreground" }
+  ]
+}
