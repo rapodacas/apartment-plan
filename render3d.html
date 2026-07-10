@@ -191,28 +191,39 @@ box(4.6, 0.18, 2.4, M.trim, 12.8, 3.1, 10.5, B);
 // Spans x0-18, z0 to -2. West arch bay: fireplace at 45°. East arch bay: spa fits exactly.
 const NWALL = new THREE.Group(); scene.add(NWALL);
 {
+  // Arches are completely stucco; brick pillars rise only to the spring line.
   const aw = archWall(18, 9, [{ c: 5, w: 6, h: 7.2 }, { c: 13, w: 6, h: 7.2 }], 2, M.stuccoWhite);
   aw.position.set(0, 0, -2); NWALL.add(aw);   // extrudes z -2 → 0
-  for (const px of [1, 9, 17]) box(2.15, 8.8, 2.15, M.brick, px, 4.4, -1, NWALL);
+  box(2.3, 4.4, 2.3, M.brick, 9, 2.2, -1, NWALL);    // center pillar — brick to spring line
+  box(2.3, 4.4, 2.3, M.brick, 17, 2.2, -1, NWALL);   // NE pillar
+  box(2.3, 11.4, 2.3, M.brick, 1, 5.7, -1, NWALL);   // NW pillar IS the chimney — through the roof
 }
-// Spa — fills the east arch bay, just inside the covered patio
-box(6, 3, 6, M.spaShell, 13, 1.5, 3.2);
+// East arch = arched window over the kitchen sink (arch kept, glazed)
+box(5.6, 6.9, 0.25, M.glass, 13, 3.6, -1);
+// Spa — OUTSIDE, on the north porch, tight to the wall in front of the east arch
+box(6, 3, 6, M.spaShell, 13, 1.5, -5.3);
 {
   const w = new THREE.Mesh(new THREE.PlaneGeometry(5.4, 5.4), M.water);
-  w.rotation.x = -Math.PI / 2; w.position.set(13, 3.05, 3.2); w.receiveShadow = true; scene.add(w);
-  box(3, 1, 1.4, M.wood, 13, 0.5, 6.8);        // step
+  w.rotation.x = -Math.PI / 2; w.position.set(13, 3.05, -5.3); w.receiveShadow = true; scene.add(w);
+  box(3, 1, 1.4, M.wood, 13, 0.5, -8.9);       // step, north side
 }
-// Fireplace — 45° across the west bay corner; chimney rises through the patio cover
-const F = new THREE.Group(); F.position.set(2.9, 0, 2.9); F.rotation.y = Math.PI / 4; scene.add(F);
+// Kitchen counter + sink inside the north wall — overlooking the arched window and the spa
+box(6.4, 3, 2, M.woodDark, 13, 1.5, 1.2);
+box(6.4, 0.18, 2, M.trim, 13, 3.1, 1.2);
+box(1.8, 0.3, 1.2, new THREE.MeshStandardMaterial({ color: 0xb9c2ca, roughness: 0.3, metalness: 0.6 }), 13, 3.22, 1.1);  // sink
+box(0.12, 0.9, 0.12, M.spaShell, 13.7, 3.6, 1.1);   // faucet
+// Fireplace — 45° in the west bay corner; flue ties into the NW pillar/chimney.
+// Shape per photos: brick base, arched mouth, domed top.
+const F = new THREE.Group(); F.position.set(3.1, 0, 2.7); F.rotation.y = Math.PI / 4; scene.add(F);
 {
-  box(5, 3.2, 3.6, M.brick, 0, 1.6, 0, F);
-  const dome = new THREE.Mesh(new THREE.SphereGeometry(1.9, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2), M.brick);
-  dome.position.set(0, 3.2, 0); dome.castShadow = true; F.add(dome);
-  const mouth = new THREE.Mesh(new THREE.CircleGeometry(0.85, 16, 0, Math.PI),
+  box(4.6, 3.4, 3.4, M.brick, 0, 1.7, 0, F);
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(1.85, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2), M.brick);
+  dome.position.set(0, 3.4, 0); dome.castShadow = true; F.add(dome);
+  const mouth = new THREE.Mesh(new THREE.CircleGeometry(0.95, 16, 0, Math.PI),
     new THREE.MeshBasicMaterial({ color: 0x160c08 }));
-  mouth.position.set(0, 3.1, 1.82); F.add(mouth);
+  mouth.position.set(0, 3.0, 1.72); F.add(mouth);
+  box(1.1, 1.8, 1.1, M.brick, -1.2, 4.2, -1.2, F);   // flue shoulder angling toward the NW pillar
 }
-box(1.5, 8.6, 1.5, M.brick, 2.9, 7, 2.9);      // chimney — pierces the roof at the patio corner
 
 // ============ EAST ARCADE — NEW: two pillars (ridge + south) + two arches matching the north wall ============
 // Wall line x17-19 (2' thick, flush with the 1' roof overhang). Bays: z1-10 (kitchen) and z12-24 (east patio).
@@ -225,7 +236,8 @@ const EARC = new THREE.Group(); scene.add(EARC);
   aw.rotation.y = Math.PI / 2;     // local X 0→27 maps to global z 26→-1; depth → +X (x17-19)
   aw.position.set(17, 0, 26);
   EARC.add(aw);
-  for (const pz of [25, 11, -0.9]) box(2.15, 8.8, 2.15, M.brick, 18, 4.4, pz, EARC);
+  // Brick to the spring line only — stucco arches above, matching the north wall
+  for (const pz of [25, 11, -0.9]) box(2.3, 4.4, 2.3, M.brick, 18, 2.2, pz, EARC);
 }
 // Kitchen east side — CLOSED option (toggleable): arched glazing filling the north bay
 const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
