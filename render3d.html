@@ -171,21 +171,29 @@ box(18, RF, 14.5, M.concrete, 9, RF / 2, 21.25, B);
 
 // --- Office core (x0-10, z14-26) — walls stop under the low roof ---
 box(10, 6.6, 12, M.stucco, 5, RF + 3.3, 20, B);
-// --- East room (x10-18, z14-24) ---
-box(8, 6.6, 10, M.stucco, 14, RF + 3.3, 19, B);
+// --- East room (x10-18, z14-24): open raised veranda — no north or east walls (rails instead).
+//     West enclosure = office east wall; south enclosure = new bath mass.
 // --- New bath (x10-18, z24-28.5) ---
 box(8, 6.4, 4.5, M.stucco, 14, RF + 3.2, 26.25, B);
 
 // --- Kitchen zone (x8-18, z0-14, grade, under the main roof) ---
 box(0.7, KW, 14, M.stucco, 8.35, KW / 2, 7, B);         // west wall (partition to open patio)
-// Kitchen interior: floor slab, counter run on west wall, island, fridge
+// Kitchen interior: floor slab; west wall = countertop run + counter-depth fridge; dinette at south
 const steel = new THREE.MeshStandardMaterial({ color: 0xc6cdd4, roughness: 0.35, metalness: 0.7 });
 box(9.4, 0.12, 13.2, M.concrete, 13.3, 0.06, 7.1, B);   // floor slab
-box(2.1, 3, 4.6, M.woodDark, 9.8, 1.5, 11, B);           // counter along west wall
-box(2.1, 0.18, 4.6, M.trim, 9.8, 3.1, 11, B);            // countertop
-box(3, 5.9, 2.7, steel, 16.2, 2.95, 12.3, B);            // fridge (the Samsung, finally indoors)
-box(4.6, 3, 2.4, M.woodDark, 12.8, 1.5, 10.5, B);        // island
-box(4.6, 0.18, 2.4, M.trim, 12.8, 3.1, 10.5, B);
+box(2, 3, 8.4, M.woodDark, 9.75, 1.5, 9.2, B);           // countertop run, west wall
+box(2, 0.18, 8.4, M.trim, 9.75, 3.1, 9.2, B);
+box(2.2, 5.9, 3, steel, 9.85, 2.95, 3.3, B);             // counter-depth fridge, west wall north end
+// Small dinette beneath the veranda rail (south end of the kitchen)
+{
+  const tTop = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.14, 20), M.wood);
+  tTop.position.set(13.6, 2.45, 11.9); tTop.castShadow = true; scene.add(tTop);
+  const tPed = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.3, 2.4, 10), M.woodDark);
+  tPed.position.set(13.6, 1.2, 11.9); tPed.castShadow = true; scene.add(tPed);
+  for (const [cx, cz] of [[11.9, 11.9], [15.3, 11.9], [13.6, 10.2]]) {
+    box(1.1, 1.5, 1.1, M.cushion, cx, 0.8, cz, B);
+  }
+}
 
 // ============ NORTH WALL — the existing two-arch wall (2' thick, heavy brick pillars) ============
 // Spans x0-18, z0 to -2. West arch bay: fireplace at 45°. East arch bay: spa fits exactly.
@@ -198,8 +206,8 @@ const NWALL = new THREE.Group(); scene.add(NWALL);
   box(2.3, 4.4, 2.3, M.brick, 17, 2.2, -1, NWALL);   // NE pillar
   box(2.3, 6.8, 2.3, M.brick, 1, 8, -1, NWALL);      // NW pillar IS the chimney — rises FROM the dome, through the roof
 }
-// East arch = arched window over the kitchen sink (arch kept, glazed)
-box(5.6, 6.9, 0.25, M.glass, 13, 3.6, -1);
+// East arch = arched window over the kitchen sink (arch kept, glazed at the outer wall face)
+box(5.6, 6.9, 0.25, M.glass, 13, 3.6, -1.75);
 // Spa — OUTSIDE, on the north porch, tight to the wall in front of the east arch
 box(6, 3, 6, M.spaShell, 13, 1.5, -5.3);
 {
@@ -207,11 +215,11 @@ box(6, 3, 6, M.spaShell, 13, 1.5, -5.3);
   w.rotation.x = -Math.PI / 2; w.position.set(13, 3.05, -5.3); w.receiveShadow = true; scene.add(w);
   box(3, 1, 1.4, M.wood, 13, 0.5, -8.9);       // step, north side
 }
-// Kitchen counter + sink inside the north wall — overlooking the arched window and the spa
-box(6.4, 3, 2, M.woodDark, 13, 1.5, 1.2);
-box(6.4, 0.18, 2, M.trim, 13, 3.1, 1.2);
-box(1.8, 0.3, 1.2, new THREE.MeshStandardMaterial({ color: 0xb9c2ca, roughness: 0.3, metalness: 0.6 }), 13, 3.22, 1.1);  // sink
-box(0.12, 0.9, 0.12, M.spaShell, 13.7, 3.6, 1.1);   // faucet
+// Kitchen sink counter — INSET into the pillar wall, in the arch recess under the window
+box(5.8, 3, 2, M.woodDark, 13, 1.5, -0.55);
+box(5.8, 0.18, 2.2, M.trim, 13, 3.1, -0.5);
+box(1.8, 0.3, 1.2, new THREE.MeshStandardMaterial({ color: 0xb9c2ca, roughness: 0.3, metalness: 0.6 }), 13, 3.22, -0.6);  // sink
+box(0.12, 0.9, 0.12, M.spaShell, 13.7, 3.6, -0.6);  // faucet
 // Fireplace — dome centered directly under the chimney (NW pillar), set at 45°.
 // Shape per photos: brick base, arched mouth, domed top; the chimney rises from the dome.
 const F = new THREE.Group(); F.position.set(1, 0, -1); F.rotation.y = Math.PI / 4; scene.add(F);  // dome plan-centered under the chimney
@@ -256,6 +264,10 @@ const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5
   box(0.18, 0.18, 11.4, railMat, 17.5, 5.05, 18, R);     // top rail, along the raised east edge
   box(0.12, 0.12, 11.4, railMat, 17.5, 4.2, 18, R);      // mid rail
   for (let i = 0; i <= 6; i++) box(0.14, 3.1, 0.14, railMat, 17.5, 3.6, 12.4 + i * 1.87, R);
+  // North edge of the veranda (replaces the old north wall) — overlooks the kitchen + dinette
+  box(7.2, 0.18, 0.18, railMat, 13.7, 5.05, 14.2, R);
+  box(7.2, 0.12, 0.12, railMat, 13.7, 4.2, 14.2, R);
+  for (let i = 0; i <= 4; i++) box(0.14, 3.1, 0.14, railMat, 10.3 + i * 1.75, 3.6, 14.2, R);
   // Staircase — ~4' wide at the east edge, north side of the east room (deck → grade)
   for (let i = 0; i < 4; i++) {
     box(3.6, 2 - i * 0.5, 1.05, M.concrete, 15, (2 - i * 0.5) / 2, 13.4 - i * 1.05, R);
