@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>864 Farr Ave — 3D Concept</title>
+<style>
+html,body{margin:0;height:100%;background:#0d1117;overflow:hidden;font-family:-apple-system,'Segoe UI',Arial,sans-serif}
+#c{width:100%;height:100%;display:block;touch-action:none}
+#hud{position:fixed;top:0;left:0;right:0;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;pointer-events:none}
+#hud h1{font-size:15px;color:#e6edf3;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+#hud .tag{font-size:10px;color:#9fb6cc;background:rgba(13,17,23,.55);border:1px solid rgba(255,255,255,.12);padding:2px 8px;border-radius:20px;backdrop-filter:blur(4px)}
+#views{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:0 10px}
+#views button,#views a{background:rgba(22,27,34,.85);border:1px solid #30363d;color:#58a6ff;font-size:12px;padding:8px 13px;border-radius:20px;cursor:pointer;backdrop-filter:blur(6px);text-decoration:none;font-family:inherit}
+#views button.active{background:#1f6feb;color:#fff;border-color:#1f6feb}
+#note{position:fixed;top:44px;left:14px;font-size:10px;color:#9fb6cc;text-shadow:0 1px 3px rgba(0,0,0,.7);pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">
+  <h1>864 Farr Ave — Apartment Concept</h1>
+  <span class="tag">3D massing · not to scale for construction</span>
+</div>
+<div id="note">Drag to orbit · pinch/scroll to zoom · two-finger drag to pan</div>
+<div id="views">
+  <button data-v="aerial" class="active">Aerial</button>
+  <button data-v="east">East Arches + Lawn</button>
+  <button data-v="west">West Patio</button>
+  <button data-v="kitchen">Kitchen Arcade</button>
+  <button data-v="spa">Spa Pavilion</button>
+  <a href="floorplan.html">Plan ↗</a>
+</div>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ============ Site model — units are FEET, matching floorplan.html ============
+// X = east, Z = south, Y = up. Origin = building NW corner (plan 0,0).
+// Building: kitchen x8-18/z0-14 (grade), office x0-10/z14-26 (raised 2'),
+// east room x10-18/z14-24 (raised), new bath x10-18/z24-28.5 (raised),
+// exist bath x22-26/z23-31. East fence x=26, south fence z=31, gate z18-22.
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x9ec9e8);
+scene.fog = new THREE.Fog(0x9ec9e8, 160, 320);
+
+const camera = new THREE.PerspectiveCamera(46, 2, 0.5, 600);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.495;
+controls.minDistance = 8; controls.maxDistance = 180;
+
+// ---- Lights ----
+const hemi = new THREE.HemisphereLight(0xcfe6ff, 0x8a7a5a, 0.9);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff2dd, 2.1);
+sun.position.set(70, 80, 25); // morning sun from the east — hero light on the arches
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -70; sun.shadow.camera.right = 70;
+sun.shadow.camera.top = 70; sun.shadow.camera.bottom = -70;
+sun.shadow.bias = -0.0004;
+scene.add(sun);
+
+// ---- Procedural textures ----
+function canvasTex(draw, w = 256, h = 256, rx = 1, ry = 1) {
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  draw(cv.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+const brickTex = (rx, ry) => canvasTex((g, w, h) => {
+  g.fillStyle = '#8d4a3c'; g.fillRect(0, 0, w, h);
+  const bw = 64, bh = 32;
+  for (let y = 0; y < h / bh; y++) for (let x = -1; x < w / bw + 1; x++) {
+    const off = (y % 2) * bw / 2;
+    g.fillStyle = ['#94503f', '#85453a', '#9c5744', '#8a4a3b'][(x + y * 3) % 4];
+    g.fillRect(x * bw + off + 2, y * bh + 2, bw - 4, bh - 4);
+  }
+}, 256, 256, rx, ry);
+const paverTex = (rx, ry) => canvasTex((g, w, h) => {
+  g.fillStyle = '#caa789'; g.fillRect(0, 0, w, h);
+  const bw = 42, bh = 21;
+  for (let y = 0; y < h / bh; y++) for (let x = -1; x < w / bw + 1; x++) {
+    const off = (y % 2) * bw / 2;
+    g.fillStyle = ['#b06a4f', '#a4604a', '#b87356', '#9d5945'][(x * 7 + y) % 4];
+    g.fillRect(x * bw + off + 1.5, y * bh + 1.5, bw - 3, bh - 3);
+  }
+}, 256, 256, rx, ry);
+const lawnTex = (rx, ry) => canvasTex((g, w, h) => {
+  g.fillStyle = '#4d9c44'; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 900; i++) {
+    g.fillStyle = ['#57a94d', '#448c3c', '#5fb254', '#3f8338'][i % 4];
+    g.globalAlpha = 0.5;
+    g.fillRect(Math.random() * w, Math.random() * h, 3, 3);
+  }
+}, 256, 256, rx, ry);
+
+// ---- Materials ----
+const M = {
+  stucco: new THREE.MeshStandardMaterial({ color: 0xf0ebde, roughness: 0.95 }),
+  stuccoWhite: new THREE.MeshStandardMaterial({ color: 0xf7f3ea, roughness: 0.95 }),
+  brick: new THREE.MeshStandardMaterial({ map: brickTex(2, 2), roughness: 0.9 }),
+  roof: new THREE.MeshStandardMaterial({ color: 0x39404a, roughness: 0.55, metalness: 0.35 }),
+  wood: new THREE.MeshStandardMaterial({ color: 0x8f6742, roughness: 0.8 }),
+  woodDark: new THREE.MeshStandardMaterial({ color: 0x6e4d2f, roughness: 0.85 }),
+  glass: new THREE.MeshStandardMaterial({ color: 0x9fd2e8, roughness: 0.08, metalness: 0.3, transparent: true, opacity: 0.55 }),
+  trim: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6 }),
+  fence: new THREE.MeshStandardMaterial({ color: 0xeef1f4, roughness: 0.7 }),
+  water: new THREE.MeshStandardMaterial({ color: 0x3fb3dd, roughness: 0.05, metalness: 0.2 }),
+  spaShell: new THREE.MeshStandardMaterial({ color: 0x5a6672, roughness: 0.5 }),
+  cushion: new THREE.MeshStandardMaterial({ color: 0xe8e0cd, roughness: 0.9 }),
+  soil: new THREE.MeshStandardMaterial({ color: 0x6b5138, roughness: 1 }),
+  leaf: new THREE.MeshStandardMaterial({ color: 0x3e7d3a, roughness: 0.9 }),
+  leafDark: new THREE.MeshStandardMaterial({ color: 0x2f6330, roughness: 0.9 }),
+  succulent: new THREE.MeshStandardMaterial({ color: 0x7a4f52, roughness: 0.85 }),
+  concrete: new THREE.MeshStandardMaterial({ color: 0xb9b3a6, roughness: 0.95 }),
+};
+
+function box(w, h, d, mat, x, y, z, group) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  m.position.set(x, y, z); m.castShadow = m.receiveShadow = true;
+  (group || scene).add(m); return m;
+}
+
+// ---- Ground ----
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400),
+  new THREE.MeshStandardMaterial({ color: 0x9a8a6c, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2; ground.position.set(0, -0.05, 0);
+ground.receiveShadow = true; scene.add(ground);
+
+// Brick paver patio — existing, kept ("neater"): west + north zones
+function pad(x1, z1, x2, z2, tex, y = 0.02) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(x2 - x1, z2 - z1),
+    new THREE.MeshStandardMaterial({ map: tex, roughness: 0.9 }));
+  m.rotation.x = -Math.PI / 2;
+  m.position.set((x1 + x2) / 2, y, (z1 + z2) / 2);
+  m.receiveShadow = true; scene.add(m); return m;
+}
+pad(-26, 0, 8, 31, paverTex(9, 8));          // west patio (lean-to, pergola zone)
+pad(0, 0, 8, 14, paverTex(2.5, 4));          // open north patio remainder
+pad(-26, -8, 8, 0, paverTex(9, 2));          // northwest patio corner (fireplace)
+pad(14, -16, 27, -3, paverTex(3.5, 3.5));    // northeast pad under spa pavilion
+// Lush lawn — east yard, building to fence and along gate run
+pad(18, 0, 26, 31, lawnTex(3, 8), 0.03);
+pad(8, -8, 26, 0, lawnTex(5, 3), 0.03);      // lawn apron north-east
+
+// ============ BUILDING ============
+const B = new THREE.Group(); scene.add(B);
+const RF = 2;             // raised floor height (office/east room/bath)
+const WALL = 8;           // wall height above raised floor
+const KW = 9;             // kitchen wall height from grade
+
+// --- Raised plinth under office + east room + new bath ---
+box(18, RF, 14.5, M.concrete, 9, RF / 2, 21.25, B);
+
+// --- Office core (x0-10, z14-26) ---
+box(10, WALL, 12, M.stucco, 5, RF + WALL / 2, 20, B);
+// --- East room (x10-18, z14-24) ---
+box(8, WALL, 10, M.stucco, 14, RF + WALL / 2, 19, B);
+// --- New bath (x10-18, z24-28.5) ---
+box(8, WALL - 1, 4.5, M.stucco, 14, RF + (WALL - 1) / 2, 26.25, B);
+
+// --- Kitchen shell (x8-18, z0-14, grade level; east side open arches) ---
+box(0.7, KW, 14, M.stucco, 8.35, KW / 2, 7, B);         // west wall
+box(10, KW, 0.7, M.stucco, 13, KW / 2, 0.35, B);        // north wall
+// north wall window + door
+box(4, 3.5, 0.3, M.glass, 14.5, 5.4, 0.3, B);
+box(0.25, 3.9, 4.4, M.trim, 14.5, 5.4, 0.34, B).rotation.z = Math.PI / 2;
+box(3, 6.8, 0.3, M.glass, 10.3, 3.4, 0.3, B);           // glazed entry door
+
+// ============ EAST ARCADE — pavilion arches replicated (x=18 wall line) ============
+// Semicircular arches on brick piers, stucco above — mirrors the existing spa pavilion.
+function archWall(len, height, arches, depth, mat) {
+  const s = new THREE.Shape();
+  s.moveTo(0, 0); s.lineTo(len, 0); s.lineTo(len, height); s.lineTo(0, height); s.lineTo(0, 0);
+  for (const a of arches) {
+    const h = new THREE.Path();
+    const r = a.w / 2, spring = a.h - r;
+    h.moveTo(a.c - r, 0);
+    h.lineTo(a.c - r, spring);
+    h.absarc(a.c, spring, r, Math.PI, 0, true);
+    h.lineTo(a.c + r, 0);
+    h.lineTo(a.c - r, 0);
+    s.holes.push(h);
+  }
+  const g = new THREE.ExtrudeGeometry(s, { depth, bevelEnabled: false });
+  const m = new THREE.Mesh(g, mat);
+  m.castShadow = m.receiveShadow = true;
+  return m;
+}
+// Kitchen segment z0-14: two OPEN arches (outdoor kitchen breathes east to the lawn)
+// East-room segment z14-24: two arches GLAZED (arched windows onto the lawn)
+const ARCH_W = 4.6, ARCH_H = 7.6, TOP = 10;
+const eastWall = archWall(24, TOP, [
+  { c: 3.9, w: ARCH_W, h: ARCH_H }, { c: 10.1, w: ARCH_W, h: ARCH_H },
+  { c: 16.4, w: ARCH_W, h: ARCH_H }, { c: 21.4, w: ARCH_W, h: ARCH_H },
+], 0.8, M.stuccoWhite);
+eastWall.rotation.y = -Math.PI / 2;
+eastWall.position.set(18, 0, 24);   // spans z=24 → z=0 after rotation
+B.add(eastWall);
+// Brick piers at arch bases (echo pavilion piers)
+for (const z of [0.6, 6.9, 13.2, 18.9, 23.5]) {
+  box(1.1, 5.2, 1.3, M.brick, 18.35, 2.6, z, B);
+}
+// Glaze the two east-room arches (recessed glass panels)
+box(0.15, 7.2, 4.4, M.glass, 17.85, RF + 3.4, 16.4 + 0.0, B).position.z = 24 - 16.4;
+box(0.15, 7.2, 4.4, M.glass, 17.85, RF + 3.4, 24 - 21.4, B);
+
+// ============ ROOFS ============
+// Main gable over office + east room + bath (ridge E-W at z=20)
+function gableRoof(x1, x2, z1, z2, eaveY, ridgeY, ridgeZ) {
+  const L = x2 - x1;
+  const s = new THREE.Shape();
+  s.moveTo(z1, eaveY); s.lineTo(ridgeZ, ridgeY); s.lineTo(z2, eaveY);
+  s.lineTo(z2, eaveY - 0.5); s.lineTo(ridgeZ, ridgeY - 0.5); s.lineTo(z1, eaveY - 0.5);
+  s.lineTo(z1, eaveY);
+  const g = new THREE.ExtrudeGeometry(s, { depth: L, bevelEnabled: false });
+  const m = new THREE.Mesh(g, M.roof);
+  m.rotation.y = Math.PI / 2;
+  m.position.set(x1, 0, 0);
+  m.castShadow = m.receiveShadow = true;
+  scene.add(m);
+  // gable-end stucco triangles
+  const t = new THREE.Shape();
+  t.moveTo(z1, eaveY - 0.5); t.lineTo(ridgeZ, ridgeY - 0.5); t.lineTo(z2, eaveY - 0.5); t.lineTo(z1, eaveY - 0.5);
+  for (const gx of [x1 + 0.9, x2 - 0.9]) {
+    const gm = new THREE.Mesh(new THREE.ShapeGeometry(t), M.stucco);
+    gm.rotation.y = Math.PI / 2; gm.position.set(gx, 0, 0);
+    gm.castShadow = true; scene.add(gm);
+  }
+}
+gableRoof(-1.2, 19.6, 12.8, 29.6, RF + WALL, RF + WALL + 3.4, 20.8);
+// Kitchen shed roof — high at south (ties under main gable), low at north
+{
+  const g = new THREE.BoxGeometry(12.6, 0.5, 16.3);
+  const m = new THREE.Mesh(g, M.roof);
+  m.position.set(13.1, (KW + 1.4 + KW - 0.4) / 2 + 0.1, 6.6);
+  m.rotation.x = Math.atan2(1.8, 16);
+  m.castShadow = m.receiveShadow = true; scene.add(m);
+}
+
+// ============ WEST SIDE — proposed design (open brief) ============
+// Wood pergola lounge off the office west wall + arched office windows to match east.
+const P = new THREE.Group(); scene.add(P);
+// Posts
+for (const [px, pz] of [[-9, 15], [-9, 25], [-0.8, 15], [-0.8, 25]]) {
+  box(0.6, 8.4, 0.6, M.woodDark, px, 4.2, pz, P);
+}
+// Beams + slats
+box(9.4, 0.5, 0.8, M.wood, -4.9, 8.6, 15, P);
+box(9.4, 0.5, 0.8, M.wood, -4.9, 8.6, 25, P);
+for (let i = 0; i <= 10; i++) box(0.35, 0.35, 11.4, M.wood, -8.9 + i * 0.82, 8.95, 20, P);
+// String lights (two sagging strands with warm bulbs)
+const bulbMat = new THREE.MeshStandardMaterial({ color: 0xffdf9e, emissive: 0xffb84d, emissiveIntensity: 1.4 });
+for (const zz of [17, 23]) {
+  for (let i = 0; i <= 8; i++) {
+    const x = -8.6 + i;
+    const sag = Math.sin((i / 8) * Math.PI) * 0.7;
+    const b = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 8), bulbMat);
+    b.position.set(x, 8.3 - sag, zz); P.add(b);
+  }
+}
+// Lounge set on the (kept, neater) paver patio
+box(6, 1.4, 2.2, M.cushion, -5, 0.9, 24.2, P);
+box(2.2, 1.4, 4.4, M.cushion, -7.6, 0.9, 21.6, P);
+box(2.6, 1.1, 2.6, M.woodDark, -4.4, 0.65, 20.6, P);
+// Planter bed along office west wall
+box(1.6, 1.1, 10.5, M.brick, -1.2, 0.55, 20, P);
+const soil = box(1.3, 0.25, 10.2, M.soil, -1.2, 1.15, 20, P);
+for (let i = 0; i < 6; i++) {
+  const bush = new THREE.Mesh(new THREE.SphereGeometry(0.55 + Math.random() * 0.25, 10, 8), M.leaf);
+  bush.position.set(-1.2, 1.6, 15.6 + i * 1.75); bush.castShadow = true; P.add(bush);
+}
+// Office west wall: two arched windows echoing the east arcade
+for (const wz of [17.2, 22.8]) {
+  const aw = archWall(3.2, 5.6, [{ c: 1.6, w: 2.6, h: 4.9 }], 0.35, M.trim);
+  aw.rotation.y = Math.PI / 2;
+  aw.position.set(-0.15, RF + 1.2, wz + 1.6);
+  B.add(aw);
+  box(0.18, 4.6, 2.4, M.glass, 0.02, RF + 3.4, wz, B);
+}
+
+// ============ SPA PAVILION (existing — kept, NE of building) ============
+// Stucco arches on brick piers, matches photos; hot tub inside.
+const V = new THREE.Group(); V.position.set(15.5, 0, -15); scene.add(V);
+{
+  const pw = 10, pd = 11, ph = 9;
+  // Corner brick piers
+  for (const [px, pz] of [[0.8, 0.8], [pw - 0.8, 0.8], [0.8, pd - 0.8], [pw - 0.8, pd - 0.8]]) {
+    box(1.6, ph, 1.6, M.brick, px, ph / 2, pz, V);
+  }
+  // Arch walls N & S (front/back) and E (facing patio); west closed low wall
+  const aN = archWall(pw, ph, [{ c: pw / 2, w: 6.4, h: 7.2 }], 0.7, M.stuccoWhite);
+  aN.position.set(0, 0, 0.35); V.add(aN);
+  const aS = archWall(pw, ph, [{ c: pw / 2, w: 6.4, h: 7.2 }], 0.7, M.stuccoWhite);
+  aS.position.set(0, 0, pd - 0.35); V.add(aS);
+  const aE = archWall(pd, ph, [{ c: pd / 2, w: 6, h: 7 }], 0.7, M.stuccoWhite);
+  aE.rotation.y = -Math.PI / 2; aE.position.set(pw - 0.35, 0, pd); V.add(aE);
+  box(0.7, 3.2, pd, M.brick, 0.35, 1.6, pd / 2, V); // west knee wall
+  // Roof slab + overhang
+  box(pw + 2.4, 0.7, pd + 2.4, M.roof, pw / 2, ph + 0.35, pd / 2, V);
+  // Spa
+  box(7, 3, 7, M.spaShell, pw / 2, 1.5, pd / 2, V);
+  const w = new THREE.Mesh(new THREE.PlaneGeometry(6.2, 6.2), M.water);
+  w.rotation.x = -Math.PI / 2; w.position.set(pw / 2, 3.05, pd / 2); V.add(w);
+  box(3, 1, 1.6, M.wood, pw / 2, 0.5, pd - 1.5, V); // step
+}
+
+// ============ FIREPLACE / PIZZA OVEN (existing — kept, NW corner) ============
+const F = new THREE.Group(); F.position.set(-5, 0, -4); scene.add(F);
+{
+  box(5, 3.2, 4.2, M.brick, 0, 1.6, 0, F);
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(2.1, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2), M.brick);
+  dome.position.set(0, 3.2, 0); dome.castShadow = true; F.add(dome);
+  box(1, 2.4, 1, M.brick, 0, 5.4, -0.9, F); // chimney
+  const mouth = new THREE.Mesh(new THREE.CircleGeometry(0.9, 16, 0, Math.PI),
+    new THREE.MeshBasicMaterial({ color: 0x160c08 }));
+  mouth.position.set(0, 3.15, 2.12); F.add(mouth);
+}
+
+// ============ LEAN-TO SHED (existing — kept, west side) ============
+const S = new THREE.Group(); S.position.set(-14, 0, 2); scene.add(S);
+{
+  const sw = 8, sd = 10;                       // 8' deep x 10' long, open east face
+  const galv = new THREE.MeshStandardMaterial({ color: 0x9aa3ab, roughness: 0.5, metalness: 0.55 });
+  box(0.5, 6.5, sd, M.wood, 0.25, 3.25, sd / 2, S);          // west (back) wall
+  box(sw, 6.8, 0.5, M.wood, sw / 2, 3.4, 0.25, S);           // north wall
+  box(sw, 6.8, 0.5, M.wood, sw / 2, 3.4, sd - 0.25, S);      // south wall
+  for (const pz of [0.5, sd - 0.5]) box(0.5, 7.6, 0.5, M.woodDark, sw - 0.25, 3.8, pz, S); // east posts
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(sw + 1.6, 0.25, sd + 1.2), galv);
+  roof.position.set(sw / 2 + 0.2, 7.15, sd / 2);
+  roof.rotation.z = Math.atan2(1.4, sw);                     // slopes down to the west
+  roof.castShadow = roof.receiveShadow = true; S.add(roof);
+  box(2.4, 2, 1.6, M.woodDark, 3, 1, 3, S);                  // storage inside
+  box(1.8, 1.4, 1.4, M.spaShell, 5.6, 0.7, 6.5, S);
+}
+
+// ============ EXISTING DETACHED BATH (cut to 4×8) ============
+box(4, 8, 8, M.stucco, 24, 4, 27);
+{
+  const m = new THREE.Mesh(new THREE.BoxGeometry(5, 0.4, 9), M.roof);
+  m.position.set(24, 8.4, 27); m.rotation.z = 0.06; m.castShadow = true; scene.add(m);
+  box(2.2, 6.5, 0.2, M.woodDark, 23, 3.25, 23.05);
+}
+
+// ============ FENCES + GATE (white vinyl, per plan) ============
+function fenceRun(x1, z1, x2, z2) {
+  const len = Math.hypot(x2 - x1, z2 - z1);
+  const g = new THREE.Group();
+  g.position.set(x1, 0, z1);
+  g.rotation.y = -Math.atan2(z2 - z1, x2 - x1);
+  box(len, 5.4, 0.25, M.fence, len / 2, 2.9, 0, g);
+  box(len, 0.5, 0.35, M.fence, len / 2, 5.8, 0, g);
+  for (let d = 0; d <= len; d += 8) box(0.5, 6.3, 0.5, M.fence, Math.min(d, len), 3.15, 0, g);
+  scene.add(g); return g;
+}
+fenceRun(26, 31, 26, 22);   // east, south of gate
+fenceRun(26, 18, 26, -16);  // east, north of gate (runs past the spa pavilion)
+fenceRun(-26, 31, 26, 31);  // south
+fenceRun(-26, -0, -26, 31); // west boundary behind pavilion
+// Gate (slightly darker, latch side post)
+box(0.4, 5.9, 4, M.trim, 26, 2.95, 20).material = new THREE.MeshStandardMaterial({ color: 0xdde3e8, roughness: 0.6 });
+
+// ============ LANDSCAPE (existing — kept) ============
+function tree(x, z, trunkH, r, mat) {
+  const g = new THREE.Group(); g.position.set(x, 0, z);
+  const t = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.4, trunkH, 8), M.woodDark);
+  t.position.y = trunkH / 2; t.castShadow = true; g.add(t);
+  for (let i = 0; i < 3; i++) {
+    const c = new THREE.Mesh(new THREE.SphereGeometry(r * (1 - i * 0.18), 12, 10), i ? M.leaf : mat);
+    c.position.set((Math.random() - 0.5) * r, trunkH + r * 0.55 + i * r * 0.4, (Math.random() - 0.5) * r);
+    c.castShadow = true; g.add(c);
+  }
+  scene.add(g); return g;
+}
+tree(22.5, 6, 4, 3.2, M.leafDark);      // pomegranate in the new lawn
+tree(-23.5, 28.5, 9, 2.6, M.leaf);      // palm-ish corner tree
+tree(12, -6, 5, 3.6, M.leafDark);       // shade tree on NE lawn apron
+// Succulent bed along south fence (aeoniums from photos)
+for (let i = 0; i < 9; i++) {
+  const s = new THREE.Mesh(new THREE.ConeGeometry(0.5, 0.8, 9), i % 3 ? M.succulent : M.leaf);
+  s.position.set(-21 + i * 2.1, 0.4, 29.6); s.castShadow = true; scene.add(s);
+}
+// Shrubs along east fence in the lawn
+for (let i = 0; i < 5; i++) {
+  const s = new THREE.Mesh(new THREE.SphereGeometry(0.8, 10, 8), M.leaf);
+  s.position.set(25, 0.8, 2 + i * 5.4); s.castShadow = true; scene.add(s);
+}
+
+// ============ CAMERA PRESETS ============
+const VIEWS = {
+  aerial:  { pos: [58, 54, 62],  tgt: [3, 2, 8] },
+  east:    { pos: [46, 9, 16],   tgt: [18, 6, 13] },
+  west:    { pos: [-28, 8, 34],  tgt: [-4, 5, 16] },
+  kitchen: { pos: [30, 5.5, 4],  tgt: [14, 5, 6] },
+  spa:     { pos: [4, 7, -24],   tgt: [19, 4, -9] },
+};
+let anim = null;
+function goTo(name) {
+  const v = VIEWS[name];
+  const p0 = camera.position.clone(), t0 = controls.target.clone();
+  const p1 = new THREE.Vector3(...v.pos), t1 = new THREE.Vector3(...v.tgt);
+  const start = performance.now(), dur = 900;
+  anim = (now) => {
+    let k = Math.min(1, (now - start) / dur);
+    k = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    camera.position.lerpVectors(p0, p1, k);
+    controls.target.lerpVectors(t0, t1, k);
+    if (k >= 1) anim = null;
+  };
+  document.querySelectorAll('#views button').forEach(b =>
+    b.classList.toggle('active', b.dataset.v === name));
+}
+document.querySelectorAll('#views button').forEach(b =>
+  b.addEventListener('click', () => goTo(b.dataset.v)));
+camera.position.set(...VIEWS.aerial.pos);
+controls.target.set(...VIEWS.aerial.tgt);
+
+// ---- Render loop ----
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== w * renderer.getPixelRatio() || canvas.height !== h * renderer.getPixelRatio()) {
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+}
+renderer.setAnimationLoop((now) => {
+  resize();
+  if (anim) anim(now);
+  controls.update();
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

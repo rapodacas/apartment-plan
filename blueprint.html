@@ -27,9 +27,10 @@ th{color:#7ab8ff;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
 <div class="navrow">
   <a href="index.html">← Tasks</a>
   <a href="floorplan.html">Floor Plan + Photos →</a>
+  <a href="render3d.html">3D View →</a>
 </div>
 
-<svg viewBox="-40 -60 360 480" width="720" xmlns="http://www.w3.org/2000/svg" style="background:#0d1f38;border-radius:12px;border:1px solid #1e3a5c">
+<svg viewBox="-160 -170 490 600" width="760" xmlns="http://www.w3.org/2000/svg" style="background:#0d1f38;border-radius:12px;border:1px solid #1e3a5c">
   <defs>
     <pattern id="bgrid" patternUnits="userSpaceOnUse" width="10" height="10">
       <rect width="10" height="10" fill="none" stroke="rgba(122,184,255,.05)" stroke-width=".4"/>
@@ -38,7 +39,7 @@ th{color:#7ab8ff;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
       <path d="M0,0 L6,3 L0,6 z" fill="#7ab8ff"/>
     </marker>
   </defs>
-  <rect x="-40" y="-60" width="360" height="480" fill="url(#bgrid)"/>
+  <rect x="-160" y="-170" width="490" height="600" fill="url(#bgrid)"/>
 
   <!-- Compass -->
   <g transform="translate(290,-30)">
@@ -127,6 +128,37 @@ th{color:#7ab8ff;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
   <circle cx="14" cy="50" r="6" fill="#0d1f38" stroke="#7aff9e" stroke-width="1"/>
   <text x="14" y="53" text-anchor="middle" font-size="7" fill="#7aff9e" font-weight="700">8</text>
 
+  <!-- ═══ EXISTING OUTBUILDINGS (per owner, 7/9) ═══ -->
+
+  <!-- [9] Lean-to shed — west side -->
+  <rect x="-140" y="20" width="80" height="100" fill="none" stroke="#cfe3ff" stroke-width="1.6"/>
+  <line x1="-140" y1="20" x2="-60" y2="120" stroke="#1e3a5c" stroke-width=".6"/>
+  <line x1="-60" y1="20" x2="-140" y2="120" stroke="#1e3a5c" stroke-width=".6"/>
+  <text x="-100" y="62" text-anchor="middle" font-size="9" fill="#cfe3ff">LEAN-TO</text>
+  <text x="-100" y="74" text-anchor="middle" font-size="9" fill="#cfe3ff">SHED</text>
+  <text x="-100" y="87" text-anchor="middle" font-size="7" fill="#6d8db3">wood · corrugated roof</text>
+  <text x="-100" y="97" text-anchor="middle" font-size="7" fill="#6d8db3">±8' × 10' · open east</text>
+  <circle cx="-52" cy="28" r="6" fill="#0d1f38" stroke="#cfe3ff" stroke-width="1"/>
+  <text x="-52" y="31" text-anchor="middle" font-size="7" fill="#cfe3ff" font-weight="700">9</text>
+
+  <!-- [10] Fireplace / pizza oven — NW corner -->
+  <rect x="-75" y="-62" width="50" height="42" fill="none" stroke="#cfe3ff" stroke-width="1.6"/>
+  <circle cx="-50" cy="-41" r="12" fill="none" stroke="#cfe3ff" stroke-width="1"/>
+  <text x="-50" y="-70" text-anchor="middle" font-size="8" fill="#cfe3ff">FIREPLACE / OVEN</text>
+  <text x="-50" y="-8" text-anchor="middle" font-size="7" fill="#6d8db3">brick dome · chimney</text>
+  <circle cx="-18" cy="-56" r="6" fill="#0d1f38" stroke="#cfe3ff" stroke-width="1"/>
+  <text x="-18" y="-53" text-anchor="middle" font-size="7" fill="#cfe3ff" font-weight="700">10</text>
+
+  <!-- [11] Spa pavilion — NE of building -->
+  <rect x="155" y="-150" width="100" height="110" fill="none" stroke="#cfe3ff" stroke-width="1.6"/>
+  <rect x="178" y="-128" width="54" height="54" fill="none" stroke="#7af0ff" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="205" y="-98" text-anchor="middle" font-size="8" fill="#7af0ff">SPA</text>
+  <text x="205" y="-155" text-anchor="middle" font-size="8" fill="#cfe3ff">SPA PAVILION</text>
+  <text x="205" y="-30" text-anchor="middle" font-size="7" fill="#6d8db3">stucco arches on brick piers</text>
+  <text x="205" y="-20" text-anchor="middle" font-size="7" fill="#6d8db3">arch profile → replicate on east facade</text>
+  <circle cx="262" cy="-144" r="6" fill="#0d1f38" stroke="#cfe3ff" stroke-width="1"/>
+  <text x="262" y="-141" text-anchor="middle" font-size="7" fill="#cfe3ff" font-weight="700">11</text>
+
   <!-- Fences -->
   <line x1="-20" y1="310" x2="260" y2="310" stroke="#6d8db3" stroke-width="1.6" stroke-dasharray="12,6"/>
   <line x1="260" y1="310" x2="260" y2="-40" stroke="#6d8db3" stroke-width="1.6" stroke-dasharray="12,6"/>
@@ -160,6 +192,9 @@ th{color:#7ab8ff;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
     <li><b>[6] Steps</b>, ±4' wide up to raised deck, north side — matches plan location. Treads weathered; verify rise/run for code. <span class="src">(IMG_2644)</span></li>
     <li><b>[7] Appliances staged</b> at future kitchen: Samsung french-door fridge (10-yr warranty tag), 2 microwaves. Protect from weather until enclosure. <span class="src">(IMG_2615, 2622)</span></li>
     <li><b>[8] Mixing/staging area</b>, west walkway: cement mixer, work tables, drills, levels. <span class="src">(IMG_2626)</span></li>
+    <li><b>[9] Lean-to shed</b>, west side — wood plank walls, corrugated roof, open east face. Stays. <span class="src">(IMG_2626, 2646 · owner 7/9)</span></li>
+    <li><b>[10] Fireplace / pizza oven</b>, NW corner — brick dome with chimney. Stays. <span class="src">(IMG_2633, 2643 · owner 7/9)</span></li>
+    <li><b>[11] Spa pavilion</b>, NE of building — stucco arches on brick piers, covered hot tub. Stays; <b>its arch profile is the template for the east facade arcade</b>. <span class="src">(IMG_2642 · owner 7/9)</span></li>
   </ul>
 </div>
 
@@ -194,8 +229,8 @@ th{color:#7ab8ff;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
 </div>
 
 <p class="note">
-  Generated from the 7/9/2026 photo survey. Positions of openings are approximate — field-verify before framing or ordering.<br>
-  This sheet updates as new photos come in through the sync pipeline.
+  Generated from the 7/9/2026 photo survey; outbuildings (lean-to, fireplace, spa pavilion) placed per owner 7/9 — positions approximate, field-verify before framing or ordering.<br>
+  This sheet updates as new photos come in through the sync pipeline. See <a href="render3d.html" style="color:#7ab8ff">3D concept</a> for the proposed finished state.
 </p>
 
 </body>
