@@ -64,7 +64,7 @@ controls.maxPolarAngle = Math.PI * 0.495;
 controls.minDistance = 8; controls.maxDistance = 180;
 
 // ---- Lights ----
-const hemi = new THREE.HemisphereLight(0xcfe6ff, 0x8a7a5a, 0.9);
+const hemi = new THREE.HemisphereLight(0xcfe6ff, 0x8a7a5a, 1.25);
 scene.add(hemi);
 const sun = new THREE.DirectionalLight(0xfff2dd, 2.1);
 sun.position.set(70, 80, 25); // morning sun from the east — hero light on the arches
@@ -154,11 +154,10 @@ function pad(x1, z1, x2, z2, tex, y = 0.02) {
 }
 pad(-26, 0, 8, 31, paverTex(9, 8));          // west patio (lean-to, pergola zone)
 pad(0, 0, 8, 14, paverTex(2.5, 4));          // open north patio remainder
-pad(-26, -8, 8, 0, paverTex(9, 2));          // northwest patio corner (fireplace)
-pad(14, -16, 27, -3, paverTex(3.5, 3.5));    // northeast pad under spa pavilion
-// Lush lawn — east yard, building to fence and along gate run
+pad(-26, -8, 15, 0, paverTex(11, 2));        // north patio run — fireplace at its corner
+pad(13, -12, 26, 1, paverTex(3.5, 3.5));     // pad under attached spa pavilion
+// Lush lawn — east yard, building to fence
 pad(18, 0, 26, 31, lawnTex(3, 8), 0.03);
-pad(8, -8, 26, 0, lawnTex(5, 3), 0.03);      // lawn apron north-east
 
 // ============ BUILDING ============
 const B = new THREE.Group(); scene.add(B);
@@ -183,6 +182,14 @@ box(10, KW, 0.7, M.stucco, 13, KW / 2, 0.35, B);        // north wall
 box(4, 3.5, 0.3, M.glass, 14.5, 5.4, 0.3, B);
 box(0.25, 3.9, 4.4, M.trim, 14.5, 5.4, 0.34, B).rotation.z = Math.PI / 2;
 box(3, 6.8, 0.3, M.glass, 10.3, 3.4, 0.3, B);           // glazed entry door
+// Kitchen interior: floor slab, counter run on west wall, island, fridge
+const steel = new THREE.MeshStandardMaterial({ color: 0xc6cdd4, roughness: 0.35, metalness: 0.7 });
+box(9.4, 0.12, 13.2, M.concrete, 13.3, 0.06, 7.1, B);   // floor slab
+box(2.1, 3, 8.5, M.woodDark, 9.8, 1.5, 8.5, B);          // counter along west wall
+box(2.1, 0.18, 8.5, M.trim, 9.8, 3.1, 8.5, B);           // countertop
+box(3, 5.9, 2.7, steel, 10.3, 2.95, 2.6, B);             // fridge (the Samsung, finally indoors)
+box(4.6, 3, 2.4, M.woodDark, 13.8, 1.5, 7.5, B);         // island
+box(4.6, 0.18, 2.4, M.trim, 13.8, 3.1, 7.5, B);
 
 // ============ EAST ARCADE — pavilion arches replicated (x=18 wall line) ============
 // Semicircular arches on brick piers, stucco above — mirrors the existing spa pavilion.
@@ -206,21 +213,22 @@ function archWall(len, height, arches, depth, mat) {
 }
 // Kitchen segment z0-14: two OPEN arches (outdoor kitchen breathes east to the lawn)
 // East-room segment z14-24: two arches GLAZED (arched windows onto the lawn)
-const ARCH_W = 4.6, ARCH_H = 7.6, TOP = 10;
+const TOP = 10;
+// TWO large arches on the east elevation (per owner). Local wall X runs 0→24 = global z 24→0.
+// East-room arch (glazed) centered z=19 → c=5, 7' wide. Kitchen arch (open) centered z=7 → c=17, 8' wide.
 const eastWall = archWall(24, TOP, [
-  { c: 3.9, w: ARCH_W, h: ARCH_H }, { c: 10.1, w: ARCH_W, h: ARCH_H },
-  { c: 16.4, w: ARCH_W, h: ARCH_H }, { c: 21.4, w: ARCH_W, h: ARCH_H },
+  { c: 5, w: 7, h: 8.2 },
+  { c: 17, w: 8, h: 8.4 },
 ], 0.8, M.stuccoWhite);
-eastWall.rotation.y = -Math.PI / 2;
-eastWall.position.set(18, 0, 24);   // spans z=24 → z=0 after rotation
+eastWall.rotation.y = Math.PI / 2;
+eastWall.position.set(18, 0, 24);   // spans z=24 → z=0
 B.add(eastWall);
-// Brick piers at arch bases (echo pavilion piers)
-for (const z of [0.6, 6.9, 13.2, 18.9, 23.5]) {
+// Brick piers flanking each arch (echo pavilion piers)
+for (const z of [2.3, 11.7, 14.8, 23.2]) {
   box(1.1, 5.2, 1.3, M.brick, 18.35, 2.6, z, B);
 }
-// Glaze the two east-room arches (recessed glass panels)
-box(0.15, 7.2, 4.4, M.glass, 17.85, RF + 3.4, 16.4 + 0.0, B).position.z = 24 - 16.4;
-box(0.15, 7.2, 4.4, M.glass, 17.85, RF + 3.4, 24 - 21.4, B);
+// Glaze the east-room arch (full-height arched glass)
+box(0.15, 8.4, 6.8, M.glass, 17.8, 4.3, 19, B);
 
 // ============ ROOFS ============
 // Main gable over office + east room + bath (ridge E-W at z=20)
@@ -232,8 +240,8 @@ function gableRoof(x1, x2, z1, z2, eaveY, ridgeY, ridgeZ) {
   s.lineTo(z1, eaveY);
   const g = new THREE.ExtrudeGeometry(s, { depth: L, bevelEnabled: false });
   const m = new THREE.Mesh(g, M.roof);
-  m.rotation.y = Math.PI / 2;
-  m.position.set(x1, 0, 0);
+  m.rotation.y = -Math.PI / 2;      // shape x-axis (plan z) → global +Z; extrude → -X from x2
+  m.position.set(x2, 0, 0);
   m.castShadow = m.receiveShadow = true;
   scene.add(m);
   // gable-end stucco triangles
@@ -241,7 +249,7 @@ function gableRoof(x1, x2, z1, z2, eaveY, ridgeY, ridgeZ) {
   t.moveTo(z1, eaveY - 0.5); t.lineTo(ridgeZ, ridgeY - 0.5); t.lineTo(z2, eaveY - 0.5); t.lineTo(z1, eaveY - 0.5);
   for (const gx of [x1 + 0.9, x2 - 0.9]) {
     const gm = new THREE.Mesh(new THREE.ShapeGeometry(t), M.stucco);
-    gm.rotation.y = Math.PI / 2; gm.position.set(gx, 0, 0);
+    gm.rotation.y = -Math.PI / 2; gm.position.set(gx, 0, 0);
     gm.castShadow = true; scene.add(gm);
   }
 }
@@ -256,74 +264,58 @@ gableRoof(-1.2, 19.6, 12.8, 29.6, RF + WALL, RF + WALL + 3.4, 20.8);
 }
 
 // ============ WEST SIDE — proposed design (open brief) ============
-// Wood pergola lounge off the office west wall + arched office windows to match east.
+// Pergola lounge on the paver patio, west of the existing lean-to shed.
 const P = new THREE.Group(); scene.add(P);
 // Posts
-for (const [px, pz] of [[-9, 15], [-9, 25], [-0.8, 15], [-0.8, 25]]) {
+for (const [px, pz] of [[-19, 15], [-19, 25], [-10.3, 15], [-10.3, 25]]) {
   box(0.6, 8.4, 0.6, M.woodDark, px, 4.2, pz, P);
 }
 // Beams + slats
-box(9.4, 0.5, 0.8, M.wood, -4.9, 8.6, 15, P);
-box(9.4, 0.5, 0.8, M.wood, -4.9, 8.6, 25, P);
-for (let i = 0; i <= 10; i++) box(0.35, 0.35, 11.4, M.wood, -8.9 + i * 0.82, 8.95, 20, P);
+box(9.4, 0.5, 0.8, M.wood, -14.7, 8.6, 15, P);
+box(9.4, 0.5, 0.8, M.wood, -14.7, 8.6, 25, P);
+for (let i = 0; i <= 10; i++) box(0.35, 0.35, 11.4, M.wood, -18.7 + i * 0.82, 8.95, 20, P);
 // String lights (two sagging strands with warm bulbs)
 const bulbMat = new THREE.MeshStandardMaterial({ color: 0xffdf9e, emissive: 0xffb84d, emissiveIntensity: 1.4 });
 for (const zz of [17, 23]) {
   for (let i = 0; i <= 8; i++) {
-    const x = -8.6 + i;
+    const x = -18.4 + i;
     const sag = Math.sin((i / 8) * Math.PI) * 0.7;
     const b = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 8), bulbMat);
     b.position.set(x, 8.3 - sag, zz); P.add(b);
   }
 }
 // Lounge set on the (kept, neater) paver patio
-box(6, 1.4, 2.2, M.cushion, -5, 0.9, 24.2, P);
-box(2.2, 1.4, 4.4, M.cushion, -7.6, 0.9, 21.6, P);
-box(2.6, 1.1, 2.6, M.woodDark, -4.4, 0.65, 20.6, P);
-// Planter bed along office west wall
-box(1.6, 1.1, 10.5, M.brick, -1.2, 0.55, 20, P);
-const soil = box(1.3, 0.25, 10.2, M.soil, -1.2, 1.15, 20, P);
-for (let i = 0; i < 6; i++) {
-  const bush = new THREE.Mesh(new THREE.SphereGeometry(0.55 + Math.random() * 0.25, 10, 8), M.leaf);
-  bush.position.set(-1.2, 1.6, 15.6 + i * 1.75); bush.castShadow = true; P.add(bush);
-}
-// Office west wall: two arched windows echoing the east arcade
-for (const wz of [17.2, 22.8]) {
-  const aw = archWall(3.2, 5.6, [{ c: 1.6, w: 2.6, h: 4.9 }], 0.35, M.trim);
-  aw.rotation.y = Math.PI / 2;
-  aw.position.set(-0.15, RF + 1.2, wz + 1.6);
-  B.add(aw);
-  box(0.18, 4.6, 2.4, M.glass, 0.02, RF + 3.4, wz, B);
-}
+box(6, 1.4, 2.2, M.cushion, -14.7, 0.9, 24.2, P);
+box(2.2, 1.4, 4.4, M.cushion, -17.4, 0.9, 21.6, P);
+box(2.6, 1.1, 2.6, M.woodDark, -14.1, 0.65, 20.6, P);
 
-// ============ SPA PAVILION (existing — kept, NE of building) ============
-// Stucco arches on brick piers, matches photos; hot tub inside.
-const V = new THREE.Group(); V.position.set(15.5, 0, -15); scene.add(V);
+// ============ SPA PAVILION (existing — ATTACHED to north side of building, east end) ============
+// Stucco arches on brick piers, matches photos; hot tub inside. South face meets the building.
+const V = new THREE.Group(); V.position.set(15, 0, -11); scene.add(V);
 {
   const pw = 10, pd = 11, ph = 9;
   // Corner brick piers
   for (const [px, pz] of [[0.8, 0.8], [pw - 0.8, 0.8], [0.8, pd - 0.8], [pw - 0.8, pd - 0.8]]) {
     box(1.6, ph, 1.6, M.brick, px, ph / 2, pz, V);
   }
-  // Arch walls N & S (front/back) and E (facing patio); west closed low wall
+  // Arch walls on the three free faces: N, E, W (south face = building)
   const aN = archWall(pw, ph, [{ c: pw / 2, w: 6.4, h: 7.2 }], 0.7, M.stuccoWhite);
   aN.position.set(0, 0, 0.35); V.add(aN);
-  const aS = archWall(pw, ph, [{ c: pw / 2, w: 6.4, h: 7.2 }], 0.7, M.stuccoWhite);
-  aS.position.set(0, 0, pd - 0.35); V.add(aS);
   const aE = archWall(pd, ph, [{ c: pd / 2, w: 6, h: 7 }], 0.7, M.stuccoWhite);
-  aE.rotation.y = -Math.PI / 2; aE.position.set(pw - 0.35, 0, pd); V.add(aE);
-  box(0.7, 3.2, pd, M.brick, 0.35, 1.6, pd / 2, V); // west knee wall
-  // Roof slab + overhang
-  box(pw + 2.4, 0.7, pd + 2.4, M.roof, pw / 2, ph + 0.35, pd / 2, V);
+  aE.rotation.y = -Math.PI / 2; aE.position.set(pw - 0.35, 0, 0); V.add(aE);
+  const aW = archWall(pd, ph, [{ c: pd / 2, w: 6, h: 7 }], 0.7, M.stuccoWhite);
+  aW.rotation.y = -Math.PI / 2; aW.position.set(0.35, 0, 0); V.add(aW);
+  // Roof slab + modest overhang
+  box(pw + 1.6, 0.7, pd + 1.6, M.roof, pw / 2, ph + 0.35, pd / 2 - 0.4, V);
   // Spa
   box(7, 3, 7, M.spaShell, pw / 2, 1.5, pd / 2, V);
   const w = new THREE.Mesh(new THREE.PlaneGeometry(6.2, 6.2), M.water);
   w.rotation.x = -Math.PI / 2; w.position.set(pw / 2, 3.05, pd / 2); V.add(w);
-  box(3, 1, 1.6, M.wood, pw / 2, 0.5, pd - 1.5, V); // step
+  box(3, 1, 1.6, M.wood, pw / 2, 0.5, 1.2, V); // entry step, north side
 }
 
-// ============ FIREPLACE / PIZZA OVEN (existing — kept, NW corner) ============
-const F = new THREE.Group(); F.position.set(-5, 0, -4); scene.add(F);
+// ============ FIREPLACE / PIZZA OVEN (existing — at the patio corner, beside the pavilion) ============
+const F = new THREE.Group(); F.position.set(12.4, 0, -5); scene.add(F);
 {
   box(5, 3.2, 4.2, M.brick, 0, 1.6, 0, F);
   const dome = new THREE.Mesh(new THREE.SphereGeometry(2.1, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2), M.brick);
@@ -334,21 +326,22 @@ const F = new THREE.Group(); F.position.set(-5, 0, -4); scene.add(F);
   mouth.position.set(0, 3.15, 2.12); F.add(mouth);
 }
 
-// ============ LEAN-TO SHED (existing — kept, west side) ============
-const S = new THREE.Group(); S.position.set(-14, 0, 2); scene.add(S);
+// ============ LEAN-TO SHED (existing — ATTACHED to the building's west wall) ============
+const S = new THREE.Group(); S.position.set(-8, 0, 15); scene.add(S);
 {
-  const sw = 8, sd = 10;                       // 8' deep x 10' long, open east face
-  const galv = new THREE.MeshStandardMaterial({ color: 0x9aa3ab, roughness: 0.5, metalness: 0.55 });
-  box(0.5, 6.5, sd, M.wood, 0.25, 3.25, sd / 2, S);          // west (back) wall
-  box(sw, 6.8, 0.5, M.wood, sw / 2, 3.4, 0.25, S);           // north wall
-  box(sw, 6.8, 0.5, M.wood, sw / 2, 3.4, sd - 0.25, S);      // south wall
-  for (const pz of [0.5, sd - 0.5]) box(0.5, 7.6, 0.5, M.woodDark, sw - 0.25, 3.8, pz, S); // east posts
-  const roof = new THREE.Mesh(new THREE.BoxGeometry(sw + 1.6, 0.25, sd + 1.2), galv);
-  roof.position.set(sw / 2 + 0.2, 7.15, sd / 2);
-  roof.rotation.z = Math.atan2(1.4, sw);                     // slopes down to the west
+  const sw = 8, sd = 10;   // 8' deep off the office west wall, 10' long; high side against building
+  const galv = new THREE.MeshStandardMaterial({ color: 0xb7bec6, roughness: 0.45, metalness: 0.5 });
+  const plank = new THREE.MeshStandardMaterial({ color: 0xb08a5e, roughness: 0.9 });
+  box(0.5, 5.6, sd, plank, 0.25, 2.8, sd / 2, S);            // west (low) wall
+  box(sw, 6.4, 0.5, plank, sw / 2, 3.2, 0.25, S);            // north wall
+  box(sw, 6.4, 0.5, plank, sw / 2, 3.2, sd - 0.25, S);       // south wall
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(sw + 1.4, 0.25, sd + 1), galv);
+  roof.position.set(sw / 2 - 0.3, 6.9, sd / 2);
+  roof.rotation.z = Math.atan2(1.6, sw);                     // high at the building, sloping west
   roof.castShadow = roof.receiveShadow = true; S.add(roof);
-  box(2.4, 2, 1.6, M.woodDark, 3, 1, 3, S);                  // storage inside
-  box(1.8, 1.4, 1.4, M.spaShell, 5.6, 0.7, 6.5, S);
+  box(1.9, 6, 0.2, M.trim, 3.5, 3, sd - 0.15, S);            // white door, south face (per photos)
+  box(2.4, 2, 1.6, M.woodDark, 2.6, 1, 3, S);                // storage inside
+  box(1.8, 1.4, 1.4, M.spaShell, 5.8, 0.7, 6.5, S);
 }
 
 // ============ EXISTING DETACHED BATH (cut to 4×8) ============
@@ -389,9 +382,9 @@ function tree(x, z, trunkH, r, mat) {
   }
   scene.add(g); return g;
 }
-tree(22.5, 6, 4, 3.2, M.leafDark);      // pomegranate in the new lawn
+tree(24, 3, 4, 2.6, M.leafDark);        // pomegranate in the new lawn (NE corner)
 tree(-23.5, 28.5, 9, 2.6, M.leaf);      // palm-ish corner tree
-tree(12, -6, 5, 3.6, M.leafDark);       // shade tree on NE lawn apron
+tree(-22, 3, 5, 3.6, M.leafDark);       // shade tree, NW patio corner
 // Succulent bed along south fence (aeoniums from photos)
 for (let i = 0; i < 9; i++) {
   const s = new THREE.Mesh(new THREE.ConeGeometry(0.5, 0.8, 9), i % 3 ? M.succulent : M.leaf);
@@ -406,10 +399,10 @@ for (let i = 0; i < 5; i++) {
 // ============ CAMERA PRESETS ============
 const VIEWS = {
   aerial:  { pos: [58, 54, 62],  tgt: [3, 2, 8] },
-  east:    { pos: [46, 9, 16],   tgt: [18, 6, 13] },
-  west:    { pos: [-28, 8, 34],  tgt: [-4, 5, 16] },
-  kitchen: { pos: [30, 5.5, 4],  tgt: [14, 5, 6] },
-  spa:     { pos: [4, 7, -24],   tgt: [19, 4, -9] },
+  east:    { pos: [23.5, 6, 20], tgt: [17, 6.5, 4] },
+  west:    { pos: [-22, 7.5, 33], tgt: [-8, 5, 17] },
+  kitchen: { pos: [24, 6, 16],   tgt: [11, 4, 4] },
+  spa:     { pos: [3, 7, -20],   tgt: [20, 4, -6] },
 };
 let anim = null;
 function goTo(name) {
