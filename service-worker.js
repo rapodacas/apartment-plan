@@ -14,7 +14,7 @@ self.addEventListener('push', e => {
     badge: 'icon-192.png',
     tag: 'worker-signup-' + (data.date || Date.now()),
     renotify: true,
-    data: { date: data.date, url: '/apartment-plan/' }
+    data: { date: data.date, url: '/apartment-plan/app.html' }
   };
 
   e.waitUntil(self.registration.showNotification(data.title, options));
@@ -23,14 +23,14 @@ self.addEventListener('push', e => {
 // Handle notification click — open app and scroll to day
 self.addEventListener('notificationclick', e => {
   e.notification.close();
-  const url = e.notification.data?.url || '/apartment-plan/';
+  const url = e.notification.data?.url || '/apartment-plan/app.html';
   const date = e.notification.data?.date || '';
 
   e.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clients => {
       // Focus existing tab if open
       for (const client of clients) {
-        if (client.url.includes('apartment-plan')) {
+        if (client.url.includes('app.html')) {
           client.focus();
           client.postMessage({ type: 'SCROLL_TO_DAY', date });
           return;

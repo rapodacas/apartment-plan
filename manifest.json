@@ -1,10 +1,10 @@
 {
-  "name": "Apartment Build — 864 Farr Ave",
+  "name": "Apartment Build \u00e2\u20ac\u201d 864 Farr Ave",
   "short_name": "Apt Build",
-  "start_url": "/apartment-plan/",
+  "start_url": "/apartment-plan/app.html",
   "display": "standalone",
   "background_color": "#0d1117",
-  "theme_color": "#1a3a5c",
+  "theme_color": "#0d1117",
   "icons": [
     {
       "src": "icon-192.png",
@@ -16,5 +16,6 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "scope": "/apartment-plan/"
 }
