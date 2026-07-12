@@ -196,19 +196,38 @@ box(18, RF, 12, M.concrete, 9, RF / 2, 20, B);
 box(10, RF, 3, M.concrete, 13, RF / 2, 12.5, B);
 
 // --- Office core (x0-10, z14-26) — 9' walls over the raised floor, hollow so the
-//     roof-off toggle reveals the interior ---
-box(0.5, 9, 12, M.stucco, 0.25, RF + 4.5, 20, B);   // west wall
-box(0.5, 9, 12, M.stucco, 9.75, RF + 4.5, 20, B);   // east wall
-box(10, 9, 0.5, M.stucco, 5, RF + 4.5, 14.25, B);   // north wall
-box(10, 9, 0.5, M.stucco, 5, RF + 4.5, 25.75, B);   // south wall
+//     roof-off toggle reveals the interior. Walls have REAL openings cut for the
+//     windows/doors so the clear glazing sees through (rev 7/12). ---
+{
+  let w;
+  // west wall (x0-0.5) — double-hung opening
+  w = panelWall(12, 9, [{ x: 7.4, y: 1.9, w: 2.2, h: 3.5 }], 0.5, M.stucco);
+  w.rotation.y = Math.PI / 2; w.position.set(0, RF, 26); B.add(w);
+  // east wall (x9.5-10) — 6' french-door opening
+  w = panelWall(12, 9, [{ x: 3, y: 0, w: 6, h: 6.4 }], 0.5, M.stucco);
+  w.rotation.y = Math.PI / 2; w.position.set(9.5, RF, 26); B.add(w);
+  // north wall (z14-14.5) — centered 6×3 window opening
+  w = panelWall(10, 9, [{ x: 2, y: 2.7, w: 6, h: 3 }], 0.5, M.stucco);
+  w.position.set(0, RF, 14); B.add(w);
+  // south wall (z25.5-26) — clerestory pair openings
+  w = panelWall(10, 9, [{ x: 2.85, y: 7.45, w: 1.5, h: 0.9 }, { x: 5.65, y: 7.45, w: 1.5, h: 0.9 }], 0.5, M.stucco);
+  w.position.set(0, RF, 25.5); B.add(w);
+}
 box(4.5, 0.18, 1.9, M.wood, 3.2, 4.5, 15.6, B);     // desk under the transfer window
 box(1.4, 1.4, 1.4, M.cushion, 3.2, 2.7, 17.3, B);   // chair
 // --- East room (x10-18, z14-21): open raised veranda flowing into the z11-14 extension.
 //     West enclosure = office east wall; south enclosure = new bath mass.
 // --- New bath (x10-18, z21-26) — 8×5, flush with the building's south face.
 //     Hollow walls so the roof-off toggle reveals the interior. ---
-box(8, 9, 0.5, M.stucco, 14, RF + 4.5, 21.25, B);    // north wall (door wall)
-box(8, 9, 0.5, M.stucco, 14, RF + 4.5, 25.75, B);    // south wall
+{
+  let w;
+  // north wall (door wall, z21-21.5) — door opening
+  w = panelWall(8, 9, [{ x: 0.95, y: 0, w: 2.5, h: 6.4 }], 0.5, M.stucco);
+  w.position.set(10, RF, 21); B.add(w);
+  // south wall (z25.5-26) — frosted window opening
+  w = panelWall(8, 9, [{ x: 2.95, y: 3.75, w: 2.1, h: 1.7 }], 0.5, M.stucco);
+  w.position.set(10, RF, 25.5); B.add(w);
+}
 box(0.5, 9, 4, M.stucco, 10.25, RF + 4.5, 23.5, B);  // west wall (shared with office side)
 box(0.5, 9, 4, M.stucco, 17.25, RF + 4.5, 23.5, B);  // east wall (inside the arcade line)
 box(3, 0.18, 3.2, M.trim, 12.1, 2.1, 23.6, B);       // shower pan, west end
@@ -354,6 +373,22 @@ const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5
 
 // Arch-wall builder — arches cut from a stucco panel. Semicircular by default;
 // pass a.ry for a low elliptical (segmental) arch: rise ry over span w, top at a.h.
+// Flat wall panel with rectangular openings cut out (windows/doors) — same idiom as archWall.
+function panelWall(len, height, holes, depth, mat) {
+  const s = new THREE.Shape();
+  s.moveTo(0, 0); s.lineTo(len, 0); s.lineTo(len, height); s.lineTo(0, height); s.lineTo(0, 0);
+  for (const o of holes) {
+    const h = new THREE.Path();
+    h.moveTo(o.x, o.y); h.lineTo(o.x + o.w, o.y);
+    h.lineTo(o.x + o.w, o.y + o.h); h.lineTo(o.x, o.y + o.h); h.lineTo(o.x, o.y);
+    s.holes.push(h);
+  }
+  const g = new THREE.ExtrudeGeometry(s, { depth, bevelEnabled: false });
+  const m = new THREE.Mesh(g, mat);
+  m.castShadow = m.receiveShadow = true;
+  return m;
+}
+
 function archWall(len, height, arches, depth, mat) {
   const s = new THREE.Shape();
   s.moveTo(0, 0); s.lineTo(len, 0); s.lineTo(len, height); s.lineTo(0, height); s.lineTo(0, 0);
