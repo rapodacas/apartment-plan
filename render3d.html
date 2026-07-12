@@ -53,8 +53,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // X = east, Z = south, Y = up. Origin = old plan datum (office N face = z14).
 // Rev 7/12: north arch wall S face at z-2 (16' from office), ridge z11 (3' from office).
 // Kitchen x8-18/z-2..11 (grade, 10×13), veranda ext x8-18/z11-14 (raised),
-// office x0-10/z14-26 (raised 2'), east room x10-18/z14-19 (open raised deck),
-// new bath x10-18/z19-24 (raised, ON footprint — no south bump-out),
+// office x0-10/z14-26 (raised 2', 9' walls), east room x10-18/z14-21 (open raised deck),
+// new bath x10-18/z21-26 (raised, flush with the building south face),
 // exist bath x22-26/z23-31. East fence x=26, south fence z=31, gate z18-22.
 
 const canvas = document.getElementById('c');
@@ -182,12 +182,18 @@ box(18, RF, 12, M.concrete, 9, RF / 2, 20, B);
 // --- Veranda extension plinth — 10' wide (kitchen-aligned) × 3' north to the ridge (z11-14) ---
 box(10, RF, 3, M.concrete, 13, RF / 2, 12.5, B);
 
-// --- Office core (x0-10, z14-26) — 9' walls over the raised floor ---
-box(10, 9, 12, M.stucco, 5, RF + 4.5, 20, B);
-// --- East room (x10-18, z14-19): open raised veranda flowing into the z11-14 extension.
+// --- Office core (x0-10, z14-26) — 9' walls over the raised floor, hollow so the
+//     roof-off toggle reveals the interior ---
+box(0.5, 9, 12, M.stucco, 0.25, RF + 4.5, 20, B);   // west wall
+box(0.5, 9, 12, M.stucco, 9.75, RF + 4.5, 20, B);   // east wall
+box(10, 9, 0.5, M.stucco, 5, RF + 4.5, 14.25, B);   // north wall
+box(10, 9, 0.5, M.stucco, 5, RF + 4.5, 25.75, B);   // south wall
+box(4.5, 0.18, 1.9, M.wood, 3.2, 4.5, 15.6, B);     // desk under the transfer window
+box(1.4, 1.4, 1.4, M.cushion, 3.2, 2.7, 17.3, B);   // chair
+// --- East room (x10-18, z14-21): open raised veranda flowing into the z11-14 extension.
 //     West enclosure = office east wall; south enclosure = new bath mass.
-// --- New bath (x10-18, z19-24) — 8×5, fully on the original footprint, walls to the roof ---
-box(8, 9, 5, M.stucco, 14, RF + 4.5, 21.5, B);
+// --- New bath (x10-18, z21-26) — 8×5, flush with the building's south face ---
+box(8, 9, 5, M.stucco, 14, RF + 4.5, 23.5, B);
 
 // --- Kitchen zone (x8-18, z-2..11, grade, north wall to ridge, under the main roof) ---
 box(0.7, KW, 13, M.stucco, 8.35, KW / 2, 4.5, B);       // west wall (partition to open patio)
@@ -233,9 +239,10 @@ box(6, 3, 6, M.spaShell, 13, 1.5, -7.3);
   w.rotation.x = -Math.PI / 2; w.position.set(13, 3.05, -7.3); w.receiveShadow = true; scene.add(w);
   box(3, 1, 1.4, M.wood, 13, 0.5, -10.9);      // step, north side
 }
-// Kitchen sink counter — INSET into the pillar wall, in the arch recess under the window
-box(5.8, 3, 2, M.woodDark, 13, 1.5, -2.55);
-box(5.8, 0.18, 2.2, M.trim, 13, 3.1, -2.5);
+// Kitchen sink counter — starts at the middle of the north wall (center pillar) and
+// runs the eastern arch, inset into the recess under the arched window
+box(7, 3, 2, M.woodDark, 12.5, 1.5, -2.55);
+box(7, 0.18, 2.2, M.trim, 12.5, 3.1, -2.5);
 box(1.8, 0.3, 1.2, new THREE.MeshStandardMaterial({ color: 0xb9c2ca, roughness: 0.3, metalness: 0.6 }), 13, 3.22, -2.6);  // sink
 box(0.12, 0.9, 0.12, M.spaShell, 13.7, 3.6, -2.6);  // faucet
 // Fireplace — dome centered directly under the chimney (NW pillar), set at 45°.
@@ -279,10 +286,10 @@ const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
 const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5, metalness: 0.4 });
 {
   const R = new THREE.Group(); scene.add(R);
-  // East edge rail — veranda east edge, ridge (z11) to the bath mass (z19)
-  box(0.18, 0.18, 8, railMat, 16.9, 5.05, 15, R);        // top rail
-  box(0.12, 0.12, 8, railMat, 16.9, 4.2, 15, R);         // mid rail
-  for (let i = 0; i <= 4; i++) box(0.14, 3.1, 0.14, railMat, 16.9, 3.6, 11.4 + i * 1.8, R);
+  // East edge rail — veranda east edge, ridge (z11) to the bath mass (z21)
+  box(0.18, 0.18, 10, railMat, 16.9, 5.05, 16, R);       // top rail
+  box(0.12, 0.12, 10, railMat, 16.9, 4.2, 16, R);        // mid rail
+  for (let i = 0; i <= 5; i++) box(0.14, 3.1, 0.14, railMat, 16.9, 3.6, 11.4 + i * 1.85, R);
   // North edge of the veranda — on the ridge line (z11), overlooks the kitchen + dinette.
   // Runs x8.4→12.5; the 42" stair occupies x12.5→16 beside the east arch wall.
   box(4.1, 0.18, 0.18, railMat, 10.45, 5.05, 11.2, R);
@@ -338,12 +345,12 @@ const WD = new THREE.Group(); scene.add(WD);
     box(1.2, 0.65, 0.36, M.glass, cx, 9.9, 26, WD);
   }
   // Bath door — north face, off the veranda deck
-  box(2.8, 6.5, 0.3, M.trim, 12.2, 5.25, 19, WD);       // jamb
-  box(2.5, 6.3, 0.36, M.woodDark, 12.2, 5.15, 19, WD);  // door slab
-  box(0.14, 0.7, 0.14, M.trim, 13.2, 5.0, 18.78, WD);   // handle
-  // Bath window — small frosted unit, south face
-  box(2.1, 1.7, 0.3, M.trim, 14, 6.6, 24, WD);
-  box(1.8, 1.4, 0.36, M.glass, 14, 6.6, 24, WD);
+  box(2.8, 6.5, 0.3, M.trim, 12.2, 5.25, 21, WD);       // jamb
+  box(2.5, 6.3, 0.36, M.woodDark, 12.2, 5.15, 21, WD);  // door slab
+  box(0.14, 0.7, 0.14, M.trim, 13.2, 5.0, 20.78, WD);   // handle
+  // Bath window — small frosted unit, south face (flush with building south line)
+  box(2.1, 1.7, 0.3, M.trim, 14, 6.6, 26, WD);
+  box(1.8, 1.4, 0.36, M.glass, 14, 6.6, 26, WD);
 }
 
 // Kitchen segment z0-14: two OPEN arches (outdoor kitchen breathes east to the lawn)
