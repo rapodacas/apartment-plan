@@ -213,9 +213,9 @@ box(2.2, 5.9, 3, steel, 9.85, 2.95, 3.3, B);             // counter-depth fridge
 // NW counter — fills the west wall between the fridge and the north wall
 box(2, 3, 3.8, M.woodDark, 9.75, 1.5, -0.1, B);
 box(2, 0.18, 3.8, M.trim, 9.75, 3.1, -0.1, B);
-// NE peninsula — far NE corner: standard-depth counter, projecting 30" south from the north wall
-box(2.1, 3, 2.5, M.woodDark, 14.95, 1.5, -0.75, B);
-box(2.1, 0.18, 2.6, M.trim, 14.95, 3.1, -0.7, B);
+// NE peninsula — pushed against the east wall: standard-depth counter, projecting 30" south
+box(2.1, 3, 2.5, M.woodDark, 16.45, 1.5, -0.75, B);
+box(2.1, 0.18, 2.6, M.trim, 16.45, 3.1, -0.7, B);
 // Small dinette beneath the veranda rail (south end of the kitchen, at the ridge line)
 {
   const tTop = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.14, 20), M.wood);
@@ -247,10 +247,10 @@ box(6, 3, 6, M.spaShell, 13, 1.5, -7.3);
   w.rotation.x = -Math.PI / 2; w.position.set(13, 3.05, -7.3); w.receiveShadow = true; scene.add(w);
   box(3, 1, 1.4, M.wood, 13, 0.5, -10.9);      // step, north side
 }
-// Kitchen sink counter — starts at the middle of the north wall (center pillar) and
-// runs the eastern arch, inset into the recess under the arched window
-box(7, 3, 2, M.woodDark, 12.5, 1.5, -2.55);
-box(7, 0.18, 2.2, M.trim, 12.5, 3.1, -2.5);
+// Kitchen sink counter — starts at the middle of the north wall (center pillar), runs the
+// eastern arch, and continues to the east wall where it meets the peninsula (L-shape)
+box(8.5, 3, 2, M.woodDark, 13.25, 1.5, -2.55);
+box(8.5, 0.18, 2.2, M.trim, 13.25, 3.1, -2.5);
 box(1.8, 0.3, 1.2, new THREE.MeshStandardMaterial({ color: 0xb9c2ca, roughness: 0.3, metalness: 0.6 }), 13, 3.22, -2.6);  // sink
 box(0.12, 0.9, 0.12, M.spaShell, 13.7, 3.6, -2.6);  // faucet
 // Fireplace — dome centered directly under the chimney (NW pillar), set at 45°.
@@ -271,8 +271,8 @@ const F = new THREE.Group(); F.position.set(1, 0, -3); F.rotation.y = Math.PI / 
 const EARC = new THREE.Group(); scene.add(EARC);
 {
   const aw = archWall(29, 11, [
-    { c: 22, w: 11.7, h: 10.25 },  // north bay (kitchen east side / ENTRY) — pillar to pillar
-    { c: 8, w: 11.7, h: 10.25 },   // south bay (east room — open, rail + stairs) — pillar to pillar
+    { c: 22, w: 11.7, h: 7.2, ry: 2.8 },  // north bay (ENTRY) — pillar to pillar, top matches north arches
+    { c: 8, w: 11.7, h: 7.2, ry: 2.8 },   // south bay (open, rail + stairs) — pillar to pillar, low ellipse
   ], 0.5, M.stuccoWhite);
   aw.rotation.y = Math.PI / 2;     // local X 0→29 maps to global z 26→-3; depth → +X (x17.5-18)
   aw.position.set(17.5, 0, 26);
@@ -283,10 +283,10 @@ const EARC = new THREE.Group(); scene.add(EARC);
 // Kitchen east side — CLOSED option (toggleable): arched glazing + the APARTMENT ENTRY door
 const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
 {
-  box(0.3, 9.6, 11.6, M.glass, 17.7, 4.8, 4, KCLOSED);   // arched glass infill, full bay
-  box(0.3, 9.6, 0.35, M.trim, 17.7, 4.8, 6.9, KCLOSED);  // mullion beside the door
-  box(0.3, 0.4, 11.6, M.trim, 17.7, 7.1, 4, KCLOSED);    // transom rail
-  box(0.4, 7, 3.2, M.woodDark, 17.7, 3.5, 3.6, KCLOSED); // entry door
+  box(0.3, 7.2, 11.6, M.glass, 17.7, 3.6, 4, KCLOSED);   // arched glass infill, full bay
+  box(0.3, 7.2, 0.35, M.trim, 17.7, 3.6, 6.9, KCLOSED);  // mullion beside the door
+  box(0.3, 0.4, 11.6, M.trim, 17.7, 6.1, 4, KCLOSED);    // transom rail
+  box(0.4, 6.8, 3.2, M.woodDark, 17.7, 3.4, 3.6, KCLOSED); // entry door
   box(0.15, 0.8, 0.15, M.trim, 17.98, 3.4, 2.4, KCLOSED); // handle
 }
 
@@ -294,10 +294,10 @@ const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
 const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5, metalness: 0.4 });
 {
   const R = new THREE.Group(); scene.add(R);
-  // East edge rail — veranda east edge at the thin arcade wall plane, ridge (z11) to the bath (z21)
-  box(0.18, 0.18, 10, railMat, 17.6, 5.05, 16, R);       // top rail
-  box(0.12, 0.12, 10, railMat, 17.6, 4.2, 16, R);        // mid rail
-  for (let i = 0; i <= 5; i++) box(0.14, 3.1, 0.14, railMat, 17.6, 3.6, 11.4 + i * 1.85, R);
+  // South arch infill — half-height wall with a window band above (replaces the rail)
+  box(0.5, 5.5, 11.6, M.stucco, 17.75, 2.75, 18, R);     // pony wall, grade to 3.5' above deck
+  box(0.6, 0.3, 11.7, M.trim, 17.75, 5.6, 18, R);        // sill
+  box(0.3, 1.6, 11.6, M.glass, 17.7, 6.5, 18, R);        // window band up to the arch
   // North edge of the veranda — on the ridge line (z11), overlooks the kitchen + dinette.
   // Runs x8.4→14; the 42" stair occupies x14→17.5 beside the east arcade wall.
   box(5.6, 0.18, 0.18, railMat, 11.2, 5.05, 11.2, R);
@@ -313,16 +313,17 @@ const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5
   }
 }
 
-// Arch-wall builder — semicircular arches cut from a stucco panel.
+// Arch-wall builder — arches cut from a stucco panel. Semicircular by default;
+// pass a.ry for a low elliptical (segmental) arch: rise ry over span w, top at a.h.
 function archWall(len, height, arches, depth, mat) {
   const s = new THREE.Shape();
   s.moveTo(0, 0); s.lineTo(len, 0); s.lineTo(len, height); s.lineTo(0, height); s.lineTo(0, 0);
   for (const a of arches) {
     const h = new THREE.Path();
-    const r = a.w / 2, spring = a.h - r;
+    const r = a.w / 2, ry = a.ry || r, spring = a.h - ry;
     h.moveTo(a.c - r, 0);
     h.lineTo(a.c - r, spring);
-    h.absarc(a.c, spring, r, Math.PI, 0, true);
+    h.absellipse(a.c, spring, r, ry, Math.PI, 0, true);
     h.lineTo(a.c + r, 0);
     h.lineTo(a.c - r, 0);
     s.holes.push(h);
