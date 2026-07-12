@@ -175,19 +175,19 @@ pad(18, 0, 26, 31, lawnTex(3, 8), 0.03);
 const B = new THREE.Group(); scene.add(B);
 const RF = 2;             // raised floor height (office/east room/bath)
 const WALL = 8;           // wall height above raised floor
-const KW = 9;             // kitchen wall height from grade
+const KW = 11.5;          // kitchen wall height from grade (office walls are 9' over the 2' raised floor)
 
 // --- Raised plinth under office + east room + new bath (z14-26) ---
 box(18, RF, 12, M.concrete, 9, RF / 2, 20, B);
 // --- Veranda extension plinth — 10' wide (kitchen-aligned) × 3' north to the ridge (z11-14) ---
 box(10, RF, 3, M.concrete, 13, RF / 2, 12.5, B);
 
-// --- Office core (x0-10, z14-26) — walls stop under the low roof ---
-box(10, 6.6, 12, M.stucco, 5, RF + 3.3, 20, B);
+// --- Office core (x0-10, z14-26) — 9' walls over the raised floor ---
+box(10, 9, 12, M.stucco, 5, RF + 4.5, 20, B);
 // --- East room (x10-18, z14-19): open raised veranda flowing into the z11-14 extension.
 //     West enclosure = office east wall; south enclosure = new bath mass.
-// --- New bath (x10-18, z19-24) — 8×5, fully on the original footprint ---
-box(8, 6.4, 5, M.stucco, 14, RF + 3.2, 21.5, B);
+// --- New bath (x10-18, z19-24) — 8×5, fully on the original footprint, walls to the roof ---
+box(8, 9, 5, M.stucco, 14, RF + 4.5, 21.5, B);
 
 // --- Kitchen zone (x8-18, z-2..11, grade, north wall to ridge, under the main roof) ---
 box(0.7, KW, 13, M.stucco, 8.35, KW / 2, 4.5, B);       // west wall (partition to open patio)
@@ -218,11 +218,11 @@ box(2.1, 0.18, 2.6, M.trim, 14.95, 3.1, -0.7, B);
 const NWALL = new THREE.Group(); scene.add(NWALL);
 {
   // Arches are completely stucco; brick pillars rise only to the spring line.
-  const aw = archWall(18, 9, [{ c: 5, w: 6, h: 7.2 }, { c: 13, w: 6, h: 7.2 }], 2, M.stuccoWhite);
+  const aw = archWall(18, 11, [{ c: 5, w: 6, h: 7.2 }, { c: 13, w: 6, h: 7.2 }], 2, M.stuccoWhite);
   aw.position.set(0, 0, -4); NWALL.add(aw);   // extrudes z -4 → -2
   box(2.3, 4.4, 2.3, M.brick, 9, 2.2, -3, NWALL);    // center pillar — brick to spring line
   box(2.3, 4.4, 2.3, M.brick, 17, 2.2, -3, NWALL);   // NE pillar
-  box(2.3, 6.8, 2.3, M.brick, 1, 8, -3, NWALL);      // NW pillar IS the chimney — rises FROM the dome, through the roof
+  box(2.3, 9.4, 2.3, M.brick, 1, 9.3, -3, NWALL);    // NW pillar IS the chimney — rises FROM the dome, through the raised roof
 }
 // East arch = arched window over the kitchen sink (arch kept, glazed at the outer wall face)
 box(5.6, 6.9, 0.25, M.glass, 13, 3.6, -3.75);
@@ -255,7 +255,7 @@ const F = new THREE.Group(); F.position.set(1, 0, -3); F.rotation.y = Math.PI / 
 const EARC = new THREE.Group(); scene.add(EARC);
 {
   // Arches span pillar-to-pillar — they land on the brick right at the pillar tops
-  const aw = archWall(29, 9, [
+  const aw = archWall(29, 11, [
     { c: 20.95, w: 9.4, h: 9 },    // north bay (kitchen east side / ENTRY) — center z 5.05
     { c: 8, w: 11.6, h: 9 },       // south bay (east room — open, rail + stairs) — center z 18
   ], 2, M.stuccoWhite);
@@ -332,10 +332,10 @@ const WD = new THREE.Group(); scene.add(WD);
   box(0.3, 3.5, 2.5, M.trim, 0, 5.6, 17.5, WD);
   box(0.36, 3.1, 2.1, M.glass, 0, 5.6, 17.5, WD);
   box(0.38, 0.12, 2.1, M.trim, 0, 5.6, 17.5, WD);       // meeting rail
-  // [5] Clerestory pair — office south wall, high on the gable
+  // [5] Clerestory pair — office south wall, high on the gable (9' walls)
   for (const cx of [3.6, 6.4]) {
-    box(1.5, 0.9, 0.3, M.trim, cx, 7.9, 26, WD);
-    box(1.2, 0.65, 0.36, M.glass, cx, 7.9, 26, WD);
+    box(1.5, 0.9, 0.3, M.trim, cx, 9.9, 26, WD);
+    box(1.2, 0.65, 0.36, M.glass, cx, 9.9, 26, WD);
   }
   // Bath door — north face, off the veranda deck
   box(2.8, 6.5, 0.3, M.trim, 12.2, 5.25, 19, WD);       // jamb
@@ -350,14 +350,14 @@ const WD = new THREE.Group(); scene.add(WD);
 // East-room segment z14-24: two arches GLAZED (arched windows onto the lawn)
 // ============ ROOF — one continuous low gable, 1:10 pitch, ridge E-W at z=11 ============
 const ROOF = new THREE.Group(); scene.add(ROOF);
-// South plane 16.5': eave z=27.5 (18" past office S wall) rising to ridge z=11 (3' N of office N wall).
-// North plane 20': ridge z=11 down past the 2'-thick arch wall (z 0..-2), ending z=-9 (~6-7' overhang).
+// Raised for 9' office walls (top plate y=11): south eave z=27.5 underside 10.85 rising
+// to ridge z=11 underside 12.5; north plane down past the arch wall to z=-9 underside 10.5.
 // Width 20': x -1 (1' west overhang) to x 19 (1' past the 8' east patio).
 {
   const s = new THREE.Shape();
-  s.moveTo(-9, 8.75); s.lineTo(11, 10.75); s.lineTo(27.5, 9.1);
-  s.lineTo(27.5, 8.65); s.lineTo(11, 10.3); s.lineTo(-9, 8.3);
-  s.lineTo(-9, 8.75);
+  s.moveTo(-9, 10.95); s.lineTo(11, 12.95); s.lineTo(27.5, 11.3);
+  s.lineTo(27.5, 10.85); s.lineTo(11, 12.5); s.lineTo(-9, 10.5);
+  s.lineTo(-9, 10.95);
   const g = new THREE.ExtrudeGeometry(s, { depth: 20, bevelEnabled: false });
   const m = new THREE.Mesh(g, M.roof);
   m.rotation.y = -Math.PI / 2;      // shape x-axis (plan z) → global +Z; extrude → -X from x=19
