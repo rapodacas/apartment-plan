@@ -250,7 +250,16 @@ const NWALL = new THREE.Group(); scene.add(NWALL);
   aw.position.set(0, 0, -4); NWALL.add(aw);   // extrudes z -4 → -2
   box(2.3, 8, 2.3, M.brickWhite, 9, 4, -3, NWALL);        // center pillar — brick to spring line (8')
   box(2.3, 8, 2.3, M.brickWhite, 17, 4, -3, NWALL);       // NE pillar
-  box(2.3, 9.4, 2.3, M.brickWhite, 1, 9.3, -3, NWALL);    // NW pillar IS the chimney — rises FROM the dome, through the raised roof
+  box(2.3, 8, 2.3, M.brickWhite, 1, 4, -3, NWALL);   // NW pillar — brick stops at the spring line like the others
+  // Concealed flue pipe from the fireplace dome up through the roof (only the stub shows above)
+  {
+    const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 8.4, 12),
+      new THREE.MeshStandardMaterial({ color: 0x3a3f45, roughness: 0.5, metalness: 0.6 }));
+    pipe.position.set(1, 9.2, -3); pipe.castShadow = true; NWALL.add(pipe);
+    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.25, 12),
+      new THREE.MeshStandardMaterial({ color: 0x2c3036, roughness: 0.5, metalness: 0.6 }));
+    cap.position.set(1, 13.5, -3); NWALL.add(cap);
+  }
 }
 // East arch = arched window over the kitchen sink (arch kept, glazed at the outer wall face)
 box(5.6, 9, 0.25, M.glass, 13, 4.6, -3.75);
@@ -300,8 +309,10 @@ const EARC = new THREE.Group(); scene.add(EARC);
   aw.rotation.y = Math.PI / 2;     // local X 0→29 maps to global z 26→-3; depth → +X (x17.5-18)
   aw.position.set(17.5, 0, 26);
   EARC.add(aw);
-  // Brick to the spring line (8') only — thin stucco arches above, matching the north wall
-  for (const pz of [25, 11, -3]) box(2.3, 8, 2.3, M.brickWhite, 17, 4, pz, EARC);
+  // Pillar FACADES only (rev 7/12) — brick pilaster faces applied to the wall for effect;
+  // no real pillar masses, so the interior real estate stays clear. Slightly proud of the
+  // outer face. NE corner (z-3) uses the real existing north-wall pillar — no duplicate.
+  for (const pz of [25, 11]) box(0.35, 8, 2.3, M.brickWhite, 18.05, 4, pz, EARC);
 }
 // Kitchen east side — CLOSED option (toggleable): arched glazing + the APARTMENT ENTRY door
 const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
