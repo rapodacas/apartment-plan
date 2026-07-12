@@ -194,14 +194,20 @@ box(0.7, KW, 13, M.stucco, 8.35, KW / 2, 4.5, B);       // west wall (partition 
 const steel = new THREE.MeshStandardMaterial({ color: 0xc6cdd4, roughness: 0.35, metalness: 0.7 });
 box(9.4, 0.12, 12.6, M.concrete, 13.3, 0.06, 4.5, B);   // floor slab
 // (south countertop run removed 7/12 — sink counter at the north arch window remains)
-box(2.2, 5.9, 3, steel, 9.85, 2.95, 9.4, B);             // counter-depth fridge — south end against the veranda edge, facing east
+box(2.2, 5.9, 3, steel, 9.85, 2.95, 3.3, B);             // counter-depth fridge, west wall north end, facing east
+// NW counter — fills the west wall between the fridge and the north wall
+box(2, 3, 3.8, M.woodDark, 9.75, 1.5, -0.1, B);
+box(2, 0.18, 3.8, M.trim, 9.75, 3.1, -0.1, B);
+// NE peninsula — far NE corner: standard-depth counter, projecting 30" south from the north wall
+box(2.1, 3, 2.5, M.woodDark, 14.95, 1.5, -0.75, B);
+box(2.1, 0.18, 2.6, M.trim, 14.95, 3.1, -0.7, B);
 // Small dinette beneath the veranda rail (south end of the kitchen, at the ridge line)
 {
   const tTop = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.14, 20), M.wood);
-  tTop.position.set(13.4, 2.45, 8.7); tTop.castShadow = true; scene.add(tTop);
+  tTop.position.set(11.6, 2.45, 8.9); tTop.castShadow = true; scene.add(tTop);
   const tPed = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.3, 2.4, 10), M.woodDark);
-  tPed.position.set(13.4, 1.2, 8.7); tPed.castShadow = true; scene.add(tPed);
-  for (const [cx, cz] of [[11.7, 8.9], [15.1, 8.9], [13.4, 7.2]]) {
+  tPed.position.set(11.6, 1.2, 8.9); tPed.castShadow = true; scene.add(tPed);
+  for (const [cx, cz] of [[9.9, 8.9], [13.3, 8.9], [11.6, 7.2]]) {
     box(1.1, 1.5, 1.1, M.cushion, cx, 0.8, cz, B);
   }
 }
@@ -281,9 +287,9 @@ const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5
   box(4.1, 0.18, 0.18, railMat, 10.45, 5.05, 11.2, R);
   box(4.1, 0.12, 0.12, railMat, 10.45, 4.2, 11.2, R);
   for (let i = 0; i <= 2; i++) box(0.14, 3.1, 0.14, railMat, 8.5 + i * 2, 3.6, 11.2, R);
-  // West edge of the veranda extension (x8, z11-14) — short guard above the open patio
-  box(0.18, 0.18, 3, railMat, 8.1, 5.05, 12.5, R);
-  for (const pz of [11.2, 13.8]) box(0.14, 3.1, 0.14, railMat, 8.1, 3.6, pz, R);
+  // West side of the veranda extension — SOLID WALL (rev 7/12): continues the kitchen
+  // west wall from the ridge to the office north wall, closing the 3' gap.
+  box(0.7, KW, 3, M.stucco, 8.35, KW / 2, 12.5, R);
   // Staircase — 42" wide, 3 risers, NE corner of the veranda edge, beside the east arch wall
   for (let i = 0; i < 3; i++) {
     const h = 2 - i * (2 / 3);
