@@ -638,7 +638,7 @@ function navTask(taskId){SELECTED_TASK=taskId;TAB='task';render()}
 function slugify(s){return(s||'').replace(/[^a-zA-Z0-9]/g,'-').toLowerCase()}
 
 // ── Helpers ──
-function todayStr(){return new Date().toISOString().slice(0,10)}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function getTask(id){return DATA.tasks.find(t=>t.id===id)}
 // Firebase drops empty arrays — normalize task fields
 function fixTask(t){t.dependsOn=t.dependsOn||[];t.materials=t.materials||[];t.links=t.links||[];t.notes=t.notes||'';return t}
