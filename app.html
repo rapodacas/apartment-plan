@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Apartment Build — 864 Farr Ave</title>
+<title>Apartment Build — The Casita</title>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -350,7 +350,7 @@ body.light .toast .toast-title{color:#2a6a9a}
 <body>
 
 <div id="app-header">
-  <h1 onclick="navHome()">864 Farr Ave — Apartment Build</h1>
+  <h1 onclick="navHome()">The Casita — Apartment Build</h1>
   <div class="header-right">
     <span id="header-user-label"></span>
     <button id="theme-btn" onclick="toggleTheme()" title="Toggle theme"></button>
@@ -477,15 +477,16 @@ _id=34;
 
 const DEFAULT_SCOPE=[
   'Office 10×12 — raised foundation, conditioned, existing core (120 sf)',
-  'East Room 8×10 — raised, fully enclosed addition (80 sf)',
-  'New Bathroom 8×4.5 — raised, south of east room, 2\' from room + 2.5\' extension (36 sf)',
-  'Kitchen 10×14 — ground level, north of east room, east side open (140 sf)',
+  'East Room 8×5 — open raised deck, flows into veranda extension (40 sf)',
+  'New Bathroom 8×5 — raised, south end of deck, fully on original footprint (40 sf)',
+  'Veranda extension 10\'×3\' — kitchen-aligned, north to the ridge line (30 sf)',
+  'Kitchen 10×13 — ground level, north arch wall (16\' from office) to ridge (130 sf)',
   'Existing Bathroom 4×8 — halved from 8×8, SE corner against east fence (32 sf, detached)',
   '6\' opening centered on office east wall into east room',
-  '4\' steps at north of east room against east wall (kitchen to raised level)',
-  'Fence along south (2.5\' from new bath) and east (8\' from building)',
+  '4\' stair, 3 risers, NE corner of veranda edge beside east arch wall',
+  'Fence along south (7\' from building) and east (8\' from building)',
   'Gate on east fence, 5\' north of existing bathroom',
-  'Total building: 376 sq ft + 32 sf detached bath'
+  'Total footprint: 360 sq ft (290 enclosed + 70 open deck) + 32 sf detached bath'
 ];
 const DEFAULT_RISKS=[
   'Permits: Determine strategy now — inspection delays could push schedule.',
@@ -726,7 +727,7 @@ function renderCalendarTab(){
   }
 
   h+=renderCalendar();
-  h+=`<div class="app-footer"><a href="index.html">Project Home</a> &middot; <a href="floorplan.html" target="_blank">View Floor Plan</a> &middot; 864 Farr Ave, Escondido</div>`;
+  h+=`<div class="app-footer"><a href="index.html">Project Home</a> &middot; <a href="floorplan.html" target="_blank">View Floor Plan</a> &middot; The Casita, Escondido</div>`;
   return h;
 }
 

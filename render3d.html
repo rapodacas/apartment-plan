@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>864 Farr Ave — 3D Concept</title>
+<title>The Casita — 3D Concept</title>
 <style>
 html,body{margin:0;height:100%;background:#0d1117;overflow:hidden;font-family:-apple-system,'Segoe UI',Arial,sans-serif}
 #c{width:100%;height:100%;display:block;touch-action:none}
@@ -26,7 +26,7 @@ body.embed #hud,body.embed #note,body.embed #views a{display:none}
 <script>if(new URLSearchParams(location.search).has('embed'))document.body.classList.add('embed');</script>
 <canvas id="c"></canvas>
 <div id="hud">
-  <h1>864 Farr Ave — Apartment Concept</h1>
+  <h1>The Casita — Apartment Concept</h1>
   <span class="tag">3D massing · not to scale for construction</span>
 </div>
 <div id="note">Drag to orbit · pinch/scroll to zoom · two-finger drag to pan</div>
@@ -49,9 +49,11 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // ============ Site model — units are FEET, matching floorplan.html ============
-// X = east, Z = south, Y = up. Origin = building NW corner (plan 0,0).
-// Building: kitchen x8-18/z0-14 (grade), office x0-10/z14-26 (raised 2'),
-// east room x10-18/z14-24 (raised), new bath x10-18/z24-28.5 (raised),
+// X = east, Z = south, Y = up. Origin = old plan datum (office N face = z14).
+// Rev 7/12: north arch wall S face at z-2 (16' from office), ridge z11 (3' from office).
+// Kitchen x8-18/z-2..11 (grade, 10×13), veranda ext x8-18/z11-14 (raised),
+// office x0-10/z14-26 (raised 2'), east room x10-18/z14-19 (open raised deck),
+// new bath x10-18/z19-24 (raised, ON footprint — no south bump-out),
 // exist bath x22-26/z23-31. East fence x=26, south fence z=31, gate z18-22.
 
 const canvas = document.getElementById('c');
@@ -162,9 +164,9 @@ function pad(x1, z1, x2, z2, tex, y = 0.02) {
   m.receiveShadow = true; scene.add(m); return m;
 }
 pad(-26, 0, 8, 31, paverTex(9, 8));          // west patio (lean-to, pergola zone)
-pad(0, 0, 8, 14, paverTex(2.5, 4));          // open north patio remainder
-pad(-26, -8, 8, 0, paverTex(9, 2));          // north patio run
-pad(8, -9, 19, 0, paverTex(3, 2.5));         // covered porch north of the arch wall (under roof overhang)
+pad(0, -2, 8, 14, paverTex(2.5, 4));         // open north patio remainder
+pad(-26, -8, 8, -2, paverTex(9, 2));         // north patio run
+pad(8, -9, 19, -4, paverTex(3, 2.5));        // covered porch north of the arch wall (under roof overhang)
 // Lush lawn — east yard, building to fence
 pad(18, 0, 26, 31, lawnTex(3, 8), 0.03);
 
@@ -174,63 +176,65 @@ const RF = 2;             // raised floor height (office/east room/bath)
 const WALL = 8;           // wall height above raised floor
 const KW = 9;             // kitchen wall height from grade
 
-// --- Raised plinth under office + east room + new bath ---
-box(18, RF, 14.5, M.concrete, 9, RF / 2, 21.25, B);
+// --- Raised plinth under office + east room + new bath (z14-26) ---
+box(18, RF, 12, M.concrete, 9, RF / 2, 20, B);
+// --- Veranda extension plinth — 10' wide (kitchen-aligned) × 3' north to the ridge (z11-14) ---
+box(10, RF, 3, M.concrete, 13, RF / 2, 12.5, B);
 
 // --- Office core (x0-10, z14-26) — walls stop under the low roof ---
 box(10, 6.6, 12, M.stucco, 5, RF + 3.3, 20, B);
-// --- East room (x10-18, z14-24): open raised veranda — no north or east walls (rails instead).
+// --- East room (x10-18, z14-19): open raised veranda flowing into the z11-14 extension.
 //     West enclosure = office east wall; south enclosure = new bath mass.
-// --- New bath (x10-18, z24-28.5) ---
-box(8, 6.4, 4.5, M.stucco, 14, RF + 3.2, 26.25, B);
+// --- New bath (x10-18, z19-24) — 8×5, fully on the original footprint ---
+box(8, 6.4, 5, M.stucco, 14, RF + 3.2, 21.5, B);
 
-// --- Kitchen zone (x8-18, z0-14, grade, under the main roof) ---
-box(0.7, KW, 14, M.stucco, 8.35, KW / 2, 7, B);         // west wall (partition to open patio)
+// --- Kitchen zone (x8-18, z-2..11, grade, north wall to ridge, under the main roof) ---
+box(0.7, KW, 13, M.stucco, 8.35, KW / 2, 4.5, B);       // west wall (partition to open patio)
 // Kitchen interior: floor slab; west wall = countertop run + counter-depth fridge; dinette at south
 const steel = new THREE.MeshStandardMaterial({ color: 0xc6cdd4, roughness: 0.35, metalness: 0.7 });
-box(9.4, 0.12, 13.2, M.concrete, 13.3, 0.06, 7.1, B);   // floor slab
-box(2, 3, 8.4, M.woodDark, 9.75, 1.5, 9.2, B);           // countertop run, west wall
-box(2, 0.18, 8.4, M.trim, 9.75, 3.1, 9.2, B);
+box(9.4, 0.12, 12.6, M.concrete, 13.3, 0.06, 4.5, B);   // floor slab
+box(2, 3, 6, M.woodDark, 9.75, 1.5, 7.8, B);             // countertop run, west wall
+box(2, 0.18, 6, M.trim, 9.75, 3.1, 7.8, B);
 box(2.2, 5.9, 3, steel, 9.85, 2.95, 3.3, B);             // counter-depth fridge, west wall north end
-// Small dinette beneath the veranda rail (south end of the kitchen)
+// Small dinette beneath the veranda rail (south end of the kitchen, at the ridge line)
 {
   const tTop = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.14, 20), M.wood);
-  tTop.position.set(13.6, 2.45, 11.9); tTop.castShadow = true; scene.add(tTop);
+  tTop.position.set(11.6, 2.45, 8.9); tTop.castShadow = true; scene.add(tTop);
   const tPed = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.3, 2.4, 10), M.woodDark);
-  tPed.position.set(13.6, 1.2, 11.9); tPed.castShadow = true; scene.add(tPed);
-  for (const [cx, cz] of [[11.9, 11.9], [15.3, 11.9], [13.6, 10.2]]) {
+  tPed.position.set(11.6, 1.2, 8.9); tPed.castShadow = true; scene.add(tPed);
+  for (const [cx, cz] of [[9.9, 8.9], [13.3, 8.9], [11.6, 7.2]]) {
     box(1.1, 1.5, 1.1, M.cushion, cx, 0.8, cz, B);
   }
 }
 
 // ============ NORTH WALL — the existing two-arch wall (2' thick, heavy brick pillars) ============
-// Spans x0-18, z0 to -2. West arch bay: fireplace at 45°. East arch bay: spa fits exactly.
+// Rev 7/12: south face at z-2 (16' from office). Spans x0-18, z-2 to -4.
 const NWALL = new THREE.Group(); scene.add(NWALL);
 {
   // Arches are completely stucco; brick pillars rise only to the spring line.
   const aw = archWall(18, 9, [{ c: 5, w: 6, h: 7.2 }, { c: 13, w: 6, h: 7.2 }], 2, M.stuccoWhite);
-  aw.position.set(0, 0, -2); NWALL.add(aw);   // extrudes z -2 → 0
-  box(2.3, 4.4, 2.3, M.brick, 9, 2.2, -1, NWALL);    // center pillar — brick to spring line
-  box(2.3, 4.4, 2.3, M.brick, 17, 2.2, -1, NWALL);   // NE pillar
-  box(2.3, 6.8, 2.3, M.brick, 1, 8, -1, NWALL);      // NW pillar IS the chimney — rises FROM the dome, through the roof
+  aw.position.set(0, 0, -4); NWALL.add(aw);   // extrudes z -4 → -2
+  box(2.3, 4.4, 2.3, M.brick, 9, 2.2, -3, NWALL);    // center pillar — brick to spring line
+  box(2.3, 4.4, 2.3, M.brick, 17, 2.2, -3, NWALL);   // NE pillar
+  box(2.3, 6.8, 2.3, M.brick, 1, 8, -3, NWALL);      // NW pillar IS the chimney — rises FROM the dome, through the roof
 }
 // East arch = arched window over the kitchen sink (arch kept, glazed at the outer wall face)
-box(5.6, 6.9, 0.25, M.glass, 13, 3.6, -1.75);
+box(5.6, 6.9, 0.25, M.glass, 13, 3.6, -3.75);
 // Spa — OUTSIDE, on the north porch, tight to the wall in front of the east arch
-box(6, 3, 6, M.spaShell, 13, 1.5, -5.3);
+box(6, 3, 6, M.spaShell, 13, 1.5, -7.3);
 {
   const w = new THREE.Mesh(new THREE.PlaneGeometry(5.4, 5.4), M.water);
-  w.rotation.x = -Math.PI / 2; w.position.set(13, 3.05, -5.3); w.receiveShadow = true; scene.add(w);
-  box(3, 1, 1.4, M.wood, 13, 0.5, -8.9);       // step, north side
+  w.rotation.x = -Math.PI / 2; w.position.set(13, 3.05, -7.3); w.receiveShadow = true; scene.add(w);
+  box(3, 1, 1.4, M.wood, 13, 0.5, -10.9);      // step, north side
 }
 // Kitchen sink counter — INSET into the pillar wall, in the arch recess under the window
-box(5.8, 3, 2, M.woodDark, 13, 1.5, -0.55);
-box(5.8, 0.18, 2.2, M.trim, 13, 3.1, -0.5);
-box(1.8, 0.3, 1.2, new THREE.MeshStandardMaterial({ color: 0xb9c2ca, roughness: 0.3, metalness: 0.6 }), 13, 3.22, -0.6);  // sink
-box(0.12, 0.9, 0.12, M.spaShell, 13.7, 3.6, -0.6);  // faucet
+box(5.8, 3, 2, M.woodDark, 13, 1.5, -2.55);
+box(5.8, 0.18, 2.2, M.trim, 13, 3.1, -2.5);
+box(1.8, 0.3, 1.2, new THREE.MeshStandardMaterial({ color: 0xb9c2ca, roughness: 0.3, metalness: 0.6 }), 13, 3.22, -2.6);  // sink
+box(0.12, 0.9, 0.12, M.spaShell, 13.7, 3.6, -2.6);  // faucet
 // Fireplace — dome centered directly under the chimney (NW pillar), set at 45°.
 // Shape per photos: brick base, arched mouth, domed top; the chimney rises from the dome.
-const F = new THREE.Group(); F.position.set(1, 0, -1); F.rotation.y = Math.PI / 4; scene.add(F);  // dome plan-centered under the chimney
+const F = new THREE.Group(); F.position.set(1, 0, -3); F.rotation.y = Math.PI / 4; scene.add(F);  // dome plan-centered under the chimney
 {
   box(4.6, 3.4, 3.4, M.brick, 0, 1.7, 0, F);
   const dome = new THREE.Mesh(new THREE.SphereGeometry(1.85, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2), M.brick);
@@ -245,15 +249,15 @@ const F = new THREE.Group(); F.position.set(1, 0, -1); F.rotation.y = Math.PI / 
 const EARC = new THREE.Group(); scene.add(EARC);
 {
   // Arches span pillar-to-pillar — they land on the brick right at the pillar tops
-  const aw = archWall(27, 9, [
+  const aw = archWall(29, 9, [
     { c: 20.95, w: 9.4, h: 9 },    // north bay (kitchen east side / ENTRY) — center z 5.05
     { c: 8, w: 11.6, h: 9 },       // south bay (east room — open, rail + stairs) — center z 18
   ], 2, M.stuccoWhite);
-  aw.rotation.y = Math.PI / 2;     // local X 0→27 maps to global z 26→-1; depth → +X (x16-18)
+  aw.rotation.y = Math.PI / 2;     // local X 0→29 maps to global z 26→-3; depth → +X (x16-18)
   aw.position.set(16, 0, 26);
   EARC.add(aw);
   // Brick to the spring line only — stucco arches above, matching the north wall
-  for (const pz of [25, 11, -0.9]) box(2.3, 4.4, 2.3, M.brick, 17, 2.2, pz, EARC);
+  for (const pz of [25, 11, -3]) box(2.3, 4.4, 2.3, M.brick, 17, 2.2, pz, EARC);
 }
 // Kitchen east side — CLOSED option (toggleable): arched glazing + the APARTMENT ENTRY door
 const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
@@ -269,16 +273,22 @@ const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
 const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5, metalness: 0.4 });
 {
   const R = new THREE.Group(); scene.add(R);
-  box(0.18, 0.18, 11.4, railMat, 16.9, 5.05, 18, R);     // top rail, along the raised east edge
-  box(0.12, 0.12, 11.4, railMat, 16.9, 4.2, 18, R);      // mid rail
-  for (let i = 0; i <= 6; i++) box(0.14, 3.1, 0.14, railMat, 16.9, 3.6, 12.4 + i * 1.87, R);
-  // North edge of the veranda (replaces the old north wall) — overlooks the kitchen + dinette
-  box(7.2, 0.18, 0.18, railMat, 13.7, 5.05, 14.2, R);
-  box(7.2, 0.12, 0.12, railMat, 13.7, 4.2, 14.2, R);
-  for (let i = 0; i <= 4; i++) box(0.14, 3.1, 0.14, railMat, 10.3 + i * 1.75, 3.6, 14.2, R);
-  // Staircase — ~4' wide at the east edge, north side of the east room (deck → grade)
-  for (let i = 0; i < 4; i++) {
-    box(3.6, 2 - i * 0.5, 1.05, M.concrete, 14.1, (2 - i * 0.5) / 2, 13.4 - i * 1.05, R);
+  // East edge rail — veranda east edge, ridge (z11) to the bath mass (z19)
+  box(0.18, 0.18, 8, railMat, 16.9, 5.05, 15, R);        // top rail
+  box(0.12, 0.12, 8, railMat, 16.9, 4.2, 15, R);         // mid rail
+  for (let i = 0; i <= 4; i++) box(0.14, 3.1, 0.14, railMat, 16.9, 3.6, 11.4 + i * 1.8, R);
+  // North edge of the veranda — on the ridge line (z11), overlooks the kitchen + dinette.
+  // Runs x8.4→12.4; the 4' stair occupies x12.4→16 beside the east arch wall.
+  box(4, 0.18, 0.18, railMat, 10.4, 5.05, 11.2, R);
+  box(4, 0.12, 0.12, railMat, 10.4, 4.2, 11.2, R);
+  for (let i = 0; i <= 2; i++) box(0.14, 3.1, 0.14, railMat, 8.5 + i * 1.95, 3.6, 11.2, R);
+  // West edge of the veranda extension (x8, z11-14) — short guard above the open patio
+  box(0.18, 0.18, 3, railMat, 8.1, 5.05, 12.5, R);
+  for (const pz of [11.2, 13.8]) box(0.14, 3.1, 0.14, railMat, 8.1, 3.6, pz, R);
+  // Staircase — 4' wide, 3 risers, NE corner of the veranda edge, beside the east arch wall
+  for (let i = 0; i < 3; i++) {
+    const h = 2 - i * (2 / 3);
+    box(3.6, h, 1.05, M.concrete, 14.2, h / 2, 10.45 - i * 1.05, R);
   }
 }
 

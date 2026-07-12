@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>864 Farr Ave — Floor Plan</title>
+<title>The Casita — Floor Plan</title>
 <style>
 body{margin:0;padding:20px;background:#1a1a2e;font-family:-apple-system,'Segoe UI',Arial,sans-serif;color:#e6edf3;display:flex;flex-direction:column;align-items:center}
 h1{font-size:20px;margin-bottom:4px;color:#58a6ff}
@@ -35,7 +35,7 @@ svg{max-width:100%;height:auto}
 </style>
 </head>
 <body>
-<h1>864 Farr Ave — Apartment Conversion</h1>
+<h1>The Casita — Apartment Conversion</h1>
 <p class="subtitle">Floor Plan — Approximate (10px = 1 foot)</p>
 <div class="navrow">
   <a href="index.html">← Home</a>
@@ -66,32 +66,44 @@ svg{max-width:100%;height:auto}
 
   <!-- ═══ OPEN PATIO — north of office (west side) ═══ -->
   <!-- Office is 10' wide (x=0 to x=100). Kitchen starts at x=80. Open patio = x=0 to x=80 -->
-  <rect x="0" y="0" width="80" height="140" rx="0" fill="none" stroke="#30363d" stroke-width="1" stroke-dasharray="6,4"/>
-  <text x="40" y="60" text-anchor="middle" font-size="10" fill="#30363d">Open</text>
-  <text x="40" y="74" text-anchor="middle" font-size="10" fill="#30363d">Patio</text>
+  <rect x="0" y="-20" width="80" height="160" rx="0" fill="none" stroke="#30363d" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="40" y="50" text-anchor="middle" font-size="10" fill="#30363d">Open</text>
+  <text x="40" y="64" text-anchor="middle" font-size="10" fill="#30363d">Patio</text>
 
-  <!-- ═══ KITCHEN — 10' E-W × 14' N-S, north of east room ═══ -->
-  <!-- East wall aligns with east room east wall (x=180) -->
-  <!-- 10' wide = x=80 to x=180. 14' tall = y=0 to y=140 -->
-  <rect x="80" y="0" width="100" height="140" rx="2" fill="#1a3a2a" stroke="#3fb950" stroke-width="2"/>
-  <rect x="80" y="0" width="100" height="140" fill="url(#hatch)"/>
+  <!-- ═══ KITCHEN — 10' E-W × 13' N-S (north wall to ridge), ground level ═══ -->
+  <!-- North wall 16' from office face (y=-20). Ridge at 3' from office face (y=110). -->
+  <!-- 10' wide = x=80 to x=180 (aligned with veranda below) -->
+  <rect x="80" y="-20" width="100" height="130" rx="2" fill="#1a3a2a" stroke="#3fb950" stroke-width="2"/>
+  <rect x="80" y="-20" width="100" height="130" fill="url(#hatch)"/>
   <!-- East wall open (dashed) -->
-  <line x1="180" y1="0" x2="180" y2="140" stroke="#3fb950" stroke-width="2" stroke-dasharray="6,4"/>
-  <text x="130" y="55" text-anchor="middle" font-size="14" fill="#3fb950" font-weight="600">KITCHEN</text>
-  <text x="130" y="73" text-anchor="middle" font-size="11" fill="#3fb950">10 × 14</text>
-  <text x="130" y="90" text-anchor="middle" font-size="9" fill="rgba(63,185,80,.6)">Ground level</text>
-  <text x="130" y="105" text-anchor="middle" font-size="8" fill="rgba(63,185,80,.5)">East side open →</text>
+  <line x1="180" y1="-20" x2="180" y2="110" stroke="#3fb950" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="130" y="30" text-anchor="middle" font-size="14" fill="#3fb950" font-weight="600">KITCHEN</text>
+  <text x="130" y="48" text-anchor="middle" font-size="11" fill="#3fb950">10 × 13</text>
+  <text x="130" y="65" text-anchor="middle" font-size="9" fill="rgba(63,185,80,.6)">Ground level</text>
+  <text x="112" y="98" text-anchor="middle" font-size="8" fill="rgba(63,185,80,.5)">East side open →</text>
+
+  <!-- RIDGE LINE — 3' north of office face -->
+  <line x1="70" y1="110" x2="190" y2="110" stroke="#d29922" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="66" y="113" text-anchor="end" font-size="7" fill="#d29922">RIDGE</text>
+
+  <!-- ═══ VERANDA EXTENSION — 10' wide × 3' to ridge, raised ═══ -->
+  <rect x="80" y="110" width="100" height="30" rx="2" fill="#2a1a3a" stroke="#bc8cff" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="118" y="129" text-anchor="middle" font-size="8" fill="#bc8cff">VERANDA +3' → ridge</text>
 
   <!-- Kitchen dimensions -->
-  <line x1="80" y1="-10" x2="180" y2="-10" stroke="#8b949e" stroke-width=".5"/>
-  <line x1="80" y1="-14" x2="80" y2="-6" stroke="#8b949e" stroke-width=".5"/>
-  <line x1="180" y1="-14" x2="180" y2="-6" stroke="#8b949e" stroke-width=".5"/>
-  <text x="130" y="-16" text-anchor="middle" font-size="9" fill="#8b949e">10'</text>
+  <line x1="80" y1="-30" x2="180" y2="-30" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="80" y1="-34" x2="80" y2="-26" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="180" y1="-34" x2="180" y2="-26" stroke="#8b949e" stroke-width=".5"/>
+  <text x="130" y="-36" text-anchor="middle" font-size="9" fill="#8b949e">10'</text>
 
-  <line x1="188" y1="0" x2="188" y2="140" stroke="#8b949e" stroke-width=".5"/>
-  <line x1="184" y1="0" x2="192" y2="0" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="188" y1="-20" x2="188" y2="110" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="184" y1="-20" x2="192" y2="-20" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="184" y1="110" x2="192" y2="110" stroke="#8b949e" stroke-width=".5"/>
+  <text x="202" y="45" text-anchor="middle" font-size="9" fill="#8b949e" transform="rotate(-90,202,45)">13'</text>
+
+  <line x1="188" y1="110" x2="188" y2="140" stroke="#8b949e" stroke-width=".5"/>
   <line x1="184" y1="140" x2="192" y2="140" stroke="#8b949e" stroke-width=".5"/>
-  <text x="202" y="75" text-anchor="middle" font-size="9" fill="#8b949e" transform="rotate(-90,202,75)">14'</text>
+  <text x="202" y="125" text-anchor="middle" font-size="8" fill="#8b949e" transform="rotate(-90,202,125)">3'</text>
 
   <!-- ═══ OFFICE — 10' E-W × 12' N-S, raised ═══ -->
   <!-- x=0 to x=100, y=140 to y=260 -->
@@ -112,21 +124,20 @@ svg{max-width:100%;height:auto}
   <line x1="100" y1="266" x2="100" y2="274" stroke="#8b949e" stroke-width=".5"/>
   <text x="50" y="284" text-anchor="middle" font-size="9" fill="#8b949e">10'</text>
 
-  <!-- Steps — 4' wide, north side of east room, against east boundary -->
-  <!-- East wall at x=180, steps 4' wide = x=140 to x=180, y=128 to y=142 -->
-  <rect x="140" y="128" width="40" height="14" rx="1" fill="#2a2a3a" stroke="#bc8cff" stroke-width="1.5"/>
-  <line x1="140" y1="132" x2="180" y2="132" stroke="#bc8cff" stroke-width=".5"/>
-  <line x1="140" y1="136" x2="180" y2="136" stroke="#bc8cff" stroke-width=".5"/>
-  <text x="160" y="125" text-anchor="middle" font-size="7" fill="#8b949e">STEPS 4'</text>
+  <!-- Steps — 4' wide, 3 risers, NE corner of veranda edge, against east wall -->
+  <!-- Descend north from ridge (y=110) into kitchen: x=140 to x=180, y=82 to y=110 -->
+  <rect x="140" y="82" width="40" height="28" rx="1" fill="#2a2a3a" stroke="#bc8cff" stroke-width="1.5"/>
+  <line x1="140" y1="91" x2="180" y2="91" stroke="#bc8cff" stroke-width=".5"/>
+  <line x1="140" y1="100" x2="180" y2="100" stroke="#bc8cff" stroke-width=".5"/>
+  <text x="160" y="78" text-anchor="middle" font-size="7" fill="#8b949e">STEPS 4' · 3R</text>
 
-  <!-- ═══ EAST ROOM — 8' E-W × 10' N-S (lost 2' to bath), raised ═══ -->
-  <!-- x=100 to x=180, y=140 to y=240 -->
-  <rect x="100" y="140" width="80" height="100" rx="2" fill="#2a1a3a" stroke="#bc8cff" stroke-width="2"/>
-  <rect x="100" y="140" width="80" height="100" fill="url(#hatch)"/>
-  <text x="140" y="178" text-anchor="middle" font-size="13" fill="#bc8cff" font-weight="600">EAST</text>
-  <text x="140" y="193" text-anchor="middle" font-size="13" fill="#bc8cff" font-weight="600">ROOM</text>
-  <text x="140" y="210" text-anchor="middle" font-size="11" fill="#bc8cff">8 × 10</text>
-  <text x="140" y="224" text-anchor="middle" font-size="9" fill="rgba(188,140,255,.6)">Raised · Enclosed</text>
+  <!-- ═══ EAST ROOM (open raised deck) — 8' E-W × 5' N-S, bath took south 5' ═══ -->
+  <!-- x=100 to x=180, y=140 to y=190 -->
+  <rect x="100" y="140" width="80" height="50" rx="2" fill="#2a1a3a" stroke="#bc8cff" stroke-width="2"/>
+  <rect x="100" y="140" width="80" height="50" fill="url(#hatch)"/>
+  <text x="140" y="158" text-anchor="middle" font-size="11" fill="#bc8cff" font-weight="600">EAST ROOM</text>
+  <text x="140" y="172" text-anchor="middle" font-size="10" fill="#bc8cff">8 × 5</text>
+  <text x="140" y="184" text-anchor="middle" font-size="8" fill="rgba(188,140,255,.6)">Raised · open deck</text>
 
   <!-- East room dimensions -->
   <line x1="100" y1="270" x2="180" y2="270" stroke="#8b949e" stroke-width=".5"/>
@@ -139,26 +150,20 @@ svg{max-width:100%;height:auto}
   <rect x="97" y="170" width="6" height="60" fill="#0d1117"/>
   <text x="107" y="203" text-anchor="start" font-size="7" fill="#8b949e">6' opening</text>
 
-  <!-- ═══ NEW BATHROOM — 8' E-W × 4.5' N-S, raised ═══ -->
-  <!-- 2' taken from east room (y=240 to y=260) + 2.5' extending south (y=260 to y=285) -->
-  <!-- x=100 to x=180, y=240 to y=285 -->
-  <rect x="100" y="240" width="80" height="45" rx="2" fill="#3a2a1a" stroke="#d29922" stroke-width="2"/>
-  <text x="140" y="260" text-anchor="middle" font-size="11" fill="#d29922" font-weight="600">NEW BATH</text>
-  <text x="140" y="276" text-anchor="middle" font-size="9" fill="rgba(210,153,34,.7)">8 × 4.5 · Raised</text>
+  <!-- ═══ NEW BATHROOM — 8' E-W × 5' N-S, raised, fully on original footprint ═══ -->
+  <!-- South end of raised deck: x=100 to x=180, y=190 to y=240. No extension past building line. -->
+  <rect x="100" y="190" width="80" height="50" rx="2" fill="#3a2a1a" stroke="#d29922" stroke-width="2"/>
+  <text x="140" y="212" text-anchor="middle" font-size="11" fill="#d29922" font-weight="600">NEW BATH</text>
+  <text x="140" y="228" text-anchor="middle" font-size="9" fill="rgba(210,153,34,.7)">8 × 5 · Raised</text>
 
   <!-- New bath dimension -->
-  <line x1="188" y1="240" x2="188" y2="285" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="188" y1="190" x2="188" y2="240" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="184" y1="190" x2="192" y2="190" stroke="#8b949e" stroke-width=".5"/>
   <line x1="184" y1="240" x2="192" y2="240" stroke="#8b949e" stroke-width=".5"/>
-  <line x1="184" y1="285" x2="192" y2="285" stroke="#8b949e" stroke-width=".5"/>
-  <text x="202" y="267" text-anchor="middle" font-size="9" fill="#8b949e" transform="rotate(-90,202,267)">4.5'</text>
+  <text x="202" y="217" text-anchor="middle" font-size="9" fill="#8b949e" transform="rotate(-90,202,217)">5'</text>
 
-  <!-- Divider line showing 2' taken from east room -->
-  <line x1="100" y1="240" x2="180" y2="240" stroke="#d29922" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="185" y="250" text-anchor="start" font-size="7" fill="#30363d">2' from room</text>
-
-  <!-- 2.5' extension beyond office line -->
-  <line x1="95" y1="260" x2="105" y2="260" stroke="#30363d" stroke-width=".5"/>
-  <text x="88" y="275" text-anchor="end" font-size="7" fill="#30363d">+2.5'</text>
+  <!-- Divider: deck / bath -->
+  <line x1="100" y1="190" x2="180" y2="190" stroke="#d29922" stroke-width="1" stroke-dasharray="4,3"/>
 
   <!-- ═══ GAP: 8' east room to east fence ═══ -->
   <line x1="180" y1="190" x2="260" y2="190" stroke="#30363d" stroke-width=".5" stroke-dasharray="3,3"/>
@@ -166,11 +171,11 @@ svg{max-width:100%;height:auto}
   <line x1="260" y1="186" x2="260" y2="194" stroke="#30363d" stroke-width=".5"/>
   <text x="220" y="183" text-anchor="middle" font-size="9" fill="#30363d">8'</text>
 
-  <!-- ═══ GAP: 2.5' new bath to south fence ═══ -->
-  <line x1="140" y1="285" x2="140" y2="310" stroke="#30363d" stroke-width=".5" stroke-dasharray="3,3"/>
-  <line x1="136" y1="285" x2="144" y2="285" stroke="#30363d" stroke-width=".5"/>
+  <!-- ═══ GAP: 7' building south line to south fence ═══ -->
+  <line x1="140" y1="240" x2="140" y2="310" stroke="#30363d" stroke-width=".5" stroke-dasharray="3,3"/>
+  <line x1="136" y1="240" x2="144" y2="240" stroke="#30363d" stroke-width=".5"/>
   <line x1="136" y1="310" x2="144" y2="310" stroke="#30363d" stroke-width=".5"/>
-  <text x="155" y="301" text-anchor="middle" font-size="9" fill="#30363d">2.5'</text>
+  <text x="152" y="278" text-anchor="middle" font-size="9" fill="#30363d">7'</text>
 
   <!-- ═══ EXISTING BATHROOM — 4×8 N-S, SE corner against fences ═══ -->
   <!-- East fence at x=260. Bath 4' wide = x=220 to x=260 -->
@@ -203,28 +208,29 @@ svg{max-width:100%;height:auto}
 
 <div class="legend">
   <div class="legend-item"><div class="legend-swatch" style="background:#1a2a4a;border-color:#58a6ff"></div>Office 10×12 — 120 sf</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#2a1a3a;border-color:#bc8cff"></div>East Room 8×10 — 80 sf</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#3a2a1a;border-color:#d29922"></div>New Bath 8×4.5 — 36 sf</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#1a3a2a;border-color:#3fb950"></div>Kitchen 10×14 — 140 sf</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#2a1a3a;border-color:#bc8cff"></div>East Room + Veranda — 70 sf open deck</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#3a2a1a;border-color:#d29922"></div>New Bath 8×5 — 40 sf</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#1a3a2a;border-color:#3fb950"></div>Kitchen 10×13 — 130 sf</div>
   <div class="legend-item"><div class="legend-swatch" style="background:#3d1418;border-color:#f85149"></div>Exist. Bath 4×8 — 32 sf (separate)</div>
   <div class="legend-item"><div class="legend-swatch" style="background:none;border-color:#8b949e;border-style:dashed"></div>Fence / Gate</div>
 </div>
 
 <div style="margin-top:16px;background:#161b22;border:1px solid #21262d;border-radius:10px;padding:16px 20px;max-width:400px;width:100%">
-  <div style="font-size:15px;font-weight:600;color:#58a6ff;margin-bottom:8px">Total Building: 376 sq ft</div>
+  <div style="font-size:15px;font-weight:600;color:#58a6ff;margin-bottom:8px">Total Footprint: 360 sq ft</div>
   <div style="font-size:13px;color:#8b949e;line-height:1.6">
-    Office: 120 sf · East Room: 80 sf<br>
-    Kitchen: 140 sf · New Bath: 36 sf<br>
+    Enclosed 290 sf — Office: 120 · Kitchen: 130 · New Bath: 40<br>
+    Open raised deck 70 sf — East Room 8×5 + Veranda 10×3<br>
     <span style="color:#f85149">+ Exist. Bath: 32 sf (detached)</span>
   </div>
 </div>
 
 <p class="note">
-  864 Farr Ave, Escondido — Updated 7/9/2026<br>
+  The Casita, Escondido CA — Updated 7/12/2026<br>
   📷 Tap a camera pin on the plan to see photos of that area.<br>
-  East fence 8' from building. South fence 2.5' from new bathroom. Gate on east fence 5' north of existing bathroom.<br>
-  New bathroom: 2' taken from east room + 2.5' extending south. East room reduced to 8×10.<br>
-  Steps: 4' wide, against east boundary, north side of east room. Office opening: 6' centered on east wall.
+  North wall 16' from office face: 3' office→ridge + 13' ridge→north wall.<br>
+  New bathroom 8×5 at south end of raised deck — fully on original footprint, no southern extension.<br>
+  Veranda extension: 10' wide (kitchen-aligned) × 3' north to the ridge line.<br>
+  Steps: 4' wide, 3 risers, NE corner of veranda edge against east wall. Office opening: 6' centered on east wall.
 </p>
 
 <div id="backdrop"></div>
@@ -253,10 +259,10 @@ svg{max-width:100%;height:auto}
   const PIN_POS = {
     'office':     [86, 154],
     'east-room':  [168, 154],
-    'kitchen':    [168, 14],
-    'new-bath':   [110, 250],
+    'kitchen':    [168, -6],
+    'new-bath':   [110, 200],
     'exist-bath': [230, 240],
-    'patio':      [40, 100],
+    'patio':      [40, 90],
     'yard':       [20, 296],
   };
 
