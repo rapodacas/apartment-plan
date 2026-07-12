@@ -192,8 +192,16 @@ box(4.5, 0.18, 1.9, M.wood, 3.2, 4.5, 15.6, B);     // desk under the transfer w
 box(1.4, 1.4, 1.4, M.cushion, 3.2, 2.7, 17.3, B);   // chair
 // --- East room (x10-18, z14-21): open raised veranda flowing into the z11-14 extension.
 //     West enclosure = office east wall; south enclosure = new bath mass.
-// --- New bath (x10-18, z21-26) — 8×5, flush with the building's south face ---
-box(8, 9, 5, M.stucco, 14, RF + 4.5, 23.5, B);
+// --- New bath (x10-18, z21-26) — 8×5, flush with the building's south face.
+//     Hollow walls so the roof-off toggle reveals the interior. ---
+box(8, 9, 0.5, M.stucco, 14, RF + 4.5, 21.25, B);    // north wall (door wall)
+box(8, 9, 0.5, M.stucco, 14, RF + 4.5, 25.75, B);    // south wall
+box(0.5, 9, 4, M.stucco, 10.25, RF + 4.5, 23.5, B);  // west wall (shared with office side)
+box(0.5, 9, 4, M.stucco, 17.25, RF + 4.5, 23.5, B);  // east wall (inside the arcade line)
+box(3, 0.18, 3.2, M.trim, 12.1, 2.1, 23.6, B);       // shower pan, west end
+box(0.1, 6, 3.2, M.glass, 13.6, 5, 23.6, B);         // shower glass
+box(1.3, 1.4, 1.7, M.trim, 14.9, 2.7, 24.8, B);      // toilet
+box(2.3, 2.5, 1.7, M.woodDark, 16, 3.25, 22.4, B);   // vanity
 
 // --- Kitchen zone (x8-18, z-2..11, grade, north wall to ridge, under the main roof) ---
 box(0.7, KW, 13, M.stucco, 8.35, KW / 2, 4.5, B);       // west wall (partition to open patio)
@@ -257,17 +265,17 @@ const F = new THREE.Group(); F.position.set(1, 0, -3); F.rotation.y = Math.PI / 
   mouth.position.set(0, 3.0, 1.72); F.add(mouth);
 }
 
-// ============ EAST ARCADE — NEW: two pillars (ridge + south) + two arches matching the north wall ============
-// Wall line x17-19 (2' thick, flush with the 1' roof overhang). Bays: z1-10 (kitchen) and z12-24 (east patio).
+// ============ EAST ARCADE — NEW: regular-thickness wall, arches span pillar to pillar ============
+// Wall x17.5-18 (6", outer face on the building line). Heavy 2'+ brick pillars at ridge,
+// south end, and NE corner; arches spring from the pillar tops (y4.4) and fill the full bays.
 const EARC = new THREE.Group(); scene.add(EARC);
 {
-  // Arches span pillar-to-pillar — they land on the brick right at the pillar tops
   const aw = archWall(29, 11, [
-    { c: 20.95, w: 9.4, h: 9 },    // north bay (kitchen east side / ENTRY) — center z 5.05
-    { c: 8, w: 11.6, h: 9 },       // south bay (east room — open, rail + stairs) — center z 18
-  ], 2, M.stuccoWhite);
-  aw.rotation.y = Math.PI / 2;     // local X 0→29 maps to global z 26→-3; depth → +X (x16-18)
-  aw.position.set(16, 0, 26);
+    { c: 22, w: 11.7, h: 10.25 },  // north bay (kitchen east side / ENTRY) — pillar to pillar
+    { c: 8, w: 11.7, h: 10.25 },   // south bay (east room — open, rail + stairs) — pillar to pillar
+  ], 0.5, M.stuccoWhite);
+  aw.rotation.y = Math.PI / 2;     // local X 0→29 maps to global z 26→-3; depth → +X (x17.5-18)
+  aw.position.set(17.5, 0, 26);
   EARC.add(aw);
   // Brick to the spring line only — stucco arches above, matching the north wall
   for (const pz of [25, 11, -3]) box(2.3, 4.4, 2.3, M.brick, 17, 2.2, pz, EARC);
@@ -275,33 +283,33 @@ const EARC = new THREE.Group(); scene.add(EARC);
 // Kitchen east side — CLOSED option (toggleable): arched glazing + the APARTMENT ENTRY door
 const KCLOSED = new THREE.Group(); scene.add(KCLOSED);
 {
-  box(0.3, 8.6, 9.3, M.glass, 17, 4.3, 5.05, KCLOSED);   // arched glass infill, full bay
-  box(0.3, 8.6, 0.35, M.trim, 17, 4.3, 6.9, KCLOSED);    // mullion beside the door
-  box(0.3, 0.4, 9.3, M.trim, 17, 7.1, 5.05, KCLOSED);    // transom rail
-  box(0.4, 7, 3.2, M.woodDark, 17, 3.5, 3.6, KCLOSED);   // entry door
-  box(0.15, 0.8, 0.15, M.trim, 17.28, 3.4, 2.4, KCLOSED); // handle
+  box(0.3, 9.6, 11.6, M.glass, 17.7, 4.8, 4, KCLOSED);   // arched glass infill, full bay
+  box(0.3, 9.6, 0.35, M.trim, 17.7, 4.8, 6.9, KCLOSED);  // mullion beside the door
+  box(0.3, 0.4, 11.6, M.trim, 17.7, 7.1, 4, KCLOSED);    // transom rail
+  box(0.4, 7, 3.2, M.woodDark, 17.7, 3.5, 3.6, KCLOSED); // entry door
+  box(0.15, 0.8, 0.15, M.trim, 17.98, 3.4, 2.4, KCLOSED); // handle
 }
 
 // East room bay — NO wall: safety rail on the raised edge + staircase down (per photos)
 const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5, metalness: 0.4 });
 {
   const R = new THREE.Group(); scene.add(R);
-  // East edge rail — veranda east edge, ridge (z11) to the bath mass (z21)
-  box(0.18, 0.18, 10, railMat, 16.9, 5.05, 16, R);       // top rail
-  box(0.12, 0.12, 10, railMat, 16.9, 4.2, 16, R);        // mid rail
-  for (let i = 0; i <= 5; i++) box(0.14, 3.1, 0.14, railMat, 16.9, 3.6, 11.4 + i * 1.85, R);
+  // East edge rail — veranda east edge at the thin arcade wall plane, ridge (z11) to the bath (z21)
+  box(0.18, 0.18, 10, railMat, 17.6, 5.05, 16, R);       // top rail
+  box(0.12, 0.12, 10, railMat, 17.6, 4.2, 16, R);        // mid rail
+  for (let i = 0; i <= 5; i++) box(0.14, 3.1, 0.14, railMat, 17.6, 3.6, 11.4 + i * 1.85, R);
   // North edge of the veranda — on the ridge line (z11), overlooks the kitchen + dinette.
-  // Runs x8.4→12.5; the 42" stair occupies x12.5→16 beside the east arch wall.
-  box(4.1, 0.18, 0.18, railMat, 10.45, 5.05, 11.2, R);
-  box(4.1, 0.12, 0.12, railMat, 10.45, 4.2, 11.2, R);
-  for (let i = 0; i <= 2; i++) box(0.14, 3.1, 0.14, railMat, 8.5 + i * 2, 3.6, 11.2, R);
+  // Runs x8.4→14; the 42" stair occupies x14→17.5 beside the east arcade wall.
+  box(5.6, 0.18, 0.18, railMat, 11.2, 5.05, 11.2, R);
+  box(5.6, 0.12, 0.12, railMat, 11.2, 4.2, 11.2, R);
+  for (let i = 0; i <= 2; i++) box(0.14, 3.1, 0.14, railMat, 8.5 + i * 2.7, 3.6, 11.2, R);
   // West side of the veranda extension — SOLID WALL (rev 7/12): continues the kitchen
   // west wall from the ridge to the office north wall, closing the 3' gap.
   box(0.7, KW, 3, M.stucco, 8.35, KW / 2, 12.5, R);
-  // Staircase — 42" wide, 3 risers, NE corner of the veranda edge, beside the east arch wall
+  // Staircase — 42" wide, 3 risers, NE corner of the veranda edge, beside the east arcade wall
   for (let i = 0; i < 3; i++) {
     const h = 2 - i * (2 / 3);
-    box(3.5, h, 1.05, M.concrete, 14.25, h / 2, 10.45 - i * 1.05, R);
+    box(3.5, h, 1.05, M.concrete, 15.75, h / 2, 10.45 - i * 1.05, R);
   }
 }
 
@@ -332,9 +340,9 @@ const WD = new THREE.Group(); scene.add(WD);
   box(0.34, 6, 5.6, M.glass, 10, 5.1, 20, WD);          // glazing
   box(0.38, 6, 0.18, M.trim, 10, 5.1, 20, WD);          // center stile (pair split)
   for (const dz of [19.3, 20.7]) box(0.18, 0.7, 0.14, M.trim, 10.25, 5.0, dz, WD);  // handles
-  // [3] Transfer window — office north wall, over the desk, opens to the veranda extension
-  box(2.7, 2.3, 0.3, M.trim, 3.25, 6.1, 14, WD);
-  box(2.4, 2, 0.36, M.glass, 3.25, 6.1, 14, WD);
+  // [3] North window — office north wall, centered, 6' wide × 3' tall
+  box(6.3, 3.3, 0.3, M.trim, 5, 6.2, 14, WD);
+  box(6, 3, 0.36, M.glass, 5, 6.2, 14, WD);
   // [4] Double-hung wood window — office west wall
   box(0.3, 3.5, 2.5, M.trim, 0, 5.6, 17.5, WD);
   box(0.36, 3.1, 2.1, M.glass, 0, 5.6, 17.5, WD);
