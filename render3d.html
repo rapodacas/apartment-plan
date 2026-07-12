@@ -11,12 +11,19 @@ html,body{margin:0;height:100%;background:#0d1117;overflow:hidden;font-family:-a
 #hud h1{font-size:15px;color:#e6edf3;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.6)}
 #hud .tag{font-size:10px;color:#9fb6cc;background:rgba(13,17,23,.55);border:1px solid rgba(255,255,255,.12);padding:2px 8px;border-radius:20px;backdrop-filter:blur(4px)}
 #views{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:0 10px}
-#views button,#views a{background:rgba(22,27,34,.85);border:1px solid #30363d;color:#58a6ff;font-size:12px;padding:8px 13px;border-radius:20px;cursor:pointer;backdrop-filter:blur(6px);text-decoration:none;font-family:inherit}
+#views button,#views a{background:rgba(22,27,34,.85);border:1px solid #30363d;color:#58a6ff;font-size:12px;padding:8px 13px;border-radius:20px;cursor:pointer;backdrop-filter:blur(6px);text-decoration:none;font-family:inherit;white-space:nowrap;flex-shrink:0}
+@media(max-width:700px){
+  #views{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;-webkit-overflow-scrolling:touch;bottom:calc(10px + env(safe-area-inset-bottom))}
+  #views::-webkit-scrollbar{display:none}
+  #views button,#views a{font-size:11px;padding:6px 10px}
+}
+body.embed #hud,body.embed #note,body.embed #views a{display:none}
 #views button.active{background:#1f6feb;color:#fff;border-color:#1f6feb}
 #note{position:fixed;top:44px;left:14px;font-size:10px;color:#9fb6cc;text-shadow:0 1px 3px rgba(0,0,0,.7);pointer-events:none}
 </style>
 </head>
 <body>
+<script>if(new URLSearchParams(location.search).has('embed'))document.body.classList.add('embed');</script>
 <canvas id="c"></canvas>
 <div id="hud">
   <h1>864 Farr Ave — Apartment Concept</h1>

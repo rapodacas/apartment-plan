@@ -19,6 +19,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0d1117">
 <link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script>
 // Existing installed PWAs keep the old start_url (this page) — send them to the planner.
 if (matchMedia('(display-mode: standalone)').matches) location.replace('app.html');
@@ -87,6 +88,7 @@ h1{font-size:clamp(30px,7vw,54px);line-height:1.12;letter-spacing:-.02em;margin:
 /* ── 3D ── */
 .model-card{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--border);
   aspect-ratio:16/9;background:#000}
+@media(max-width:639px){.model-card{aspect-ratio:auto;height:62vh}}
 .model-card img{width:100%;height:100%;object-fit:cover}
 .model-card iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .model-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
@@ -302,7 +304,7 @@ fetch(DB).then(r=>r.json()).then(raw=>{
 const overlay=document.getElementById('model-overlay');
 function loadModel(){
   const card=document.getElementById('model-card');
-  card.innerHTML='<iframe src="render3d.html" title="Interactive 3D model" allow="fullscreen"></iframe>';
+  card.innerHTML='<iframe src="render3d.html?embed=1" title="Interactive 3D model" allow="fullscreen"></iframe>';
 }
 overlay.addEventListener('click',loadModel);
 overlay.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')loadModel()});
