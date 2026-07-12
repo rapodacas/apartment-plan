@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  Public showcase / landing page. The task planner lives at app.html.
+  Static previews in assets/ are screenshots — regenerate via agent-browser if the
+  drawings or 3D model change (see diary 2026-07-12): render3d.html spa view → render-hero.jpg
+  + og-image.jpg, aerial → render-poster.jpg, floorplan/blueprint pages → preview-*.png.
+-->
+<title>864 Farr Ave — Backyard Apartment Build</title>
+<meta name="description" content="A backyard structure becoming a full apartment — 3D concept, floor plans, live build progress, and site photos.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="864 Farr Ave — Backyard Apartment Build">
+<meta property="og:description" content="A backyard structure becoming a full apartment — 3D concept, floor plans, live build progress, and site photos. Come swing a hammer.">
+<meta property="og:url" content="https://rapodacas.github.io/apartment-plan/">
+<meta property="og:image" content="https://rapodacas.github.io/apartment-plan/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d1117">
+<link rel="icon" href="icon-192.png">
+<script>
+// Existing installed PWAs keep the old start_url (this page) — send them to the planner.
+if (matchMedia('(display-mode: standalone)').matches) location.replace('app.html');
+</script>
+<style>
+:root{
+  --bg:#0d1117; --bg-card:#161b22; --bg-card-alt:#1c2533;
+  --text:#e6edf3; --text-muted:#8b949e; --line:#21262d; --border:#30363d;
+  --accent:#58a6ff; --accent-bg:#1a3a5c; --green:#3fb950;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.6}
+img{max-width:100%;display:block}
+a{color:var(--accent);text-decoration:none}
+section{padding:64px 20px}
+.wrap{max-width:960px;margin:0 auto}
+h2{font-size:clamp(22px,4.5vw,32px);margin-bottom:6px;letter-spacing:-.02em}
+.sub{color:var(--text-muted);margin-bottom:28px;font-size:15px}
+.pill{display:inline-block;background:var(--bg-card);border:1px solid var(--border);color:var(--accent);
+  font-size:14px;padding:9px 18px;border-radius:22px;transition:background .15s}
+.pill:hover{background:var(--bg-card-alt)}
+.pill.solid{background:var(--accent-bg);border-color:var(--accent-bg);color:#cfe4ff;font-weight:600}
+.pill.solid:hover{background:#264d73}
+
+/* ── Sticky nav ── */
+nav{position:sticky;top:0;z-index:30;background:rgba(13,17,23,.88);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:6px;padding:10px 20px;overflow-x:auto;scrollbar-width:none}
+nav .wrap::-webkit-scrollbar{display:none}
+.brand{font-weight:700;font-size:15px;color:var(--text);white-space:nowrap;margin-right:8px}
+nav a.nl{color:var(--text-muted);font-size:13.5px;padding:6px 10px;border-radius:16px;white-space:nowrap}
+nav a.nl:hover{color:var(--text);background:var(--bg-card)}
+nav a.planner{margin-left:auto;color:#cfe4ff;background:var(--accent-bg);font-size:13.5px;
+  padding:6px 14px;border-radius:16px;white-space:nowrap;font-weight:600}
+
+/* ── Hero ── */
+header{position:relative;min-height:78vh;display:flex;align-items:flex-end;
+  background:linear-gradient(rgba(13,17,23,.35),rgba(13,17,23,.55) 55%,var(--bg)),
+  url('assets/render-hero.jpg') center 40%/cover no-repeat}
+.hero-inner{max-width:960px;margin:0 auto;padding:90px 20px 56px;width:100%}
+.kicker{font-size:12.5px;letter-spacing:.22em;color:#a8c7e8;font-weight:700;text-transform:uppercase;
+  text-shadow:0 1px 8px rgba(0,0,0,.8)}
+h1{font-size:clamp(30px,7vw,54px);line-height:1.12;letter-spacing:-.02em;margin:10px 0 14px;
+  text-shadow:0 2px 16px rgba(0,0,0,.7)}
+.tagline{font-size:clamp(15px,2.4vw,18px);color:#d4dde6;max-width:560px;text-shadow:0 1px 10px rgba(0,0,0,.8)}
+.hero-ctas{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+
+/* ── Progress ── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:26px}
+.stat{background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:16px 14px}
+.stat .n{font-size:clamp(22px,4vw,30px);font-weight:700;letter-spacing:-.02em}
+.stat .l{font-size:12px;color:var(--text-muted);margin-top:2px}
+.meter-row{display:grid;grid-template-columns:minmax(110px,180px) 1fr 44px;gap:12px;align-items:center;
+  padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.meter-row:last-child{border-bottom:none}
+.meter-row .ph{color:var(--text)}
+.meter-row .ph small{display:block;color:var(--text-muted);font-size:11.5px}
+.track{background:var(--line);border-radius:5px;height:10px;overflow:hidden}
+.fill{background:var(--green);height:100%;border-radius:5px 4px 4px 5px;min-width:0;transition:width .6s ease}
+.meter-row .pc{text-align:right;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.progress-note{font-size:12.5px;color:var(--text-muted);margin-top:14px}
+.skeleton .fill,.skeleton .n{opacity:.35;animation:pulse 1.2s infinite alternate}
+@keyframes pulse{to{opacity:.15}}
+
+/* ── 3D ── */
+.model-card{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--border);
+  aspect-ratio:16/9;background:#000}
+.model-card img{width:100%;height:100%;object-fit:cover}
+.model-card iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.model-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:12px;background:rgba(13,17,23,.35);cursor:pointer;transition:background .2s}
+.model-overlay:hover{background:rgba(13,17,23,.5)}
+.model-overlay .play{background:var(--accent-bg);color:#cfe4ff;font-size:15px;font-weight:600;
+  border:none;padding:13px 24px;border-radius:26px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+.model-overlay .hint{font-size:12.5px;color:#d4dde6;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.model-links{display:flex;gap:14px;margin-top:12px;font-size:13.5px;flex-wrap:wrap}
+
+/* ── Plans ── */
+.plan-grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:640px){.plan-grid{grid-template-columns:1fr 1fr}}
+.plan-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  color:var(--text);transition:transform .15s,border-color .15s;display:block}
+.plan-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.plan-card .thumb{height:260px;overflow:hidden;background:#0d1f38}
+.plan-card .thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
+.plan-card .body{padding:14px 16px 16px}
+.plan-card .body b{font-size:15.5px}
+.plan-card .body p{font-size:13px;color:var(--text-muted);margin-top:4px}
+
+/* ── Build log ── */
+.datehdr{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.08em;margin:26px 0 12px}
+.gal{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:700px){.gal{grid-template-columns:repeat(3,1fr)}}
+.gal figure{background:var(--bg-card);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer}
+.gal .imgbox{aspect-ratio:4/3;overflow:hidden;background:var(--bg-card-alt)}
+.gal img{width:100%;height:100%;object-fit:cover;transition:transform .2s}
+.gal figure:hover img{transform:scale(1.04)}
+.gal figcaption{font-size:11.5px;color:var(--text-muted);padding:7px 9px;line-height:1.45}
+.gal .zone{color:var(--accent);font-weight:600}
+#more-photos{margin:26px auto 0;display:block;background:var(--bg-card);border:1px solid var(--border);
+  color:var(--accent);font-size:14px;padding:10px 22px;border-radius:22px;cursor:pointer;font-family:inherit}
+.photos-link{font-size:13.5px;display:inline-block;margin-top:18px}
+
+/* ── Lightbox ── */
+#lb{position:fixed;inset:0;background:rgba(8,10,14,.94);z-index:60;display:none;
+  flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#lb.open{display:flex}
+#lb img{max-width:94vw;max-height:78vh;border-radius:8px;object-fit:contain}
+#lb .cap{color:var(--text);font-size:14px;margin-top:12px;max-width:640px;text-align:center}
+#lb .meta{color:var(--text-muted);font-size:12px;margin-top:2px}
+#lb button{position:absolute;background:rgba(22,27,34,.8);border:1px solid var(--border);color:var(--text);
+  font-size:20px;width:44px;height:44px;border-radius:50%;cursor:pointer}
+#lb .x{top:16px;right:16px}
+#lb .prev{left:10px;top:50%;transform:translateY(-50%)}
+#lb .next{right:10px;top:50%;transform:translateY(-50%)}
+
+/* ── Help ── */
+#help .card{background:linear-gradient(135deg,#1a3a5c,#12283f);border:1px solid #264d73;border-radius:16px;
+  padding:32px 26px;text-align:center}
+#help .card h2{margin-bottom:10px}
+#help .card p{color:#c9d9e8;max-width:560px;margin:0 auto 8px;font-size:15px}
+#help .card .pin{color:#9fc3e8;font-size:13.5px}
+#help .card .pill{margin-top:20px;font-size:15px}
+
+/* ── Footer ── */
+footer{border-top:1px solid var(--line);padding:30px 20px 44px;text-align:center}
+footer .links{display:flex;gap:8px 18px;justify-content:center;flex-wrap:wrap;font-size:13.5px;margin-bottom:12px}
+footer .fine{color:var(--text-muted);font-size:12px}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <span class="brand">864 Farr Ave</span>
+  <a class="nl" href="#progress">Progress</a>
+  <a class="nl" href="#model">3D</a>
+  <a class="nl" href="#plans">Plans</a>
+  <a class="nl" href="#photos">Photos</a>
+  <a class="nl" href="#help">Help Out</a>
+  <a class="planner" href="app.html">Planner →</a>
+</div></nav>
+
+<header>
+  <div class="hero-inner">
+    <div class="kicker">864 Farr Ave · Escondido, CA</div>
+    <h1>A backyard becomes<br>an apartment.</h1>
+    <p class="tagline">We're converting a backyard structure into a full studio apartment — arched
+      kitchen, new bath, raised rooms, the works. Explore the plans, follow the progress, or come
+      swing a hammer.</p>
+    <div class="hero-ctas">
+      <a class="pill solid" href="#model">Explore in 3D</a>
+      <a class="pill" href="#progress">Live progress</a>
+    </div>
+  </div>
+</header>
+
+<section id="progress"><div class="wrap">
+  <h2>Live build progress</h2>
+  <p class="sub">Straight from the work-day planner — updates as tasks get checked off.</p>
+  <div class="stats skeleton" id="stats">
+    <div class="stat"><div class="n" id="s-pct">—%</div><div class="l">complete</div></div>
+    <div class="stat"><div class="n" id="s-done">— / —</div><div class="l">tasks done</div></div>
+    <div class="stat"><div class="n" id="s-next">—</div><div class="l">next work day</div></div>
+    <div class="stat"><div class="n">Oct 9</div><div class="l">target finish, 2026</div></div>
+  </div>
+  <div id="meters" class="skeleton"></div>
+  <p class="progress-note" id="progress-note">6 phases · demo to punch list · built on weekends</p>
+</div></section>
+
+<section id="model"><div class="wrap">
+  <h2>The vision, in 3D</h2>
+  <p class="sub">An interactive massing model of the finished apartment — orbit around it, peek into the kitchen arcade, stand by the spa.</p>
+  <div class="model-card" id="model-card">
+    <img src="assets/render-poster.jpg" alt="3D aerial view of the apartment concept" loading="lazy">
+    <div class="model-overlay" id="model-overlay" role="button" tabindex="0" aria-label="Load interactive 3D model">
+      <button class="play">▶&nbsp; Load interactive 3D</button>
+      <span class="hint">Drag to orbit · pinch to zoom · preset views included</span>
+    </div>
+  </div>
+  <div class="model-links">
+    <a href="render3d.html">Open fullscreen ↗</a>
+  </div>
+</div></section>
+
+<section id="plans"><div class="wrap">
+  <h2>The plans</h2>
+  <p class="sub">Every drawing is live — tap through for the interactive versions.</p>
+  <div class="plan-grid">
+    <a class="plan-card" href="floorplan.html">
+      <div class="thumb"><img src="assets/preview-floorplan.png" alt="Floor plan preview" loading="lazy"></div>
+      <div class="body"><b>Interactive floor plan</b>
+        <p>Room-by-room layout with photo pins — tap a camera to see real site photos of that zone.</p></div>
+    </a>
+    <a class="plan-card" href="blueprint.html">
+      <div class="thumb"><img src="assets/preview-blueprint.png" alt="Blueprint sheet A-1.0 preview" loading="lazy"></div>
+      <div class="body"><b>Sheet A-1.0 — existing conditions</b>
+        <p>Dimensioned survey drawing with keyed notes from the photo survey. Advisory — verify in field.</p></div>
+    </a>
+  </div>
+</div></section>
+
+<section id="photos"><div class="wrap">
+  <h2>Build log</h2>
+  <p class="sub">Real photos from the site, newest first.</p>
+  <div id="log"></div>
+  <button id="more-photos" hidden>Show earlier photos</button>
+  <a class="photos-link" href="floorplan.html">See photos pinned on the floor plan →</a>
+</div></section>
+
+<section id="help"><div class="wrap">
+  <div class="card">
+    <h2>Come build with us</h2>
+    <p>This is a friends-and-family build. Work days are Saturdays and Mondays (plus the occasional
+      Friday). Tools provided, zero experience required — there's always a job that fits.</p>
+    <p class="pin">Know Raoul? Ask him for your PIN, then pick a work day in the planner.</p>
+    <a class="pill solid" href="app.html">Open the work-day planner →</a>
+  </div>
+</div></section>
+
+<footer>
+  <div class="links">
+    <a href="app.html">Planner</a>
+    <a href="floorplan.html">Floor Plan</a>
+    <a href="blueprint.html">Blueprint</a>
+    <a href="render3d.html">3D Concept</a>
+  </div>
+  <div class="fine">864 Farr Ave, Escondido · built by hand on weekends · tracked in public</div>
+</footer>
+
+<div id="lb" role="dialog" aria-label="Photo viewer">
+  <button class="x" aria-label="Close">×</button>
+  <button class="prev" aria-label="Previous photo">‹</button>
+  <button class="next" aria-label="Next photo">›</button>
+  <img alt="">
+  <div class="cap"></div>
+  <div class="meta"></div>
+</div>
+
+<script>
+// ───────────────── Live progress (Firebase REST, public read) ─────────────────
+const DB='https://apartment-plan-default-rtdb.firebaseio.com/plan/tasks.json';
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function fmtDay(iso){const [y,m,d]=iso.split('-').map(Number);
+  return new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}
+
+fetch(DB).then(r=>r.json()).then(raw=>{
+  const tasks=(Array.isArray(raw)?raw:Object.values(raw||{})).filter(Boolean);
+  if(!tasks.length) throw new Error('empty');
+  const done=tasks.filter(t=>t.status==='done').length;
+  const pct=Math.round(done/tasks.length*100);
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('s-done').textContent=done+' / '+tasks.length;
+  const next=tasks.filter(t=>t.status!=='done'&&t.scheduledDate>=todayStr())
+    .map(t=>t.scheduledDate).sort()[0];
+  document.getElementById('s-next').textContent=next?fmtDay(next):'TBD';
+
+  // phases in task order
+  const phases=[];tasks.sort((a,b)=>a.order-b.order).forEach(t=>{if(!phases.includes(t.phase))phases.push(t.phase)});
+  document.getElementById('meters').innerHTML=phases.map(ph=>{
+    const pt=tasks.filter(t=>t.phase===ph);
+    const pd=pt.filter(t=>t.status==='done').length;
+    const ppc=pt.length?Math.round(pd/pt.length*100):0;
+    const m=ph.match(/^Phase (\d+):\s*(.*)$/)||[,'',ph];
+    return `<div class="meter-row">
+      <div class="ph">${m[2]}<small>Phase ${m[1]} · ${pd} of ${pt.length} tasks</small></div>
+      <div class="track"><div class="fill" style="width:${ppc}%"></div></div>
+      <div class="pc">${ppc}%</div></div>`;
+  }).join('');
+  document.getElementById('stats').classList.remove('skeleton');
+  document.getElementById('meters').classList.remove('skeleton');
+}).catch(()=>{
+  document.getElementById('stats').hidden=true;
+  document.getElementById('meters').hidden=true;
+  document.getElementById('progress-note').textContent=
+    '35 tasks across 6 phases · target completion October 9, 2026 · see the planner for live status';
+});
+
+// ───────────────── 3D tap-to-load ─────────────────
+const overlay=document.getElementById('model-overlay');
+function loadModel(){
+  const card=document.getElementById('model-card');
+  card.innerHTML='<iframe src="render3d.html" title="Interactive 3D model" allow="fullscreen"></iframe>';
+}
+overlay.addEventListener('click',loadModel);
+overlay.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')loadModel()});
+
+// ───────────────── Build log gallery + lightbox ─────────────────
+let PHOTOS=[],FLAT=[];
+const INITIAL_DATES=2;
+fetch('photos/manifest.json',{cache:'no-cache'}).then(r=>r.json()).then(man=>{
+  PHOTOS=man.photos.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  const zones=man.zones||{};
+  const byDate={};PHOTOS.forEach(p=>{(byDate[p.date]=byDate[p.date]||[]).push(p)});
+  const dates=Object.keys(byDate).sort().reverse();
+  const log=document.getElementById('log');
+  function renderDates(list){
+    log.innerHTML=list.map(d=>{
+      const [y,m,dd]=d.split('-').map(Number);
+      const label=new Date(y,m-1,dd).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+      return `<div class="datehdr">${label}</div><div class="gal">`+byDate[d].map(p=>{
+        const idx=FLAT.push(p)-1;
+        const zl=zones[p.zone]?zones[p.zone].label:p.zone;
+        return `<figure data-i="${idx}"><div class="imgbox">
+          <img src="photos/${p.file}" alt="${p.caption.replace(/"/g,'&quot;')}" loading="lazy" decoding="async"></div>
+          <figcaption><span class="zone">${zl}</span> — ${p.caption}</figcaption></figure>`;
+      }).join('')+'</div>';
+    }).join('');
+  }
+  FLAT=[];renderDates(dates.slice(0,INITIAL_DATES));
+  const more=document.getElementById('more-photos');
+  if(dates.length>INITIAL_DATES){more.hidden=false;
+    more.addEventListener('click',()=>{FLAT=[];renderDates(dates);more.hidden=true});}
+  log.addEventListener('click',e=>{
+    const f=e.target.closest('figure');if(f)openLb(+f.dataset.i);
+  });
+}).catch(()=>{document.getElementById('log').innerHTML=
+  '<p class="sub">Photos are on the <a href="floorplan.html">floor plan</a>.</p>'});
+
+const lb=document.getElementById('lb');let lbi=0;
+function openLb(i){lbi=i;updateLb();lb.classList.add('open');document.body.style.overflow='hidden'}
+function closeLb(){lb.classList.remove('open');document.body.style.overflow=''}
+function updateLb(){const p=FLAT[lbi];if(!p)return;
+  lb.querySelector('img').src='photos/'+p.file;
+  lb.querySelector('.cap').textContent=p.caption;
+  lb.querySelector('.meta').textContent=p.date;}
+function stepLb(d){lbi=(lbi+d+FLAT.length)%FLAT.length;updateLb()}
+lb.querySelector('.x').addEventListener('click',closeLb);
+lb.querySelector('.prev').addEventListener('click',e=>{e.stopPropagation();stepLb(-1)});
+lb.querySelector('.next').addEventListener('click',e=>{e.stopPropagation();stepLb(1)});
+lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;
+  if(e.key==='Escape')closeLb();if(e.key==='ArrowLeft')stepLb(-1);if(e.key==='ArrowRight')stepLb(1)});
+</script>
+</body>
+</html>
