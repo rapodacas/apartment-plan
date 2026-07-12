@@ -157,12 +157,12 @@ footer .fine{color:var(--text-muted);font-size:12px}
 
 <nav><div class="wrap">
   <span class="brand">The Casita</span>
+  <a class="planner" style="margin-left:0" href="app.html">Schedule</a>
   <a class="nl" href="#progress">Progress</a>
   <a class="nl" href="#model">3D</a>
   <a class="nl" href="#plans">Plans</a>
   <a class="nl" href="#photos">Photos</a>
   <a class="nl" href="#help">Help Out</a>
-  <a class="planner" href="app.html">Planner →</a>
 </div></nav>
 
 <header>
@@ -175,9 +175,25 @@ footer .fine{color:var(--text-muted);font-size:12px}
     <div class="hero-ctas">
       <a class="pill solid" href="#model">Explore in 3D</a>
       <a class="pill" href="#progress">Live progress</a>
+      <a class="pill" href="app.html">Work-day schedule →</a>
     </div>
   </div>
 </header>
+
+<section id="help-top" style="padding:0 20px"><div class="wrap">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    background:linear-gradient(135deg,#1a3a5c,#12283f);border:1px solid #264d73;border-radius:14px;
+    padding:16px 20px;margin-top:22px">
+    <div style="min-width:220px;flex:1">
+      <b style="font-size:15.5px">Come build with us 🔨</b>
+      <div style="color:#c9d9e8;font-size:13.5px;margin-top:2px">Saturdays &amp; Mondays · tools provided · zero experience required</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="pill solid" href="app.html">Pick a work day →</a>
+      <a class="pill" href="#help">How it works</a>
+    </div>
+  </div>
+</div></section>
 
 <section id="progress"><div class="wrap">
   <h2>Live build progress</h2>
@@ -186,7 +202,7 @@ footer .fine{color:var(--text-muted);font-size:12px}
     <div class="stat"><div class="n" id="s-pct">—%</div><div class="l">complete</div></div>
     <div class="stat"><div class="n" id="s-done">— / —</div><div class="l">tasks done</div></div>
     <div class="stat"><div class="n" id="s-next">—</div><div class="l">next work day</div></div>
-    <div class="stat"><div class="n">Oct 9</div><div class="l">target finish, 2026</div></div>
+    <div class="stat"><div class="n">Oct 5</div><div class="l">target finish, 2026</div></div>
   </div>
   <div id="meters" class="skeleton"></div>
   <p class="progress-note" id="progress-note">6 phases · demo to punch list · built on weekends</p>
@@ -297,7 +313,7 @@ fetch(DB).then(r=>r.json()).then(raw=>{
   document.getElementById('stats').hidden=true;
   document.getElementById('meters').hidden=true;
   document.getElementById('progress-note').textContent=
-    '35 tasks across 6 phases · target completion October 9, 2026 · see the planner for live status';
+    '35 tasks across 6 phases · target completion October 5, 2026 · see the planner for live status';
 });
 
 // ───────────────── 3D tap-to-load ─────────────────
