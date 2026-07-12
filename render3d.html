@@ -37,6 +37,7 @@ body.embed #hud,body.embed #note,body.embed #views a{display:none}
   <button data-v="kitchen">Kitchen Arcade</button>
   <button data-v="spa">North Arches + Spa</button>
   <button id="btn-kmode">Kitchen: Closed</button>
+  <button id="btn-roof">Roof: On</button>
   <a href="index.html">Home ↗</a>
   <a href="floorplan.html">Plan ↗</a>
 </div>
@@ -316,9 +317,39 @@ function archWall(len, height, arches, depth, mat) {
   m.castShadow = m.receiveShadow = true;
   return m;
 }
+// ============ WINDOWS & DOORS (per sheet A-1.0 keyed notes) ============
+const WD = new THREE.Group(); scene.add(WD);
+{
+  // [1] French doors — office east wall → veranda, glazed pair in the 6' opening (centered z20)
+  box(0.3, 6.6, 6.2, M.trim, 10, 5.3, 20, WD);          // frame
+  box(0.34, 6, 5.6, M.glass, 10, 5.1, 20, WD);          // glazing
+  box(0.38, 6, 0.18, M.trim, 10, 5.1, 20, WD);          // center stile (pair split)
+  for (const dz of [19.3, 20.7]) box(0.18, 0.7, 0.14, M.trim, 10.25, 5.0, dz, WD);  // handles
+  // [3] Transfer window — office north wall, over the desk, opens to the veranda extension
+  box(2.7, 2.3, 0.3, M.trim, 3.25, 6.1, 14, WD);
+  box(2.4, 2, 0.36, M.glass, 3.25, 6.1, 14, WD);
+  // [4] Double-hung wood window — office west wall
+  box(0.3, 3.5, 2.5, M.trim, 0, 5.6, 17.5, WD);
+  box(0.36, 3.1, 2.1, M.glass, 0, 5.6, 17.5, WD);
+  box(0.38, 0.12, 2.1, M.trim, 0, 5.6, 17.5, WD);       // meeting rail
+  // [5] Clerestory pair — office south wall, high on the gable
+  for (const cx of [3.6, 6.4]) {
+    box(1.5, 0.9, 0.3, M.trim, cx, 7.9, 26, WD);
+    box(1.2, 0.65, 0.36, M.glass, cx, 7.9, 26, WD);
+  }
+  // Bath door — north face, off the veranda deck
+  box(2.8, 6.5, 0.3, M.trim, 12.2, 5.25, 19, WD);       // jamb
+  box(2.5, 6.3, 0.36, M.woodDark, 12.2, 5.15, 19, WD);  // door slab
+  box(0.14, 0.7, 0.14, M.trim, 13.2, 5.0, 18.78, WD);   // handle
+  // Bath window — small frosted unit, south face
+  box(2.1, 1.7, 0.3, M.trim, 14, 6.6, 24, WD);
+  box(1.8, 1.4, 0.36, M.glass, 14, 6.6, 24, WD);
+}
+
 // Kitchen segment z0-14: two OPEN arches (outdoor kitchen breathes east to the lawn)
 // East-room segment z14-24: two arches GLAZED (arched windows onto the lawn)
 // ============ ROOF — one continuous low gable, 1:10 pitch, ridge E-W at z=11 ============
+const ROOF = new THREE.Group(); scene.add(ROOF);
 // South plane 16.5': eave z=27.5 (18" past office S wall) rising to ridge z=11 (3' N of office N wall).
 // North plane 20': ridge z=11 down past the 2'-thick arch wall (z 0..-2), ending z=-9 (~6-7' overhang).
 // Width 20': x -1 (1' west overhang) to x 19 (1' past the 8' east patio).
@@ -332,7 +363,7 @@ function archWall(len, height, arches, depth, mat) {
   m.rotation.y = -Math.PI / 2;      // shape x-axis (plan z) → global +Z; extrude → -X from x=19
   m.position.set(19, 0, 0);
   m.castShadow = m.receiveShadow = true;
-  scene.add(m);
+  ROOF.add(m);
 }
 
 // ============ WEST SIDE — proposed design (open brief) ============
@@ -468,6 +499,15 @@ kbtn.addEventListener('click', () => {
   kClosed = !kClosed;
   KCLOSED.visible = kClosed;
   kbtn.textContent = kClosed ? 'Kitchen: Closed' : 'Kitchen: Open';
+});
+
+// Roof on/off — lift the lid to read the floor plan from above
+const rbtn = document.getElementById('btn-roof');
+let roofOn = true;
+rbtn.addEventListener('click', () => {
+  roofOn = !roofOn;
+  ROOF.visible = roofOn;
+  rbtn.textContent = roofOn ? 'Roof: On' : 'Roof: Off';
 });
 
 // ---- Render loop ----
