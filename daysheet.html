@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La Hacienda — Day Sheet</title>
+<style>
+/* Print-first: black on white, big type, no chrome. */
+body{margin:0;padding:28px 34px;background:#fff;color:#111;font-family:-apple-system,'Segoe UI',Arial,sans-serif;
+  line-height:1.5;max-width:760px}
+h1{font-size:26px;margin:0 0 2px;letter-spacing:-.01em}
+.sub{font-size:15px;color:#444;margin-bottom:6px}
+.crew{font-size:15px;font-weight:600;border:2px solid #111;display:inline-block;padding:4px 12px;border-radius:6px;margin:6px 0 18px}
+.task{border-top:3px solid #111;padding-top:12px;margin-top:18px;page-break-inside:avoid}
+.task h2{font-size:19px;margin:0 0 8px}
+.task h2 small{font-weight:400;color:#555;font-size:13px}
+ol.steps{margin:6px 0 12px;padding-left:26px;font-size:15.5px}
+ol.steps li{margin-bottom:7px}
+.freeform{white-space:pre-wrap;font-size:15px;margin:6px 0 12px}
+.mats{columns:2;column-gap:30px;list-style:none;padding:0;margin:4px 0 0;font-size:14px}
+.mats li{margin-bottom:5px;break-inside:avoid}
+.mats li::before{content:'☐  '}
+.mhead{font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-top:10px}
+.footer{margin-top:26px;padding-top:10px;border-top:1px solid #999;font-size:12.5px;color:#555}
+#bar{position:sticky;top:0;background:#f2f2f2;margin:-28px -34px 20px;padding:10px 34px;display:flex;gap:10px;align-items:center}
+#bar button,#bar a{font-size:14px;padding:7px 14px;border:1px solid #888;background:#fff;border-radius:6px;cursor:pointer;text-decoration:none;color:#111;font-family:inherit}
+@media print{#bar{display:none} body{padding:0}}
+</style>
+</head>
+<body>
+<div id="bar">
+  <button onclick="print()">🖨 Print</button>
+  <a href="app.html">← Planner</a>
+  <span id="nav-days" style="font-size:13px;color:#555"></span>
+</div>
+<h1 id="d-title">Day Sheet</h1>
+<div class="sub" id="d-sub">Loading…</div>
+<div class="crew" id="d-crew" hidden></div>
+<div id="d-tasks"></div>
+<div class="footer">La Hacienda build · Questions: ask Raoul (WFH Mondays — call/text before improvising) ·
+  Mark steps/materials with a pen as you go; Raoul updates the planner from this sheet at day's end.</div>
+
+<script>
+const DB='https://apartment-plan-default-rtdb.firebaseio.com/plan.json';
+const NAMES={raoul:'Raoul',charlie:'Charlie',vinny:'Vinny',joaquin:'Joaquin'};
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function fmt(iso){const [y,m,d]=iso.split('-').map(Number);
+  return new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+
+fetch(DB).then(r=>r.json()).then(plan=>{
+  const tasks=(Array.isArray(plan.tasks)?plan.tasks:Object.values(plan.tasks||{})).filter(Boolean);
+  const dates=[...new Set(tasks.filter(t=>t.status!=='done').map(t=>t.scheduledDate))].sort();
+  const qs=new URLSearchParams(location.search);
+  let date=qs.get('date');
+  if(!date){date=dates.find(d=>d>=todayStr())||dates[dates.length-1];}
+  const dayTasks=tasks.filter(t=>t.scheduledDate===date).sort((a,b)=>a.order-b.order);
+
+  document.getElementById('d-title').textContent='Day Sheet — '+fmt(date);
+  document.getElementById('d-sub').textContent='La Hacienda apartment build · '+dayTasks.length+' task'+(dayTasks.length!==1?'s':'');
+  const crew=((plan.workers||{})[date]||[]).map(u=>NAMES[u]||u);
+  if(crew.length){const c=document.getElementById('d-crew');c.hidden=false;c.textContent='Crew: '+crew.join(', ')+' · Raoul';}
+
+  // prev/next day links
+  const i=dates.indexOf(date);
+  document.getElementById('nav-days').innerHTML=
+    (i>0?`<a href="?date=${dates[i-1]}">← ${dates[i-1]}</a> · `:'')+date+
+    (i<dates.length-1?` · <a href="?date=${dates[i+1]}">${dates[i+1]} →</a>`:'');
+
+  document.getElementById('d-tasks').innerHTML=dayTasks.map(t=>{
+    const done=t.status==='done'?' — ✔ DONE':'';
+    // Notes: render numbered lines as a list, other lines as lead-in text
+    const lines=(t.notes||'').split('\n').filter(Boolean);
+    const steps=lines.filter(l=>/^\s*\d+\./.test(l));
+    const rest=lines.filter(l=>!/^\s*\d+\./.test(l));
+    return `<div class="task">
+      <h2>${t.work}${done} <small>· ${t.phase}</small></h2>
+      ${rest.length?`<div class="freeform">${rest.join('\n')}</div>`:''}
+      ${steps.length?`<ol class="steps">${steps.map(s=>`<li>${s.replace(/^\s*\d+\.\s*/,'')}</li>`).join('')}</ol>`:''}
+      ${(t.materials&&t.materials.length)?`<div class="mhead">Materials / tools</div>
+        <ul class="mats">${t.materials.map(m=>`<li>${m}</li>`).join('')}</ul>`:''}
+    </div>`;
+  }).join('')||'<p>No tasks scheduled this day.</p>';
+}).catch(()=>{document.getElementById('d-sub').textContent='Could not load the plan — check connection.'});
+</script>
+</body>
+</html>
