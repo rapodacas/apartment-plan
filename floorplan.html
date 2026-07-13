@@ -73,12 +73,12 @@ svg{max-width:100%;height:auto}
   <!-- ═══ KITCHEN — 10' E-W × 13' N-S (north wall to ridge), ground level ═══ -->
   <!-- North wall 16' from office face (y=-20). Ridge at 3' from office face (y=110). -->
   <!-- 10' wide = x=80 to x=180 (aligned with veranda below) -->
-  <rect x="80" y="-20" width="100" height="130" rx="2" fill="#1a3a2a" stroke="#3fb950" stroke-width="2"/>
-  <rect x="80" y="-20" width="100" height="130" fill="url(#hatch)"/>
+  <rect x="80" y="-20" width="100" height="110" rx="2" fill="#1a3a2a" stroke="#3fb950" stroke-width="2"/>
+  <rect x="80" y="-20" width="100" height="110" fill="url(#hatch)"/>
   <!-- East wall open (dashed) -->
-  <line x1="180" y1="-20" x2="180" y2="110" stroke="#3fb950" stroke-width="2" stroke-dasharray="6,4"/>
+  <line x1="180" y1="-20" x2="180" y2="90" stroke="#3fb950" stroke-width="2" stroke-dasharray="6,4"/>
   <text x="130" y="30" text-anchor="middle" font-size="14" fill="#3fb950" font-weight="600">KITCHEN</text>
-  <text x="130" y="48" text-anchor="middle" font-size="11" fill="#3fb950">10 × 13</text>
+  <text x="130" y="48" text-anchor="middle" font-size="11" fill="#3fb950">10 × 11</text>
   <text x="130" y="65" text-anchor="middle" font-size="9" fill="rgba(63,185,80,.6)">Ground level</text>
   <text x="112" y="98" text-anchor="middle" font-size="8" fill="rgba(63,185,80,.5)">East side open →</text>
 
@@ -86,11 +86,15 @@ svg{max-width:100%;height:auto}
   <line x1="70" y1="110" x2="190" y2="110" stroke="#d29922" stroke-width="1" stroke-dasharray="8,4"/>
   <text x="66" y="113" text-anchor="end" font-size="7" fill="#d29922">RIDGE</text>
 
-  <!-- ═══ VERANDA EXTENSION — 10' wide × 3' to ridge, raised ═══ -->
-  <rect x="80" y="110" width="100" height="30" rx="2" fill="#2a1a3a" stroke="#bc8cff" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <text x="118" y="129" text-anchor="middle" font-size="8" fill="#bc8cff">VERANDA +3' → ridge</text>
-  <!-- West wall continued: office north wall to ridge (closes the 3' gap) -->
-  <line x1="80" y1="110" x2="80" y2="140" stroke="#3fb950" stroke-width="2.5"/>
+  <!-- ═══ VERANDA EXTENSION — 9'-4" wide (west wall→east-room line) × 5' deep, raised ═══ -->
+  <rect x="87" y="90" width="93" height="50" rx="2" fill="#2a1a3a" stroke="#bc8cff" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="136" y="128" text-anchor="middle" font-size="8" fill="#bc8cff">VERANDA 9'4"×5' → +24"  · dinette</text>
+  <!-- 36" stair fully encompassed, NW corner, rising SOUTH -->
+  <rect x="87" y="90" width="30" height="20" fill="#3a2a1a" stroke="#d29922" stroke-width="1.5"/>
+  <line x1="87" y1="100" x2="117" y2="100" stroke="#d29922" stroke-width=".7"/>
+  <text x="102" y="85" text-anchor="middle" font-size="7" fill="#8b949e">STAIR 36" · 3R ↑S</text>
+  <!-- West wall continued: office north wall to the veranda edge -->
+  <line x1="80" y1="90" x2="80" y2="140" stroke="#3fb950" stroke-width="2.5"/>
 
   <!-- Kitchen dimensions -->
   <line x1="80" y1="-30" x2="180" y2="-30" stroke="#8b949e" stroke-width=".5"/>
@@ -98,14 +102,14 @@ svg{max-width:100%;height:auto}
   <line x1="180" y1="-34" x2="180" y2="-26" stroke="#8b949e" stroke-width=".5"/>
   <text x="130" y="-36" text-anchor="middle" font-size="9" fill="#8b949e">10'</text>
 
-  <line x1="188" y1="-20" x2="188" y2="110" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="188" y1="-20" x2="188" y2="90" stroke="#8b949e" stroke-width=".5"/>
   <line x1="184" y1="-20" x2="192" y2="-20" stroke="#8b949e" stroke-width=".5"/>
-  <line x1="184" y1="110" x2="192" y2="110" stroke="#8b949e" stroke-width=".5"/>
-  <text x="202" y="45" text-anchor="middle" font-size="9" fill="#8b949e" transform="rotate(-90,202,45)">13'</text>
+  <line x1="184" y1="90" x2="192" y2="90" stroke="#8b949e" stroke-width=".5"/>
+  <text x="202" y="35" text-anchor="middle" font-size="9" fill="#8b949e" transform="rotate(-90,202,35)">11'</text>
 
-  <line x1="188" y1="110" x2="188" y2="140" stroke="#8b949e" stroke-width=".5"/>
+  <line x1="188" y1="90" x2="188" y2="140" stroke="#8b949e" stroke-width=".5"/>
   <line x1="184" y1="140" x2="192" y2="140" stroke="#8b949e" stroke-width=".5"/>
-  <text x="202" y="125" text-anchor="middle" font-size="8" fill="#8b949e" transform="rotate(-90,202,125)">3'</text>
+  <text x="202" y="118" text-anchor="middle" font-size="8" fill="#8b949e" transform="rotate(-90,202,118)">5'</text>
 
   <!-- ═══ OFFICE — 10' E-W × 12' N-S, raised ═══ -->
   <!-- x=0 to x=100, y=140 to y=260 -->
@@ -126,12 +130,6 @@ svg{max-width:100%;height:auto}
   <line x1="100" y1="266" x2="100" y2="274" stroke="#8b949e" stroke-width=".5"/>
   <text x="50" y="284" text-anchor="middle" font-size="9" fill="#8b949e">10'</text>
 
-  <!-- Steps — 42" wide, 3 risers, NE corner of veranda edge, against east wall -->
-  <!-- Descend north from ridge (y=110) into kitchen: x=145 to x=180, y=82 to y=110 -->
-  <rect x="145" y="82" width="35" height="28" rx="1" fill="#2a2a3a" stroke="#bc8cff" stroke-width="1.5"/>
-  <line x1="145" y1="91" x2="180" y2="91" stroke="#bc8cff" stroke-width=".5"/>
-  <line x1="145" y1="100" x2="180" y2="100" stroke="#bc8cff" stroke-width=".5"/>
-  <text x="162" y="78" text-anchor="middle" font-size="7" fill="#8b949e">STEPS 42&quot; · 3R</text>
 
   <!-- ═══ EAST ROOM (open raised deck) — 8' E-W × 7' N-S, bath flush at building south ═══ -->
   <!-- x=100 to x=180, y=140 to y=210 -->
@@ -210,18 +208,18 @@ svg{max-width:100%;height:auto}
 
 <div class="legend">
   <div class="legend-item"><div class="legend-swatch" style="background:#1a2a4a;border-color:#58a6ff"></div>Office 10×12 — 120 sf</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#2a1a3a;border-color:#bc8cff"></div>East Room + Veranda — 86 sf open deck</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#2a1a3a;border-color:#bc8cff"></div>East Room + Veranda — 97 sf open deck</div>
   <div class="legend-item"><div class="legend-swatch" style="background:#3a2a1a;border-color:#d29922"></div>New Bath 8×5 — 40 sf</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#1a3a2a;border-color:#3fb950"></div>Kitchen 10×13 — 130 sf</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#1a3a2a;border-color:#3fb950"></div>Kitchen 10×11 — 110 sf</div>
   <div class="legend-item"><div class="legend-swatch" style="background:#3d1418;border-color:#f85149"></div>Exist. Bath 4×8 — 32 sf (separate)</div>
   <div class="legend-item"><div class="legend-swatch" style="background:none;border-color:#8b949e;border-style:dashed"></div>Fence / Gate</div>
 </div>
 
 <div style="margin-top:16px;background:#161b22;border:1px solid #21262d;border-radius:10px;padding:16px 20px;max-width:400px;width:100%">
-  <div style="font-size:15px;font-weight:600;color:#58a6ff;margin-bottom:8px">Total Footprint: 376 sq ft</div>
+  <div style="font-size:15px;font-weight:600;color:#58a6ff;margin-bottom:8px">Total Footprint: 367 sq ft</div>
   <div style="font-size:13px;color:#8b949e;line-height:1.6">
-    Enclosed 290 sf — Office: 120 · Kitchen: 130 · New Bath: 40<br>
-    Open raised deck 86 sf — East Room 8×7 + Veranda 10×3<br>
+    Enclosed 270 sf — Office: 120 · Kitchen: 110 · New Bath: 40<br>
+    Open raised deck 97 sf — East Room 8×7 + Veranda 9'4"×5' (less stair)<br>
     <span style="color:#f85149">+ Exist. Bath: 32 sf (detached)</span>
   </div>
 </div>
@@ -231,8 +229,8 @@ svg{max-width:100%;height:auto}
   📷 Tap a camera pin on the plan to see photos of that area.<br>
   North wall 16' from office face: 3' office→ridge + 13' ridge→north wall.<br>
   New bathroom 8×5 at south end of raised deck — flush with the building's south face, no extension past it.<br>
-  Veranda extension: 10' wide (kitchen-aligned) × 3' north to the ridge line.<br>
-  Steps: 42" wide, 3 risers, NE corner of veranda edge against east wall. Office opening: 6' centered on east wall.
+  Veranda extension: 9'-4" wide (west wall → east-room line) × 5'-0" deep (2' past the ridge); dinette on the veranda.<br>
+  Stair: 36" wide, 3 risers, fully within the veranda's NW corner, rising SOUTH along the west wall — no projection into the kitchen. Office opening: 6' centered on east wall.
 </p>
 
 <div id="backdrop"></div>
