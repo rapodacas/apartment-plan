@@ -193,11 +193,11 @@ const KW = 11.5;          // kitchen wall height from grade (office walls are 9'
 
 // --- Raised plinth under office + east room + new bath (z14-26) ---
 box(18, RF, 12, M.concrete, 9, RF / 2, 20, B);
-// --- Veranda extension — FINAL 7/12: 9'-4" wide (west wall to east-room line, x8.7-18)
-//     × 5'-0" deep (z9-14, 2' past the ridge). 36" stair fully encompassed at the NW
-//     corner rising SOUTH: two treads in the notch, deck is the third step. ---
-box(9.3, RF, 3, M.concrete, 13.35, RF / 2, 12.5, B);   // main deck, z11-14
-box(6.3, RF, 2, M.concrete, 14.85, RF / 2, 10, B);     // deck east of the stair notch, z9-11
+// --- Veranda extension — FINAL 7/12 (corrected): clear width wall-face to wall-face
+//     x8.7-17.5 = 8'-10" × 5'-0" deep (z9-14, 2' past the ridge). 36" stair fully
+//     encompassed at the NW corner rising SOUTH: two treads in the notch, deck = third step. ---
+box(8.8, RF, 3, M.concrete, 13.1, RF / 2, 12.5, B);    // main deck, z11-14
+box(5.8, RF, 2, M.concrete, 14.6, RF / 2, 10, B);      // deck east of the stair notch, z9-11
 box(3, 0.67, 1, M.concrete, 10.2, 0.335, 9.5, B);      // tread +8"  (z9-10)
 box(3, 1.33, 1, M.concrete, 10.2, 0.665, 10.5, B);     // tread +16" (z10-11)
 
