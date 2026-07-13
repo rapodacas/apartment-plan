@@ -10,7 +10,12 @@ body{margin:0;padding:28px 34px;background:#fff;color:#111;font-family:-apple-sy
   line-height:1.5;max-width:760px}
 h1{font-size:26px;margin:0 0 2px;letter-spacing:-.01em}
 .sub{font-size:15px;color:#444;margin-bottom:6px}
-.crew{font-size:15px;font-weight:600;border:2px solid #111;display:inline-block;padding:4px 12px;border-radius:6px;margin:6px 0 18px}
+.crew{font-size:15px;font-weight:600;border:2px solid #111;display:inline-block;padding:4px 12px;border-radius:6px;margin:6px 0 12px}
+#ctx{border:1px solid #999;border-radius:8px;padding:12px 16px;margin:6px 0 8px;font-size:13.5px;page-break-inside:avoid}
+#ctx .row{margin-bottom:4px}
+#ctx b{font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.bar{display:inline-block;vertical-align:middle;width:130px;height:9px;border:1px solid #111;border-radius:4px;overflow:hidden;margin:0 6px}
+.bar i{display:block;height:100%;background:#111}
 .task{border-top:3px solid #111;padding-top:12px;margin-top:18px;page-break-inside:avoid}
 .task h2{font-size:19px;margin:0 0 8px}
 .task h2 small{font-weight:400;color:#555;font-size:13px}
@@ -36,6 +41,7 @@ ol.steps li{margin-bottom:7px}
 <h1 id="d-title">Day Sheet</h1>
 <div class="sub" id="d-sub">Loading…</div>
 <div class="crew" id="d-crew" hidden></div>
+<div id="ctx" hidden></div>
 <div id="d-tasks"></div>
 <div class="footer">La Hacienda build · Questions: ask Raoul (WFH Mondays — call/text before improvising) ·
   Mark steps/materials with a pen as you go; Raoul updates the planner from this sheet at day's end.</div>
@@ -59,6 +65,29 @@ fetch(DB).then(r=>r.json()).then(plan=>{
   document.getElementById('d-sub').textContent='La Hacienda apartment build · '+dayTasks.length+' task'+(dayTasks.length!==1?'s':'');
   const crew=((plan.workers||{})[date]||[]).map(u=>NAMES[u]||u);
   if(crew.length){const c=document.getElementById('d-crew');c.hidden=false;c.textContent='Crew: '+crew.join(', ')+' · Raoul';}
+
+  // ── Where this day fits in the build ──
+  {
+    const total=tasks.length, done=tasks.filter(t=>t.status==='done').length;
+    const pct=Math.round(done/total*100);
+    const allDates=[...new Set(tasks.map(t=>t.scheduledDate))].sort();
+    const finish=fmt(allDates[allDates.length-1]);
+    const prevD=[...allDates].reverse().find(d=>d<date);
+    const nextD=allDates.find(d=>d>date);
+    const summarize=d=>tasks.filter(t=>t.scheduledDate===d).sort((a,b)=>a.order-b.order)
+      .map(t=>(t.status==='done'?'✓ ':'')+t.work.split('—')[0].split('(')[0].trim()).join(' · ');
+    const phases=[...new Set(dayTasks.map(t=>t.phase))].map(ph=>{
+      const pt=tasks.filter(t=>t.phase===ph), pd=pt.filter(t=>t.status==='done').length;
+      return `${ph} — ${pd} of ${pt.length} tasks done`;
+    }).join(' · ');
+    const c=document.getElementById('ctx'); c.hidden=false;
+    c.innerHTML=
+      `<div class="row"><b>Where this fits</b> &nbsp; Build progress: ${done}/${total} tasks`+
+      `<span class="bar"><i style="width:${pct}%"></i></span>${pct}% · target finish ${finish}</div>`+
+      `<div class="row">${phases}</div>`+
+      (prevD?`<div class="row"><b>Last work day</b> (${prevD}): ${summarize(prevD)}</div>`:'')+
+      (nextD?`<div class="row"><b>Next up</b> (${nextD}): ${summarize(nextD)} — today sets that up.</div>`:'');
+  }
 
   // prev/next day links
   const i=dates.indexOf(date);
