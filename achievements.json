@@ -1,0 +1,19 @@
+{
+  "badges": {
+    "groundbreaker": { "emoji": "⛏️", "name": "Groundbreaker", "desc": "Worked the first dig day" },
+    "bloque": { "emoji": "🧱", "name": "Bloque por Bloque", "desc": "Laid block on a masonry day" },
+    "foundation-crew": { "emoji": "🏗️", "name": "Foundation Crew", "desc": "Worked during the foundation phase" },
+    "framing-crew": { "emoji": "🔨", "name": "Framing Crew", "desc": "Worked during framing" },
+    "roof-crew": { "emoji": "🏠", "name": "Roof Crew", "desc": "Worked during the roof phase" },
+    "topping-out": { "emoji": "🌲", "name": "Topping Out", "desc": "There the day the roof was finished" },
+    "tres-seguidos": { "emoji": "🔥", "name": "Tres Seguidos", "desc": "Three work days in a row" },
+    "finish-crew": { "emoji": "🎨", "name": "Finish Crew", "desc": "Worked interior finish" },
+    "punch-list-hero": { "emoji": "✅", "name": "Punch List Hero", "desc": "There at the finish line" },
+    "maestro": { "emoji": "🏆", "name": "Maestro de Obras", "desc": "Worked every phase of the build" }
+  },
+  "workers": {
+    "joaquin": { "name": "Joaquin", "badges": ["groundbreaker", "bloque"] },
+    "charlie": { "name": "Charlie", "badges": [] },
+    "vinny": { "name": "Vinny", "badges": [] }
+  }
+}

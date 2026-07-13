@@ -162,6 +162,7 @@ footer .fine{color:var(--text-muted);font-size:12px}
   <a class="nl" href="#model">3D</a>
   <a class="nl" href="#plans">Plans</a>
   <a class="nl" href="#photos">Photos</a>
+  <a class="nl" href="#crew">Crew</a>
   <a class="nl" href="#help">Help Out</a>
 </div></nav>
 
@@ -248,12 +249,18 @@ footer .fine{color:var(--text-muted);font-size:12px}
   <a class="photos-link" href="floorplan.html">See photos pinned on the floor plan →</a>
 </div></section>
 
+<section id="crew"><div class="wrap">
+  <h2>The crew</h2>
+  <p class="sub">Build badges are earned on real work days — every helper collects them.</p>
+  <div id="crew-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px"></div>
+</div></section>
+
 <section id="help"><div class="wrap">
   <div class="card">
     <h2>Come build with us</h2>
     <p>This is a friends-and-family build. Work days are Saturdays and Mondays (plus the occasional
       Friday). Tools provided, zero experience required — there's always a job that fits.</p>
-    <p class="pin">Know Raoul? Ask him for your PIN, then pick a work day in the planner.</p>
+    <p class="pin">Know Raoul? Ask him for your PIN, then pick a work day in the planner — and start earning crew badges.</p>
     <a class="pill solid" href="app.html">Open the work-day planner →</a>
   </div>
 </div></section>
@@ -369,6 +376,26 @@ lb.querySelector('.x').addEventListener('click',closeLb);
 lb.querySelector('.prev').addEventListener('click',e=>{e.stopPropagation();stepLb(-1)});
 lb.querySelector('.next').addEventListener('click',e=>{e.stopPropagation();stepLb(1)});
 lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});
+
+// ───────────────── Crew badges ─────────────────
+Promise.all([
+  fetch('achievements.json',{cache:'no-cache'}).then(r=>r.json()),
+  fetch('https://apartment-plan-default-rtdb.firebaseio.com/plan/workers.json').then(r=>r.json()).catch(()=>({}))
+]).then(([ach,workers])=>{
+  const dayCounts={};
+  Object.entries(workers||{}).forEach(([d,list])=>(list||[]).forEach(u=>{dayCounts[u]=(dayCounts[u]||0)+1}));
+  document.getElementById('crew-cards').innerHTML=Object.entries(ach.workers)
+    .sort((a,b)=>(b[1].badges.length-a[1].badges.length)||((dayCounts[b[0]]||0)-(dayCounts[a[0]]||0)))
+    .map(([id,w])=>{
+      const days=dayCounts[id]||0;
+      const chips=w.badges.map(b=>{const bd=ach.badges[b];return bd?`<span title="${bd.desc}" style="display:inline-block;background:var(--bg-card-alt);border:1px solid var(--border);border-radius:14px;padding:3px 10px;font-size:12px;margin:3px 4px 0 0">${bd.emoji} ${bd.name}</span>`:''}).join('');
+      return `<div style="background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:16px">
+        <b style="font-size:16px">${w.name}</b>
+        <div style="color:var(--text-muted);font-size:12.5px;margin:2px 0 6px">${days} work day${days!==1?'s':''} signed up</div>
+        <div>${chips||'<span style="color:var(--text-muted);font-size:12.5px">first badge awaits…</span>'}</div>
+      </div>`;
+    }).join('');
+}).catch(()=>{});
 document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;
   if(e.key==='Escape')closeLb();if(e.key==='ArrowLeft')stepLb(-1);if(e.key==='ArrowRight')stepLb(1)});
 </script>

@@ -53,7 +53,7 @@ function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMo
 function fmt(iso){const [y,m,d]=iso.split('-').map(Number);
   return new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
 
-fetch(DB).then(r=>r.json()).then(plan=>{
+Promise.all([fetch(DB).then(r=>r.json()),fetch('achievements.json',{cache:'no-cache'}).then(r=>r.json()).catch(()=>null)]).then(([plan,ach])=>{
   const tasks=(Array.isArray(plan.tasks)?plan.tasks:Object.values(plan.tasks||{})).filter(Boolean);
   const dates=[...new Set(tasks.filter(t=>t.status!=='done').map(t=>t.scheduledDate))].sort();
   const qs=new URLSearchParams(location.search);
@@ -63,8 +63,14 @@ fetch(DB).then(r=>r.json()).then(plan=>{
 
   document.getElementById('d-title').textContent='Day Sheet — '+fmt(date);
   document.getElementById('d-sub').textContent='La Hacienda apartment build · '+dayTasks.length+' task'+(dayTasks.length!==1?'s':'');
-  const crew=((plan.workers||{})[date]||[]).map(u=>NAMES[u]||u);
-  if(crew.length){const c=document.getElementById('d-crew');c.hidden=false;c.textContent='Crew: '+crew.join(', ')+' · Raoul';}
+  const crewIds=((plan.workers||{})[date]||[]);
+  const crew=crewIds.map(u=>NAMES[u]||u);
+  if(crew.length){const c=document.getElementById('d-crew');c.hidden=false;
+    let html='Crew: '+crew.join(', ')+' · Raoul';
+    if(ach){const creds=crewIds.map(u=>{const w=ach.workers[u];if(!w||!w.badges.length)return null;
+      return w.name+' — '+w.badges.map(b=>ach.badges[b]?ach.badges[b].emoji+' '+ach.badges[b].name:'').filter(Boolean).join(' · ');}).filter(Boolean);
+      if(creds.length)html+='<div style="font-size:12px;font-weight:400;margin-top:3px;color:#444">'+creds.join('<br>')+'</div>';}
+    c.innerHTML=html;}
 
   // ── Where this day fits in the build ──
   {
