@@ -38,6 +38,7 @@ body.embed #hud,body.embed #note,body.embed #views a{display:none}
   <button data-v="spa">North Arches + Spa</button>
   <button id="btn-kmode">Kitchen: Closed</button>
   <button id="btn-roof">Roof: On</button>
+  <button id="btn-fence">Fence: Off</button>
   <a href="index.html">Home ↗</a>
   <a href="floorplan.html">Plan ↗</a>
 </div>
@@ -508,23 +509,25 @@ box(4, 8, 8, M.stucco, 24, 4, 27);
   box(2.2, 6.5, 0.2, M.woodDark, 23, 3.25, 23.05);
 }
 
-// ============ FENCES + GATE (white vinyl, per plan) ============
+// ============ FENCES + GATE (white vinyl, per plan) — toggleable, hidden by default ============
+const FENCE = new THREE.Group(); scene.add(FENCE);
 function fenceRun(x1, z1, x2, z2) {
-  const len = Math.hypot(x2 - x1, z2 - z1);
   const g = new THREE.Group();
+  const len = Math.hypot(x2 - x1, z2 - z1);
   g.position.set(x1, 0, z1);
   g.rotation.y = -Math.atan2(z2 - z1, x2 - x1);
   box(len, 5.4, 0.25, M.fence, len / 2, 2.9, 0, g);
   box(len, 0.5, 0.35, M.fence, len / 2, 5.8, 0, g);
   for (let d = 0; d <= len; d += 8) box(0.5, 6.3, 0.5, M.fence, Math.min(d, len), 3.15, 0, g);
-  scene.add(g); return g;
+  FENCE.add(g); return g;
 }
 fenceRun(26, 31, 26, 22);   // east, south of gate
 fenceRun(26, 18, 26, -16);  // east, north of gate (runs past the spa pavilion)
 fenceRun(-26, 31, 26, 31);  // south
 fenceRun(-26, -0, -26, 31); // west boundary behind pavilion
 // Gate (slightly darker, latch side post)
-box(0.4, 5.9, 4, M.trim, 26, 2.95, 20).material = new THREE.MeshStandardMaterial({ color: 0xdde3e8, roughness: 0.6 });
+box(0.4, 5.9, 4, M.trim, 26, 2.95, 20, FENCE).material = new THREE.MeshStandardMaterial({ color: 0xdde3e8, roughness: 0.6 });
+FENCE.visible = false;      // hidden by default — toggle with the Fence button
 
 // ============ LANDSCAPE (existing — kept) ============
 function tree(x, z, trunkH, r, mat) {
@@ -598,6 +601,15 @@ rbtn.addEventListener('click', () => {
   roofOn = !roofOn;
   ROOF.visible = roofOn;
   rbtn.textContent = roofOn ? 'Roof: On' : 'Roof: Off';
+});
+
+// Fence on/off — hidden by default so exterior views stay open
+const fbtn = document.getElementById('btn-fence');
+let fenceOn = false;
+fbtn.addEventListener('click', () => {
+  fenceOn = !fenceOn;
+  FENCE.visible = fenceOn;
+  fbtn.textContent = fenceOn ? 'Fence: On' : 'Fence: Off';
 });
 
 // ---- Render loop ----
