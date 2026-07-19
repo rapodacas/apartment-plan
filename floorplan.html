@@ -177,25 +177,25 @@ svg{max-width:100%;height:auto}
   <line x1="136" y1="310" x2="144" y2="310" stroke="#30363d" stroke-width=".5"/>
   <text x="152" y="288" text-anchor="middle" font-size="9" fill="#30363d">5'</text>
 
-  <!-- ═══ EXISTING BATHROOM — rotated 7/18: 8×4 E-W, long wall on the south fence ═══ -->
-  <!-- South fence at y=310. Bath 4' deep = y=270 to y=310; 8' long = x=180 to x=260 -->
-  <!-- Door on the WEST short side (x=180), perpendicular to the fence -->
-  <rect x="180" y="270" width="80" height="40" rx="2" fill="#3d1418" stroke="#f85149" stroke-width="2"/>
-  <text x="220" y="287" text-anchor="middle" font-size="11" fill="#f85149" font-weight="600">BATH</text>
-  <text x="220" y="300" text-anchor="middle" font-size="9" fill="rgba(248,81,73,.6)">8 × 4 · door W</text>
+  <!-- ═══ EXISTING BATHROOM — rotated 7/18: 7'-6"×4 E-W, long wall on the south fence ═══ -->
+  <!-- South fence y=310, east fence x=265 (8'-6" off the building). Bath 4' deep = y=270-310; -->
+  <!-- 7'-6" long = x=190 to x=265, tucked in the SE corner. Door on the WEST short side (x=190). -->
+  <rect x="190" y="270" width="75" height="40" rx="2" fill="#3d1418" stroke="#f85149" stroke-width="2"/>
+  <text x="227" y="287" text-anchor="middle" font-size="11" fill="#f85149" font-weight="600">BATH</text>
+  <text x="227" y="300" text-anchor="middle" font-size="9" fill="rgba(248,81,73,.6)">7'-6" × 4 · door W</text>
 
   <!-- ═══ FENCE — south and east ═══ -->
   <!-- South fence: 2.5' below new bathroom (y=285+25=310) -->
-  <line x1="-20" y1="310" x2="260" y2="310" stroke="#8b949e" stroke-width="2" stroke-dasharray="12,6"/>
-  <!-- East fence: 8' east of building (x=180+80=260) -->
-  <line x1="260" y1="310" x2="260" y2="-40" stroke="#8b949e" stroke-width="2" stroke-dasharray="12,6"/>
+  <line x1="-20" y1="310" x2="265" y2="310" stroke="#8b949e" stroke-width="2" stroke-dasharray="12,6"/>
+  <!-- East fence: 8'-6" east of building (x=180+85=265) -->
+  <line x1="265" y1="310" x2="265" y2="-40" stroke="#8b949e" stroke-width="2" stroke-dasharray="12,6"/>
 
   <text x="100" y="326" text-anchor="middle" font-size="10" fill="#8b949e" font-weight="600">FENCE (south)</text>
-  <text x="272" y="100" text-anchor="middle" font-size="10" fill="#8b949e" font-weight="600" transform="rotate(90,272,100)">FENCE (east)</text>
+  <text x="277" y="100" text-anchor="middle" font-size="10" fill="#8b949e" font-weight="600" transform="rotate(90,277,100)">FENCE (east)</text>
 
   <!-- Gate — east fence, 5' north of the rotated bath's NE corner (y=270-50=220 bottom) -->
-  <rect x="256" y="180" width="8" height="40" rx="2" fill="#0d1117" stroke="#8b949e" stroke-width="1.5"/>
-  <text x="280" y="204" text-anchor="middle" font-size="9" fill="#8b949e">GATE</text>
+  <rect x="261" y="180" width="8" height="40" rx="2" fill="#0d1117" stroke="#8b949e" stroke-width="1.5"/>
+  <text x="285" y="204" text-anchor="middle" font-size="9" fill="#8b949e">GATE</text>
 
   <!-- 5' gap: gate to bathroom -->
   <line x1="268" y1="220" x2="268" y2="230" stroke="#30363d" stroke-width=".5"/>
@@ -211,7 +211,7 @@ svg{max-width:100%;height:auto}
   <div class="legend-item"><div class="legend-swatch" style="background:#2a1a3a;border-color:#bc8cff"></div>East Room + Veranda — 92 sf open deck (as-built)</div>
   <div class="legend-item"><div class="legend-swatch" style="background:#3a2a1a;border-color:#d29922"></div>New Bath 8×5 — 40 sf</div>
   <div class="legend-item"><div class="legend-swatch" style="background:#1a3a2a;border-color:#3fb950"></div>Kitchen 10×11 — 110 sf</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#3d1418;border-color:#f85149"></div>Exist. Bath 4×8 — 32 sf (separate)</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#3d1418;border-color:#f85149"></div>Exist. Bath 7'-6"×4 — 30 sf (separate)</div>
   <div class="legend-item"><div class="legend-swatch" style="background:none;border-color:#8b949e;border-style:dashed"></div>Fence / Gate</div>
 </div>
 
@@ -220,7 +220,7 @@ svg{max-width:100%;height:auto}
   <div style="font-size:13px;color:#8b949e;line-height:1.6">
     Enclosed 270 sf — Office: 120 · Kitchen: 110 · New Bath: 40<br>
     Open raised deck 92 sf — East Room 8×7 + Veranda 80"×64" as-built<br>
-    <span style="color:#f85149">+ Exist. Bath: 32 sf (detached)</span>
+    <span style="color:#f85149">+ Exist. Bath: 30 sf (detached)</span>
   </div>
 </div>
 
@@ -261,7 +261,7 @@ svg{max-width:100%;height:auto}
     'east-room':  [168, 154],
     'kitchen':    [168, -6],
     'new-bath':   [110, 220],
-    'exist-bath': [220, 290],
+    'exist-bath': [227, 290],
     'patio':      [40, 90],
     'yard':       [20, 296],
   };

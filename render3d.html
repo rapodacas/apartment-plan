@@ -56,8 +56,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // Kitchen x8-18/z-2..9 (grade, 10×11), veranda ext x8.7-18/z9-14 (raised, 36\" stair in NW notch),
 // office x0-10/z14-26 (raised 2', 9' walls), east room x10-18/z14-21 (open raised deck),
 // new bath x10-18/z21-26 (raised, flush with the building south face),
-// exist bath x18-26/z27-31 (rot 7/18: 8' wall on the south fence, door west short side).
-// East fence x=26, south fence z=31, gate z18-22.
+// exist bath x19-26.5/z27-31 (rot 7/18: 7'-6" wall on the south fence, door west short side).
+// East fence x=26.5 (8'-6" off the building), south fence z=31, gate z18-22.
 
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -184,7 +184,7 @@ pad(0, -2, 8, 14, paverTex(2.5, 4));         // open north patio remainder
 pad(-26, -8, 8, -2, paverTex(9, 2));         // north patio run
 pad(8, -9, 19, -4, paverTex(3, 2.5));        // covered porch north of the arch wall (under roof overhang)
 // Lush lawn — east yard, building to fence
-pad(18, 0, 26, 31, lawnTex(3, 8), 0.03);
+pad(18, 0, 26.5, 31, lawnTex(3, 8), 0.03);
 
 // ============ BUILDING ============
 const B = new THREE.Group(); scene.add(B);
@@ -654,11 +654,11 @@ const SAIL = new THREE.Group(); scene.add(SAIL);
 // ============ EXISTING DETACHED BATH (cut to 4×8, ROTATED 7/18) ============
 // Long 8' wall butted against the SOUTH fence (z27-31); door on the west short
 // side (x18 face), perpendicular to the fence, facing the lawn.
-box(8, 8, 4, M.stucco, 22, 4, 29);
+box(7.5, 8, 4, M.stucco, 22.75, 4, 29);
 {
-  const m = new THREE.Mesh(new THREE.BoxGeometry(9, 0.4, 5), M.roof);
-  m.position.set(22, 8.4, 29); m.rotation.x = 0.06; m.castShadow = true; scene.add(m);
-  box(0.2, 6.5, 2.2, M.woodDark, 17.95, 3.25, 29);
+  const m = new THREE.Mesh(new THREE.BoxGeometry(8.5, 0.4, 5), M.roof);
+  m.position.set(22.75, 8.4, 29); m.rotation.x = 0.06; m.castShadow = true; scene.add(m);
+  box(0.2, 6.5, 2.2, M.woodDark, 18.95, 3.25, 29);
 }
 
 // ============ FENCES + GATE (white vinyl, per plan) — toggleable, hidden by default ============
@@ -673,12 +673,12 @@ function fenceRun(x1, z1, x2, z2) {
   for (let d = 0; d <= len; d += 8) box(0.5, 6.3, 0.5, M.fence, Math.min(d, len), 3.15, 0, g);
   FENCE.add(g); return g;
 }
-fenceRun(26, 31, 26, 22);   // east, south of gate
-fenceRun(26, 18, 26, -16);  // east, north of gate (runs past the spa pavilion)
-fenceRun(-26, 31, 26, 31);  // south
+fenceRun(26.5, 31, 26.5, 22);   // east, south of gate (8'-6" off the building)
+fenceRun(26.5, 18, 26.5, -16);  // east, north of gate (runs past the spa pavilion)
+fenceRun(-26, 31, 26.5, 31);  // south
 fenceRun(-26, -0, -26, 31); // west boundary behind pavilion
 // Gate (slightly darker, latch side post)
-box(0.4, 5.9, 4, M.trim, 26, 2.95, 20, FENCE).material = new THREE.MeshStandardMaterial({ color: 0xdde3e8, roughness: 0.6 });
+box(0.4, 5.9, 4, M.trim, 26.5, 2.95, 20, FENCE).material = new THREE.MeshStandardMaterial({ color: 0xdde3e8, roughness: 0.6 });
 FENCE.visible = false;      // hidden by default — toggle with the Fence button
 
 // ============ LANDSCAPE (existing — kept) ============
@@ -704,7 +704,7 @@ for (let i = 0; i < 9; i++) {
 // Shrubs along east fence in the lawn
 for (let i = 0; i < 5; i++) {
   const s = new THREE.Mesh(new THREE.SphereGeometry(0.8, 10, 8), M.leaf);
-  s.position.set(25, 0.8, 2 + i * 5.4); s.castShadow = true; scene.add(s);
+  s.position.set(25.5, 0.8, 2 + i * 5.4); s.castShadow = true; scene.add(s);
 }
 
 // ============ CAMERA PRESETS ============
