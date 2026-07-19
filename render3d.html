@@ -227,11 +227,12 @@ box(1.4, 1.4, 1.4, M.cushion, 3.2, 2.7, 17.3, B);   // chair
 //     Hollow walls so the roof-off toggle reveals the interior. ---
 {
   let w;
-  // north wall (door wall, z21-21.5) — door opening
-  w = panelWall(8, 9, [{ x: 0.95, y: 0, w: 2.5, h: 6.4 }], 0.5, M.stucco);
+  // north wall (door wall, z21-21.5) — door opening; stops at the arcade INNER face
+  // (x17.5, 7'-6" long) so it can't poke into the south arch (fix 7/18)
+  w = panelWall(7.5, 9, [{ x: 0.95, y: 0, w: 2.5, h: 6.4 }], 0.5, M.stucco);
   w.position.set(10, RF, 21); B.add(w);
-  // south wall (z25.5-26) — frosted window opening
-  w = panelWall(8, 9, [{ x: 2.95, y: 3.75, w: 2.1, h: 1.7 }], 0.5, M.stucco);
+  // south wall (z25.5-26) — frosted window opening; same 7'-6" trim
+  w = panelWall(7.5, 9, [{ x: 2.95, y: 3.75, w: 2.1, h: 1.7 }], 0.5, M.stucco);
   w.position.set(10, RF, 25.5); B.add(w);
 }
 box(0.5, 9, 4, M.stucco, 10.25, RF + 4.5, 23.5, B);  // west wall (shared with office side)
@@ -376,12 +377,12 @@ const EDET = new THREE.Group(); scene.add(EDET);
   }
   // Iron window boxes + geraniums under the middle and south window bands
   // (middle band holds the egress unit — boxes hang BELOW the sill, no rejas there)
-  for (const wz of [11, 20.33]) {
-    box(0.5, 0.5, 5.4, iron2, 18.25, 5.15, wz, EDET);
-    for (const bz of [-2.2, 0, 2.2]) box(0.4, 0.08, 0.08, iron2, 18.2, 4.8, wz + bz, EDET);
+  for (const [wz, wy, wl] of [[11, 5.15, 5.4], [20.33, 5.15, 5.4]]) {
+    box(0.5, 0.5, wl, iron2, 18.25, wy, wz, EDET);
+    for (const bz of [-wl / 2 + 0.5, 0, wl / 2 - 0.5]) box(0.4, 0.08, 0.08, iron2, 18.2, wy - 0.35, wz + bz, EDET);
     for (let i = 0; i < 7; i++) {
       const b = new THREE.Mesh(new THREE.SphereGeometry(0.24, 8, 7), i % 3 ? bloom : M.leaf);
-      b.position.set(18.25, 5.52 + (i % 2) * 0.14, wz - 2.31 + i * 0.77);
+      b.position.set(18.25, wy + 0.37 + (i % 2) * 0.14, wz + (wl - 0.8) * (i / 6 - 0.5));
       b.castShadow = true; EDET.add(b);
     }
   }
@@ -402,21 +403,17 @@ const railMat = new THREE.MeshStandardMaterial({ color: 0x3c4148, roughness: 0.5
   // South bay: INFILLED stucco archway (blind bay, slight reveal) with an iron picket
   // screen proud of the face — bottom rail on the sill datum, full-width top rail on
   // the 8' spring datum (rev 7/18).
-  box(0.4, 9.4, 6.95, M.stucco, 17.7, 4.7, 20.33, R);
+  // Faux window fills the arch above the middle-bay datum (rev 7/18): solid stucco to
+  // the same 3.5' pony height + matching sill, then a recessed dark panel to the arch
+  // apex — no surround — with the iron reja rising only to the 8' spring line.
+  box(0.5, 5.5, 6.95, M.stucco, 17.75, 2.75, 20.33, R);          // solid base, matches middle pony
+  box(0.6, 0.3, 7.0, M.trim, 17.75, 5.6, 20.33, R);              // sill on the middle-bay datum
+  box(0.25, 3.9, 7.1, new THREE.MeshStandardMaterial({ color: 0x5e5750, roughness: 1 }), 17.55, 7.55, 20.33, R);
   {
     const ironS = new THREE.MeshStandardMaterial({ color: 0x2b2f34, roughness: 0.55, metalness: 0.55 });
-    box(0.1, 0.12, 6.9, ironS, 18.12, 5.7, 20.33, R);             // bottom rail (sill datum)
-    box(0.1, 0.12, 6.9, ironS, 18.12, 8.0, 20.33, R);             // top rail (spring datum)
-    for (let i = 0; i < 13; i++) box(0.08, 2.35, 0.08, ironS, 18.12, 6.85, 17.13 + i * 0.5335, R);
-    for (const sy of [5.7, 8.0]) for (const sz of [17.5, 23.16]) {
-      box(0.25, 0.08, 0.08, ironS, 17.98, sy, sz, R);             // standoff pins to the wall
-    }
-    for (const [deg, len] of [[90, 1.15], [45, 1.55], [135, 1.55], [20, 2.4], [160, 2.4]]) {
-      const th = deg * Math.PI / 180;                              // radiating fan over the tympanum
-      const spoke = box(0.08, len, 0.08, ironS, 18.12,
-        8.05 + (len / 2) * Math.sin(th), 20.33 + (len / 2) * Math.cos(th), R);
-      spoke.rotation.x = Math.PI / 2 - th;
-    }
+    for (let i = 0; i < 11; i++) box(0.1, 2.3, 0.1, ironS, 18.3, 6.85, 17.15 + i * 0.635, R);
+    box(0.1, 0.1, 6.9, ironS, 18.28, 6.9, 20.33, R);              // mid rail
+    box(0.12, 0.14, 6.9, ironS, 18.3, 8.0, 20.33, R);             // top rail on the spring datum
   }
   box(0.5, 5.5, 6.9, M.stucco, 17.75, 2.75, 11, R);
   box(0.6, 0.3, 7.0, M.trim, 17.75, 5.6, 11, R);
@@ -751,7 +748,7 @@ function resize() {
     camera.aspect = w / h; camera.updateProjectionMatrix();
   }
 }
-window.__p = { camera, controls, sun };   // dev handle for headless preview shots
+window.__p = { camera, controls, sun, scene };   // dev handle for headless preview shots
 renderer.setAnimationLoop((now) => {
   resize();
   if (anim) anim(now);
