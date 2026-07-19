@@ -393,6 +393,7 @@ Promise.all([
         <b style="font-size:16px">${w.name}</b>
         <div style="color:var(--text-muted);font-size:12.5px;margin:2px 0 6px">${days} work day${days!==1?'s':''} signed up</div>
         <div>${chips||'<span style="color:var(--text-muted);font-size:12.5px">first badge awaits…</span>'}</div>
+        ${w.badges.length?`<div style="margin-top:9px"><a href="certs/${id}.pdf" target="_blank" style="font-size:12.5px;color:var(--accent);text-decoration:none">🎓 Certificados (PDF)</a></div>`:''}
       </div>`;
     }).join('');
 }).catch(()=>{});
