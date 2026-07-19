@@ -177,12 +177,12 @@ svg{max-width:100%;height:auto}
   <line x1="136" y1="310" x2="144" y2="310" stroke="#30363d" stroke-width=".5"/>
   <text x="152" y="288" text-anchor="middle" font-size="9" fill="#30363d">5'</text>
 
-  <!-- ═══ EXISTING BATHROOM — 4×8 N-S, SE corner against fences ═══ -->
-  <!-- East fence at x=260. Bath 4' wide = x=220 to x=260 -->
-  <!-- South fence at y=310. Bath 8' tall = y=230 to y=310 -->
-  <rect x="220" y="230" width="40" height="80" rx="2" fill="#3d1418" stroke="#f85149" stroke-width="2"/>
-  <text x="240" y="265" text-anchor="middle" font-size="11" fill="#f85149" font-weight="600" transform="rotate(-90,240,265)">BATH</text>
-  <text x="240" y="290" text-anchor="middle" font-size="9" fill="rgba(248,81,73,.6)" transform="rotate(-90,240,290)">4 × 8</text>
+  <!-- ═══ EXISTING BATHROOM — rotated 7/18: 8×4 E-W, long wall on the south fence ═══ -->
+  <!-- South fence at y=310. Bath 4' deep = y=270 to y=310; 8' long = x=180 to x=260 -->
+  <!-- Door on the WEST short side (x=180), perpendicular to the fence -->
+  <rect x="180" y="270" width="80" height="40" rx="2" fill="#3d1418" stroke="#f85149" stroke-width="2"/>
+  <text x="220" y="287" text-anchor="middle" font-size="11" fill="#f85149" font-weight="600">BATH</text>
+  <text x="220" y="300" text-anchor="middle" font-size="9" fill="rgba(248,81,73,.6)">8 × 4 · door W</text>
 
   <!-- ═══ FENCE — south and east ═══ -->
   <!-- South fence: 2.5' below new bathroom (y=285+25=310) -->
@@ -193,7 +193,7 @@ svg{max-width:100%;height:auto}
   <text x="100" y="326" text-anchor="middle" font-size="10" fill="#8b949e" font-weight="600">FENCE (south)</text>
   <text x="272" y="100" text-anchor="middle" font-size="10" fill="#8b949e" font-weight="600" transform="rotate(90,272,100)">FENCE (east)</text>
 
-  <!-- Gate — east fence, 5' north of existing bathroom top (y=230-50=180) -->
+  <!-- Gate — east fence, 5' north of the rotated bath's NE corner (y=270-50=220 bottom) -->
   <rect x="256" y="180" width="8" height="40" rx="2" fill="#0d1117" stroke="#8b949e" stroke-width="1.5"/>
   <text x="280" y="204" text-anchor="middle" font-size="9" fill="#8b949e">GATE</text>
 
@@ -261,7 +261,7 @@ svg{max-width:100%;height:auto}
     'east-room':  [168, 154],
     'kitchen':    [168, -6],
     'new-bath':   [110, 220],
-    'exist-bath': [230, 240],
+    'exist-bath': [220, 290],
     'patio':      [40, 90],
     'yard':       [20, 296],
   };
